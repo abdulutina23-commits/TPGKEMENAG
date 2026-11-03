@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>SIM-TPG & Selisih Tukin | Kemenag Gorontalo Utara</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            navy: { 800: '#0f2547', 900: '#0a1931', 950: '#061021' },
+            emerald: { 600: '#059669', 700: '#047857' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+    .hidden-force { display: none !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .nav-btn.active {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    .nav-btn.active i { color: #fcd34d; }
+    
+    .page-sec { animation: fadeIn 0.2s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- GLOBAL LOADING OVERLAY -->
+  <div id="globalLoader" class="fixed inset-0 bg-navy-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden-force">
+    <div class="bg-white p-5 rounded-2xl shadow-xl flex items-center gap-4 max-w-xs w-full mx-4">
+      <div class="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin shrink-0"></div>
+      <div>
+        <div class="font-bold text-slate-800 text-sm" id="loaderTitle">Memproses Data...</div>
+        <div class="text-xs text-slate-500">Mohon tunggu sebentar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION AREA -->
+  <div id="alertArea" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- 0. LAYAR AWAL SPLIT-SCREEN SESUAI GAMBAR REFERENSI                    -->
+  <!-- ===================================================================== -->
+  <div id="loginScreen" class="min-h-screen flex flex-col lg:flex-row bg-[#f4f6f8]">
+    
+    <!-- PANEL KIRI: HERO BRANDING KEMENAG GORONTALO UTARA -->
+    <div class="lg:w-[56%] bg-gradient-to-br from-[#0c2421] via-[#0a1929] to-[#07111e] text-white p-6 sm:p-10 lg:p-14 flex flex-col justify-between relative overflow-hidden">
+      <div class="absolute -top-24 -left-24 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 right-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Bar Atas Panel Kiri -->
+      <div class="flex items-center justify-between gap-4 z-10">
+        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 border border-white/15 backdrop-blur-xs">
+          <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-emerald-800 shadow-xs shrink-0">
+            <i class="fa-solid fa-mosque text-sm"></i>
+          </div>
+          <span class="text-xs sm:text-sm font-bold tracking-tight text-white">Kemenag Gorontalo Utara</span>
+        </div>
+      </div>
+
+      <!-- Konten Tengah Panel Kiri -->
+      <div class="my-10 lg:my-auto max-w-xl z-10 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-[11px] font-extrabold uppercase tracking-wider">
+          <i class="fa-solid fa-circle-check text-emerald-400"></i> AKSES RESMI SEKSI PENDIDIKAN MADRASAH
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight leading-[1.15] text-white">
+          Satu akun untuk layanan digital pemberkasan.
+        </h1>
+
+        <p class="text-sm sm:text-base text-slate-300/90 leading-relaxed font-normal">
+          Masuk untuk mengakses lembar ceklis dokumen pencairan, unggah tautan berkas PDF Google Drive, verifikasi pengawas, dan laporan eksekutif <b class="text-amber-300 font-bold">SIM-TPG & TUKIN</b> sesuai peran Anda.
+        </p>
+
+        <!-- 3 Kartu Fitur di Bawah Deskripsi -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+          <div onclick="openInfoPemberkasanModal()" class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.09] hover:border-amber-400/40 transition cursor-pointer group">
+            <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-sm mb-3 group-hover:scale-105 transition">
+              <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white mb-1 flex items-center justify-between">
+              <span>Pemberkasan TPG</span>
+              <i class="fa-solid fa-circle-info text-xs text-amber-300/80"></i>
+            </h3>
+            <p class="text-xs text-slate-300/80 leading-relaxed">Semua dokumen yang diupload WAJIB di arsipkan bukti fisiknya di madrasah masing-masing.</p>
+          </div>
+
+          <div onclick="openInfoPemberkasanModal()" class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.09] transition cursor-pointer">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-sm mb-3">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white mb-1">Ceklis Pengawas</h3>
+            <p class="text-xs text-slate-300/80 leading-relaxed">Kelola lembar ceklis bulanan & semesteran serta verifikasi berkas guru.</p>
+          </div>
+
+          <div onclick="openInfoPemberkasanModal()" class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.09] transition cursor-pointer">
+            <div class="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-400/30 text-sky-300 flex items-center justify-center text-sm mb-3">
+              <i class="fa-solid fa-print"></i>
+            </div>
+            <h3 class="font-bold text-sm text-white mb-1">Selisih Tukin & PDF</h3>
+            <p class="text-xs text-slate-300/80 leading-relaxed">Input massal peserta & cetak laporan rekapitulasi PDF siap tanda tangan.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Panel Kiri -->
+      <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400 z-10">
+        <div>Seksi Pendidikan Madrasah Kementerian Agama Kabupaten Gorontalo Utara</div>
+        <div class="font-bold text-slate-300">SIM-TPG v6.0 (GitHub & GAS Ready)</div>
+      </div>
+    </div>
+
+    <!-- PANEL KANAN: KARTU LOGIN PUTIH BERSIH -->
+    <div class="lg:w-[44%] flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-[#f4f6f8]">
+      <div class="max-w-[440px] w-full bg-white rounded-3xl shadow-[0_12px_40px_rgba(15,37,71,0.08)] border border-slate-200/80 p-6 sm:p-8 animate-[fadeIn_0.25s_ease-out]">
+        
+        <!-- Baris Atas Kartu: Portal Resmi -->
+        <div class="flex items-center justify-between gap-2 mb-5">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-[#2e6b4e]">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Portal Resmi SIM-TPG</span>
+          </div>
+          <span id="cloudStatusBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Mode Mandiri</span>
+        </div>
+
+        <!-- Identitas Masuk Akun -->
+        <div class="flex items-center gap-3.5 mb-4">
+          <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-700 to-navy-900 text-amber-300 flex items-center justify-center font-extrabold text-sm">
+              TPG
+            </div>
+          </div>
+          <div>
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-[#2e6b4e]">PORTAL RESMI</div>
+            <h2 class="text-2xl font-extrabold text-slate-900 leading-tight">Masuk Akun</h2>
+            <p class="text-xs text-slate-500">SIM-TPG & Tukin Kemenag Gorontalo Utara</p>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+          Gunakan akun terdaftar untuk masuk ke layanan sesuai peran Anda di Sistem Informasi Pemberkasan TPG & Selisih Tukin Madrasah.
+        </p>
+
+        <!-- Pemilih Peran (Guru | Pengawas | Admin) -->
+        <div class="grid grid-cols-3 bg-slate-100 p-1 rounded-xl border border-slate-200/80 gap-1 mb-4">
+          <button id="tabBtnGuru" type="button" onclick="switchLoginTab('GURU')" class="py-2 px-2 rounded-lg text-xs font-extrabold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-chalkboard-user text-[#2e6b4e]"></i> Guru
+          </button>
+          <button id="tabBtnPengawas" type="button" onclick="switchLoginTab('PENGAWAS')" class="py-2 px-2 rounded-lg text-xs font-extrabold transition text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-user-check"></i> Pengawas
+          </button>
+          <button id="tabBtnAdmin" type="button" onclick="switchLoginTab('ADMIN')" class="py-2 px-2 rounded-lg text-xs font-extrabold transition text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-user-shield"></i> Admin
+          </button>
+        </div>
+
+        <!-- Kotak Info Hijau Lembut -->
+        <div id="loginInfoBox" class="bg-[#edf7f2] border border-[#c6e7d6] rounded-xl p-3.5 mb-5 flex items-start gap-2.5 text-xs text-[#1b4b35]">
+          <i class="fa-solid fa-circle-info text-[#2e6b4e] mt-0.5"></i>
+          <div id="loginInfoText" class="leading-relaxed font-medium">
+            Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive.
+          </div>
+        </div>
+
+        <!-- FORM 1: LOGIN GURU (NAMA LENGKAP) -->
+        <form id="guruLoginForm" onsubmit="handleGuruLogin(event)" class="space-y-4">
+          <div class="relative">
+            <label class="text-xs font-bold text-slate-800 block mb-1.5">Nama Lengkap Guru Penerima</label>
+            <input type="text" id="guruNameInput" autocomplete="off" oninput="filterGuruSuggestions(this.value)" onfocus="filterGuruSuggestions(this.value)" placeholder="Ketik atau pilih nama lengkap Anda..." class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e6b4e] focus:border-transparent" required>
+            <p class="text-[11px] text-slate-400 mt-1">Gunakan nama lengkap yang terdaftar pada daftar penerima TPG / Selisih Tukin.</p>
+            <div id="guruSuggestions" class="absolute left-0 right-0 top-[74px] bg-white border border-slate-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto z-30 divide-y divide-slate-100 hidden-force"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="inline-flex items-center gap-2 text-slate-600 font-medium cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded text-[#2e6b4e] focus:ring-[#2e6b4e]">
+              <span>Ingat saya</span>
+            </label>
+            <span class="text-slate-400 text-[11px]">Login Tanpa Password</span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 px-4 bg-[#3b6e52] hover:bg-[#2f5942] text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Masuk</span>
+          </button>
+        </form>
+
+        <!-- FORM 2: LOGIN PENGAWAS / ADMIN -->
+        <form id="staffLoginForm" onsubmit="handleStaffLogin(event)" class="space-y-4 hidden-force">
+          <div>
+            <label id="staffUserLabel" class="text-xs font-bold text-slate-800 block mb-1.5">Username / Email</label>
+            <input type="text" id="staffUsername" placeholder="Masukkan username resmi" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e6b4e]" required>
+            <p class="text-[11px] text-slate-400 mt-1">Gunakan username resmi yang terdaftar pada sistem SIM-TPG.</p>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-800 block mb-1.5">Kata Sandi (Password)</label>
+            <div class="relative">
+              <input type="password" id="staffPassword" placeholder="••••••••••••" class="w-full pl-4 pr-10 py-3 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e6b4e]" required>
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i id="eyeIcon" class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="inline-flex items-center gap-2 text-slate-600 font-medium cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded text-[#2e6b4e] focus:ring-[#2e6b4e]">
+              <span>Ingat saya</span>
+            </label>
+          </div>
+
+          <button type="submit" id="staffSubmitBtn" class="w-full py-3.5 px-4 bg-[#3b6e52] hover:bg-[#2f5942] text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Masuk</span>
+          </button>
+        </form>
+
+        <!-- Catatan Kaki Kartu -->
+        <div class="mt-6 p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-2.5 text-[11px] text-amber-950 leading-relaxed">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5"></i>
+          <div>
+            <b>Perhatian:</b> Semua dokumen yang diupload <b>WAJIB di arsipkan bukti fisiknya di madrasah masing-masing</b> untuk kepentingan monev dan pemeriksaan Inspektorat Jenderal.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL POP-UP RINCIAN INFORMASI PEMBERKASAN TPG -->
+  <div id="infoPemberkasanModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden-force">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
+      <div class="px-6 py-4 bg-gradient-to-r from-navy-900 to-emerald-800 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center">
+            <i class="fa-solid fa-file-shield"></i>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-sm">Informasi Pemberkasan TPG</h4>
+            <p class="text-[11px] text-emerald-200">Ketentuan Arsip & Pemeriksaan</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeInfoPemberkasanModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 flex items-center justify-center text-white transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed font-semibold flex items-start gap-3">
+          <i class="fa-solid fa-circle-exclamation text-amber-600 text-lg mt-0.5 shrink-0"></i>
+          <div>
+            Semua dokumen yang diupload <b>WAJIB di arsipkan bukti fisiknya di madrasah masing-masing</b> untuk kepentingan monev dan pemeriksaan Inspektorat Jenderal.
+          </div>
+        </div>
+        <div class="flex justify-end pt-1">
+          <button type="button" onclick="closeInfoPemberkasanModal()" class="px-5 py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs transition">
+            Saya Mengerti
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPBAR / HEADER BERSAMA (TAMPIL SETELAH LOGIN) -->
+  <header id="appHeader" class="bg-gradient-to-r from-navy-900 via-navy-800 to-emerald-700 text-white sticky top-0 z-30 shadow-md hidden-force">
+    <div class="max-w-[1600px] mx-auto px-4 h-16 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-navy-900 font-extrabold flex items-center justify-center shadow-inner shrink-0">
+          TPG
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-sm md:text-base tracking-tight leading-tight">SIM-TPG & TUKIN</h1>
+            <span id="portalBadge" class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-white/15 text-amber-300 border border-white/20">PORTAL</span>
+          </div>
+          <p class="text-[11px] md:text-xs text-emerald-200 font-medium">Kementerian Agama Kab. Gorontalo Utara</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 md:gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-xl border border-white/15">
+          <i class="fa-regular fa-calendar text-amber-300 text-xs"></i>
+          <select id="periodSelectTop" onchange="changePeriod(this.value)" class="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer [&>option]:text-slate-800"></select>
+        </div>
+
+        <div class="flex items-center gap-2.5 bg-white/10 px-3 py-1.5 rounded-xl border border-white/15">
+          <div class="text-right hidden sm:block">
+            <div id="userName" class="text-xs font-bold leading-tight truncate max-w-[160px]">-</div>
+            <div id="userRole" class="text-[10px] font-semibold text-amber-300 uppercase tracking-wider">-</div>
+          </div>
+          <button onclick="logoutApp()" title="Keluar / Ganti Akun" class="px-2.5 py-1.5 rounded-lg bg-rose-500/80 hover:bg-rose-600 text-white text-xs font-bold transition flex items-center gap-1">
+            <i class="fa-solid fa-power-off"></i> <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="md:hidden bg-navy-950/50 px-4 py-2 border-t border-white/10 flex items-center justify-between gap-2">
+      <span class="text-[11px] font-bold text-emerald-200 uppercase"><i class="fa-regular fa-calendar mr-1"></i>Periode:</span>
+      <select id="periodSelectMobile" onchange="changePeriod(this.value)" class="bg-white/10 text-white text-xs font-bold px-2.5 py-1 rounded-lg border border-white/20 focus:outline-none [&>option]:text-slate-800"></select>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- 1. TAMPILAN KHUSUS GURU (#guruApp)                                    -->
+  <!-- ===================================================================== -->
+  <div id="guruApp" class="max-w-5xl w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
+    
+    <!-- Banner Profil & Aksi Laporan Guru -->
+    <div class="bg-gradient-to-br from-navy-900 via-navy-800 to-emerald-800 text-white p-5 md:p-6 rounded-3xl shadow-md">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div class="flex items-start sm:items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-amber-400 text-2xl shrink-0">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                Lembar Ceklis Guru
+              </span>
+              <span id="guruKategoriBadge" class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400 text-navy-950">
+                PENERIMA TPG
+              </span>
+            </div>
+            <h2 id="guruPortalName" class="text-lg md:text-xl font-extrabold">-</h2>
+            <p id="guruPortalMeta" class="text-xs md:text-sm text-emerald-100/90 mt-0.5">-</p>
+          </div>
+        </div>
+
+        <!-- Ringkasan Progres & Tombol Cetak Rekapan / Buat Laporan PDF Otomatis -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 min-w-[210px]">
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-semibold text-emerald-100">Progres Disetujui</span>
+              <span id="guruProgressText" class="font-extrabold text-amber-300">0 / 0 Wajib</span>
+            </div>
+            <div class="w-full h-2 bg-navy-950/60 rounded-full overflow-hidden">
+              <div id="guruProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="text-[11px] text-white/75">Status:</span>
+              <span id="guruFinalBadge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-400 text-navy-900">BELUM LENGKAP</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 shrink-0">
+            <button onclick="generateReadyToPrintPdf('GURU_PERSONAL')" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-navy-950 font-extrabold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Buat Laporan Otomatis (PDF Siap Cetak)
+            </button>
+            <button onclick="generateReadyToPrintPdf('GURU_REKAP')" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white border border-white/20 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-print"></i> Cetak Rekapan Ceklis Dokumen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Peringatan Arsip Fisik Guru -->
+    <div class="bg-amber-50 border border-amber-200/90 rounded-2xl p-4 flex items-start gap-3 text-xs text-amber-950">
+      <i class="fa-solid fa-box-archive text-amber-600 text-base mt-0.5"></i>
+      <div>
+        <b>Ketentuan Arsip Fisik:</b> Semua dokumen yang diupload <b>WAJIB di arsipkan bukti fisiknya di madrasah masing-masing</b> untuk kepentingan monev dan pemeriksaan Inspektorat Jenderal.
+      </div>
+    </div>
+
+    <!-- Filter Siklus Ceklis (Semua / Bulanan / Semesteran) & Segarkan -->
+    <div class="bg-white p-4 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-1.5">
+        <span class="text-xs font-extrabold text-navy-900 mr-2"><i class="fa-solid fa-list-check text-emerald-600 mr-1"></i>Filter Lembar Ceklis:</span>
+        <button onclick="setGuruSiklusFilter('SEMUA')" id="btnGuruSiklus_SEMUA" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-navy-900 text-white transition">Semua Ceklis</button>
+        <button onclick="setGuruSiklusFilter('BULANAN')" id="btnGuruSiklus_BULANAN" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Ceklis Bulanan</button>
+        <button onclick="setGuruSiklusFilter('SEMESTERAN')" id="btnGuruSiklus_SEMESTERAN" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Ceklis Semesteran</button>
+      </div>
+      <button onclick="loadMyDocs()" class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 self-end sm:self-center">
+        <i class="fa-solid fa-rotate"></i> Segarkan Status
+      </button>
+    </div>
+
+    <!-- Daftar Kartu Persyaratan Checklist Guru -->
+    <div id="myChecklist" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+  </div>
+
+
+  <!-- ===================================================================== -->
+  <!-- 2. TAMPILAN KHUSUS PENGAWAS (#pengawasApp)                            -->
+  <!-- ===================================================================== -->
+  <div id="pengawasApp" class="max-w-[1600px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
+    
+    <!-- Navigasi Tab Utama Pengawas -->
+    <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="showPengawasTab('verifikasi')" id="pTab_verifikasi" class="nav-btn active px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold flex items-center gap-2 transition">
+          <i class="fa-solid fa-file-circle-check"></i> 1. Pemeriksaan Dokumen Guru
+        </button>
+        <button onclick="showPengawasTab('ceklis')" id="pTab_ceklis" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
+          <i class="fa-solid fa-pen-to-square"></i> 2. Edit Lembar Ceklis (Bulanan & Semesteran)
+        </button>
+        <button onclick="showPengawasTab('rekap')" id="pTab_rekap" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
+          <i class="fa-solid fa-print"></i> 3. Rekap Kelengkapan & Cetak PDF
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="generateReadyToPrintPdf('ALL_REKAP')" class="px-4 py-2.5 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-2">
+          <i class="fa-solid fa-file-pdf text-amber-400"></i> Buat Laporan Otomatis (PDF Siap Cetak)
+        </button>
+      </div>
+    </div>
+
+    <!-- Ringkasan Statistik Pengawas -->
+    <div id="pengawasStats" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4"></div>
+
+    <!-- SUB-TAB PENGAWAS 1: PEMERIKSAAN DOKUMEN GURU -->
+    <section id="pengawasSec-verifikasi" class="page-sec space-y-4">
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+        <div class="p-4 md:px-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Dokumen yang Diupload Guru (Pengecekan Pengawas)</h3>
+            <p class="text-xs text-slate-500">Klik <b>Tampilkan File PDF</b> untuk melihat isi berkas Google Drive guru dan memberikan keputusan</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="pFilterKategori" onchange="applyPengawasDocFilter()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Kategori (TPG & Tukin)</option>
+              <option value="TPG">Penerima TPG</option>
+              <option value="SELISIH_TUKIN">Selisih Tukin</option>
+            </select>
+            <select id="pFilterSiklus" onchange="applyPengawasDocFilter()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Siklus (Bulanan & Semesteran)</option>
+              <option value="BULANAN">Bulanan</option>
+              <option value="SEMESTERAN">Semesteran</option>
+            </select>
+            <select id="pFilterJenjang" onchange="applyPengawasDocFilter()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Jenjang</option>
+              <option value="RA">RA</option><option value="MI">MI</option><option value="MTs">MTs</option><option value="MA">MA</option>
+            </select>
+            <div class="relative flex-1 sm:w-60">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" id="pSearchDoc" oninput="applyPengawasDocFilter()" placeholder="Cari guru / madrasah / berkas..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none">
+            </div>
+            <button onclick="loadPengawasWorkspace()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
+                <th class="py-3 px-4">Nama Guru & Madrasah</th>
+                <th class="py-3 px-4">Item Lembar Ceklis</th>
+                <th class="py-3 px-4">Siklus</th>
+                <th class="py-3 px-4">File PDF Google Drive</th>
+                <th class="py-3 px-4">Status Pemeriksaan</th>
+                <th class="py-3 px-4 text-right">Tindakan Pengawas</th>
+              </tr>
+            </thead>
+            <tbody id="pengawasDocRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUB-TAB PENGAWAS 2: EDIT LEMBAR CEKLIS KELENGKAPAN DOKUMEN -->
+    <section id="pengawasSec-ceklis" class="page-sec hidden-force space-y-6">
+      <div class="bg-white p-5 rounded-2xl shadow-xs border-2 border-emerald-500/30">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 id="formChecklistTitle" class="font-extrabold text-navy-900 text-sm md:text-base flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-emerald-600"></i> Tambah / Edit Lembar Ceklis Kelengkapan Dokumen
+            </h3>
+            <p class="text-xs text-slate-500">Atur persyaratan dokumen untuk TPG maupun Selisih Tukin (baik Bulanan maupun Semesteran)</p>
+          </div>
+          <button type="button" id="btnCancelEditChecklist" onclick="resetChecklistForm()" class="px-3 py-1.5 bg-rose-50 text-rose-700 font-bold text-xs rounded-xl hidden-force">
+            <i class="fa-solid fa-xmark mr-1"></i> Batal Edit
+          </button>
+        </div>
+
+        <form id="checkForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+          <input type="hidden" name="ChecklistID" id="chkFormId">
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Periode</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="PeriodID" id="checkPeriod" required></select>
+          </div>
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Kategori Tunjangan</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Kategori" id="chkFormKategori" required>
+              <option value="TPG">Penerima TPG</option>
+              <option value="SELISIH_TUKIN">Selisih Tukin</option>
+              <option value="SEMUA">Semua (TPG & Tukin)</option>
+            </select>
+          </div>
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Siklus Pemberkasan</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Siklus" id="chkFormSiklus" required>
+              <option value="BULANAN">Bulanan</option>
+              <option value="SEMESTERAN">Semesteran</option>
+            </select>
+          </div>
+          <div class="lg:col-span-1">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Jenjang</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Jenjang" id="chkFormJenjang" required>
+              <option value="SEMUA">Semua</option>
+              <option value="RA">RA</option><option value="MI">MI</option><option value="MTs">MTs</option><option value="MA">MA</option>
+            </select>
+          </div>
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Nama Dokumen Persyaratan</label>
+            <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold" name="NamaDokumen" id="chkFormNama" placeholder="Contoh: Rekap Absensi Bulanan (PDF)" required>
+          </div>
+          <div class="lg:col-span-1">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Urut</label>
+            <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="Urutan" id="chkFormUrutan" type="number" min="1" value="1">
+          </div>
+          <div class="lg:col-span-1 flex flex-col justify-end">
+            <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 mb-1.5 cursor-pointer">
+              <input type="checkbox" name="Wajib" id="chkFormWajib" checked class="w-3.5 h-3.5 rounded text-emerald-600"> Wajib
+            </label>
+            <button type="submit" id="btnSubmitChecklist" class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+          <div class="p-4 bg-emerald-50/70 border-b border-emerald-200/60 flex items-center justify-between">
+            <div>
+              <h4 class="font-extrabold text-navy-900 text-sm">Lembar Ceklis Dokumen TPG</h4>
+              <p class="text-[11px] text-slate-500">Daftar persyaratan Bulanan & Semesteran untuk Guru TPG</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">TPG</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold uppercase text-slate-500">
+                  <th class="py-2.5 px-3">No</th>
+                  <th class="py-2.5 px-3">Siklus</th>
+                  <th class="py-2.5 px-3">Jenjang</th>
+                  <th class="py-2.5 px-3">Nama Dokumen</th>
+                  <th class="py-2.5 px-3 text-right">Edit / Hapus</th>
+                </tr>
+              </thead>
+              <tbody id="checklistTableTPG" class="divide-y divide-slate-100 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+          <div class="p-4 bg-amber-50/70 border-b border-amber-200/60 flex items-center justify-between">
+            <div>
+              <h4 class="font-extrabold text-navy-900 text-sm">Lembar Ceklis Dokumen Selisih Tukin</h4>
+              <p class="text-[11px] text-slate-500">Daftar persyaratan Bulanan & Semesteran untuk Selisih Tukin</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-500 text-navy-950">SELISIH TUKIN</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold uppercase text-slate-500">
+                  <th class="py-2.5 px-3">No</th>
+                  <th class="py-2.5 px-3">Siklus</th>
+                  <th class="py-2.5 px-3">Jenjang</th>
+                  <th class="py-2.5 px-3">Nama Dokumen</th>
+                  <th class="py-2.5 px-3 text-right">Edit / Hapus</th>
+                </tr>
+              </thead>
+              <tbody id="checklistTableTukin" class="divide-y divide-slate-100 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUB-TAB PENGAWAS 3: REKAP KELENGKAPAN PER GURU & CETAK LAPORAN -->
+    <section id="pengawasSec-rekap" class="page-sec hidden-force space-y-4">
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+        <div class="p-4 md:px-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-sm md:text-base">Rekapitulasi Kelengkapan Dokumen Wajib per Guru</h3>
+            <p class="text-xs text-slate-500">Cetak rekapan per kategori atau unduh laporan PDF siap cetak</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="generateReadyToPrintPdf('TPG_ONLY')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-print"></i> Cetak Rekap TPG (PDF)
+            </button>
+            <button onclick="generateReadyToPrintPdf('TUKIN_ONLY')" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-print"></i> Cetak Rekap Selisih Tukin (PDF)
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
+                <th class="py-3 px-4">Nama Guru</th>
+                <th class="py-3 px-4">Kategori</th>
+                <th class="py-3 px-4">Jenjang & Madrasah</th>
+                <th class="py-3 px-4 text-center">Wajib</th>
+                <th class="py-3 px-4 text-center">Disetujui</th>
+                <th class="py-3 px-4 text-center">Belum Upload</th>
+                <th class="py-3 px-4 text-center">Perbaikan</th>
+                <th class="py-3 px-4 text-right">Status & Cetak Kartu</th>
+              </tr>
+            </thead>
+            <tbody id="pengawasCompletenessRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <!-- ===================================================================== -->
+  <!-- 3. TAMPILAN KHUSUS ADMIN YANG DISEDERHANAKAN (#adminApp)              -->
+  <!-- ===================================================================== -->
+  <div id="adminApp" class="max-w-[1400px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
+    
+    <!-- Bar Navigasi Sederhana Admin -->
+    <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="showAdminTab('peserta')" id="aTab_peserta" class="nav-btn active px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold flex items-center gap-2 transition">
+          <i class="fa-solid fa-users-gear"></i> 1. Kelola Peserta TPG & Selisih Tukin
+        </button>
+        <button onclick="showAdminTab('pengaturan')" id="aTab_pengaturan" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
+          <i class="fa-solid fa-sliders"></i> 2. Pengaturan Periode, Akun & Cloud
+        </button>
+        <button onclick="showAdminTab('cetak')" id="aTab_cetak" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
+          <i class="fa-solid fa-file-pdf"></i> 3. Cetak & Unduh PDF
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="generateReadyToPrintPdf('ADMIN_PESERTA')" class="px-4 py-2.5 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-2">
+          <i class="fa-solid fa-print text-amber-400"></i> Cetak & Unduh PDF Daftar Peserta
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB ADMIN 1: KELOLA PESERTA TPG & SELISIH TUKIN -->
+    <section id="adminSec-peserta" class="page-sec space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-2xl shadow-xs border-2 border-emerald-500/30">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base font-bold">
+                <i class="fa-solid fa-paste"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-navy-900 text-sm md:text-base">Input Massal Peserta TPG</h3>
+                <p class="text-[11px] text-slate-500">Copy-paste daftar nama guru penerima TPG (1 baris = 1 nama)</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 uppercase">TPG</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Default Jenjang</label>
+              <select id="bulkTpgJenjang" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold">
+                <option value="MI">MI</option><option value="RA">RA</option><option value="MTs">MTs</option><option value="MA">MA</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Default Madrasah</label>
+              <input id="bulkTpgMadrasah" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" placeholder="Contoh: Kemenag Gorut">
+            </div>
+          </div>
+          <textarea id="bulkTpgText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Tempel (Paste) daftar nama guru penerima TPG di sini...&#10;Abdul Rahman, S.Pd.I&#10;Ahmad Fauzi, S.Ag | MTs | MTsN 1 Gorut"></textarea>
+          <div class="flex items-center justify-end mt-3">
+            <button onclick="submitBulkTeachers('TPG')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Massal Peserta TPG
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl shadow-xs border-2 border-amber-500/30">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base font-bold">
+                <i class="fa-solid fa-copy"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-navy-900 text-sm md:text-base">Input Massal Peserta Selisih Tukin</h3>
+                <p class="text-[11px] text-slate-500">Copy-paste daftar nama guru penerima Selisih Tukin (1 baris = 1 nama)</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 uppercase">SELISIH TUKIN</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Default Jenjang</label>
+              <select id="bulkTukinJenjang" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold">
+                <option value="MI">MI</option><option value="RA">RA</option><option value="MTs">MTs</option><option value="MA">MA</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Default Madrasah</label>
+              <input id="bulkTukinMadrasah" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" placeholder="Contoh: Kemenag Gorut">
+            </div>
+          </div>
+          <textarea id="bulkTukinText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Tempel (Paste) daftar nama guru penerima Selisih Tukin di sini...&#10;Siti Aminah, M.Pd&#10;Mahmud Yunus, S.Pd.I | MA | MAN 1 Gorut"></textarea>
+          <div class="flex items-center justify-end mt-3">
+            <button onclick="submitBulkTeachers('SELISIH_TUKIN')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Massal Selisih Tukin
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Input Satu per Satu / Edit Peserta -->
+      <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/80" id="teacherFormCard">
+        <div class="flex items-center justify-between mb-3">
+          <h3 id="teacherFormTitle" class="font-bold text-navy-900 text-sm md:text-base flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-emerald-600"></i> Tambah Peserta Satu per Satu
+          </h3>
+          <button type="button" id="btnCancelEditTeacher" onclick="resetTeacherForm()" class="px-3 py-1 bg-rose-50 text-rose-700 font-bold text-xs rounded-xl hidden-force">
+            <i class="fa-solid fa-xmark mr-1"></i> Batal Edit
+          </button>
+        </div>
+        <form id="teacherForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+          <input type="hidden" name="TeacherID" id="tFormId">
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Nama Lengkap Guru</label>
+            <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold" name="Nama" id="tFormNama" placeholder="Contoh: Abdul Rahman, M.Pd." required>
+          </div>
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Kategori Penerima</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Kategori" id="tFormKategori" required>
+              <option value="TPG">Penerima TPG</option>
+              <option value="SELISIH_TUKIN">Selisih Tukin</option>
+            </select>
+          </div>
+          <div class="lg:col-span-1">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Jenjang</label>
+            <select class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Jenjang" id="tFormJenjang" required>
+              <option>RA</option><option selected>MI</option><option>MTs</option><option>MA</option>
+            </select>
+          </div>
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">Nama Madrasah</label>
+            <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="NamaMadrasah" id="tFormMadrasah" placeholder="MIN 1 Gorontalo Utara" required>
+          </div>
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-slate-500 uppercase">NIP / NPK</label>
+            <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="NIP_NPK" id="tFormNip" placeholder="Opsional">
+          </div>
+          <div class="lg:col-span-1 flex items-end">
+            <button type="submit" id="btnSubmitTeacher" class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabel Daftar Nama Peserta -->
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+        <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h4 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Nama Peserta TPG & Selisih Tukin</h4>
+            <p class="text-xs text-slate-500">Gunakan tombol <b>Edit</b> atau <b>Hapus</b> di samping daftar nama untuk memperbarui data</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="adminFilterKatTeacher" onchange="renderAdminTeachersTable()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+              <option value="">Semua Kategori</option>
+              <option value="TPG">Peserta TPG</option>
+              <option value="SELISIH_TUKIN">Peserta Selisih Tukin</option>
+            </select>
+            <input type="text" id="adminSearchTeacher" oninput="renderAdminTeachersTable()" placeholder="Cari nama / madrasah..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none sm:w-56">
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
+                <th class="py-3 px-4">No</th>
+                <th class="py-3 px-4">Nama Lengkap Guru (Username Login)</th>
+                <th class="py-3 px-4">Kategori</th>
+                <th class="py-3 px-4">Jenjang</th>
+                <th class="py-3 px-4">Nama Madrasah</th>
+                <th class="py-3 px-4">NIP / NPK</th>
+                <th class="py-3 px-4 text-right">Aksi (Edit / Hapus)</th>
+              </tr>
+            </thead>
+            <tbody id="teacherRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB ADMIN 2: PENGATURAN PERIODE, KELOLA AKUN & KONEKSI GITHUB/GAS -->
+    <section id="adminSec-pengaturan" class="page-sec hidden-force space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Pengaturan Periode Pencairan -->
+        <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 id="periodFormTitle" class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2.5">
+              <i class="fa-solid fa-calendar-plus text-emerald-600"></i> Pengaturan Periode Pencairan
+            </h3>
+            <button type="button" id="btnCancelEditPeriod" onclick="resetPeriodForm()" class="px-3 py-1 bg-rose-50 text-rose-700 font-bold text-xs rounded-xl hidden-force">
+              <i class="fa-solid fa-xmark mr-1"></i> Batal Edit
+            </button>
+          </div>
+
+          <form id="periodForm" class="space-y-3.5">
+            <input type="hidden" name="PeriodID" id="pFormId">
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Nama Periode</label>
+              <input class="w-full mt-1 px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600" name="NamaPeriode" id="pFormNama" placeholder="Contoh: Semester Ganjil TP 2026/2027" required>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal Mulai</label>
+                <input class="w-full mt-1 px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600" name="TanggalMulai" id="pFormMulai" type="date" required>
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal Akhir</label>
+                <input class="w-full mt-1 px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600" name="TanggalAkhir" id="pFormAkhir" type="date" required>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <label class="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-700 cursor-pointer">
+                <input type="checkbox" name="Aktif" id="pFormAktif" checked class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                <span>Jadikan Periode Aktif Utama</span>
+              </label>
+              <button type="submit" id="btnSubmitPeriod" class="py-2.5 px-5 bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs md:text-sm rounded-xl shadow-xs transition">
+                Simpan Periode
+              </button>
+            </div>
+          </form>
+
+          <div class="pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Daftar Periode Tersimpan</span>
+              <span class="text-[10px] text-slate-400">Klik status untuk Aktif/Nonaktif</span>
+            </div>
+            <div id="adminPeriodList" class="text-xs space-y-2.5"></div>
+          </div>
+        </div>
+
+        <!-- Kelola Akun Pengawas & Admin -->
+        <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2">
+              <i class="fa-solid fa-user-shield text-emerald-600"></i> Kelola Akun Pengawas & Admin
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Tambahkan atau ubah akun login untuk Pengawas maupun Admin</p>
+          </div>
+          <form id="userForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Username Login</label>
+              <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="Username" id="uFormUsername" placeholder="Pengawas@kemenag.go.id" required>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Password</label>
+              <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="Password" id="uFormPassword" placeholder="Password login" required>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Nama Lengkap Pejabat</label>
+              <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="Nama" id="uFormNama" placeholder="Nama lengkap" required>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Role Akses</label>
+              <div class="flex gap-2 mt-1">
+                <select class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Role" id="uFormRole">
+                  <option value="PENGAWAS">PENGAWAS</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+                <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shrink-0">Simpan</button>
+              </div>
+            </div>
+          </form>
+          <div id="userRows" class="pt-2"></div>
+        </div>
+      </div>
+
+      <!-- KONEKSI GITHUB PAGES KE GOOGLE APPS SCRIPT & BACKUP JSON + SALIN CODE.GS -->
+      <div class="bg-white p-6 rounded-3xl shadow-xs border-2 border-navy-900/15 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2">
+              <i class="fa-brands fa-github text-navy-900"></i> Pengaturan Hosting GitHub Pages & Integrasi Code.gs
+            </h3>
+            <p class="text-xs text-slate-500">File <code>index.html</code> ini sudah utuh (standalone) dan di dalamnya tersimpan kode lengkap <code>Code.gs</code>.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="exportLocalDatabaseJson()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5">
+              <i class="fa-solid fa-download"></i> Backup Database (.json)
+            </button>
+            <button type="button" onclick="copyEmbeddedCodeGs()" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-navy-950 font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-copy"></i> Salin Seluruh Kode Code.gs
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <div class="lg:col-span-9">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">URL Web App Google Apps Script (Opsional - Untuk Sinkronisasi Online Antar HP/Laptop di GitHub Pages)</label>
+            <input type="url" id="gasEndpointInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec (Kosongkan jika menggunakan penyimpanan lokal)" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono">
+          </div>
+          <div class="lg:col-span-3 flex gap-2">
+            <button type="button" onclick="saveGasEndpointUrl()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition">
+              Simpan URL Cloud
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB ADMIN 3: CETAK & UNDUH PDF -->
+    <section id="adminSec-cetak" class="page-sec hidden-force">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-navy-900 text-amber-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-users-viewfinder"></i>
+            </div>
+            <h4 class="font-extrabold text-navy-900 text-base mb-1">Cetak & Unduh PDF Daftar Peserta</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-5">Laporan daftar seluruh nama guru penerima TPG dan penerima Selisih Tukin yang terdaftar pada sistem.</p>
+          </div>
+          <button onclick="generateReadyToPrintPdf('ADMIN_PESERTA')" class="w-full py-2.5 px-4 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-file-pdf text-amber-400"></i> Cetak / Unduh PDF Daftar Peserta
+          </button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-file-contract"></i>
+            </div>
+            <h4 class="font-extrabold text-navy-900 text-base mb-1">Cetak & Unduh PDF Rekap Kelengkapan</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-5">Rekapitulasi status kelengkapan berkas seluruh peserta TPG dan Selisih Tukin siap cetak (A4 Landscape).</p>
+          </div>
+          <button onclick="generateReadyToPrintPdf('ALL_REKAP')" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-print"></i> Cetak / Unduh PDF Rekap Kelengkapan
+          </button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-cloud-arrow-down"></i>
+            </div>
+            <h4 class="font-extrabold text-navy-900 text-base mb-1">Arsip PDF Drive & Excel Server</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-5">Simpan salinan PDF atau Spreadsheet langsung ke folder Google Drive Arsip Kemenag (saat di-deploy).</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="makePdf()" class="flex-1 py-2.5 px-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl transition">PDF Drive</button>
+            <button onclick="exportExcel()" class="flex-1 py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl transition">Export Excel</button>
+          </div>
+          <div id="reportResult" class="mt-3"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL PRATINJAU FILE PDF & VERIFIKASI PENGAWAS -->
+  <div id="verifyModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 hidden-force">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full h-[90vh] flex flex-col overflow-hidden border border-slate-200 animate-[fadeIn_0.15s_ease-out]">
+      <div class="px-5 py-3.5 bg-navy-900 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <i class="fa-solid fa-file-pdf text-amber-400 text-lg"></i>
+          <div class="truncate">
+            <h4 id="modalDocTitle" class="font-bold text-sm truncate">Tampilan File PDF Google Drive</h4>
+            <p id="modalTeacherSub" class="text-[11px] text-emerald-200 truncate">-</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <a id="modalExternalLink" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> <span class="hidden sm:inline">Buka di Tab Baru</span>
+          </a>
+          <button onclick="closeVerifyModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 flex items-center justify-center text-white transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0">
+        <div id="pdfViewerContainer" class="lg:col-span-8 bg-slate-800 relative flex flex-col min-h-[280px] lg:min-h-0">
+          <iframe id="pdfPreviewFrame" src="about:blank" class="w-full flex-1 border-0" allow="autoplay"></iframe>
+          <div class="bg-slate-900 text-slate-300 px-4 py-2 text-[11px] flex items-center justify-between">
+            <span><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i> Semua dokumen yang diupload <b>WAJIB di arsipkan bukti fisiknya di madrasah masing-masing</b> untuk kepentingan monev dan pemeriksaan Inspektorat Jenderal.</span>
+          </div>
+        </div>
+
+        <div id="verifyFormPanel" class="lg:col-span-4 p-5 flex flex-col justify-between bg-white border-t lg:border-t-0 lg:border-l border-slate-200 overflow-y-auto">
+          <div class="space-y-4">
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-xs space-y-1">
+              <div class="font-extrabold text-emerald-950 uppercase text-[10px]">Lembar Pemeriksaan Pengawas</div>
+              <div id="modalStageSummary" class="space-y-1 pt-1 text-slate-700"></div>
+            </div>
+
+            <input type="hidden" id="verifyId">
+            <div>
+              <label class="text-xs font-bold text-slate-700 uppercase block mb-1.5">Hasil Pengecekan Pengawas</label>
+              <select id="verifyStatus" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                <option value="DISETUJUI">✓ LENGKAP / DISETUJUI (Sesuai Ceklis)</option>
+                <option value="PERLU_PERBAIKAN">✕ PERLU PERBAIKAN (Kembalikan ke Guru)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-700 uppercase block mb-1.5">Catatan Pengawas</label>
+              <textarea id="verifyNote" rows="4" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Tuliskan catatan pemeriksaan untuk guru..."></textarea>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-end gap-2 mt-4">
+            <button onclick="closeVerifyModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition">Tutup</button>
+            <button onclick="submitVerify()" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Hasil Ceklis
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL LAPORAN OTOMATIS PDF SIAP CETAK -->
+  <div id="printReportModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 hidden-force">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+      <div class="px-5 py-3.5 bg-navy-900 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-file-pdf text-amber-400 text-lg"></i>
+          <div>
+            <h4 class="font-bold text-sm">Pratinjau Laporan PDF Siap Cetak</h4>
+            <p class="text-[11px] text-emerald-200">Klik tombol "Cetak / Simpan sebagai PDF" di kanan atas untuk mengunduh file PDF</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="triggerIframePrint()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-navy-950 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition">
+            <i class="fa-solid fa-print"></i> Cetak / Simpan sebagai PDF
+          </button>
+          <button onclick="closePrintReportModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 flex items-center justify-center text-white transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <iframe id="printReportFrame" class="w-full flex-1 bg-slate-100 border-0"></iframe>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- EMBEDDED CODE.GS (ARSIP UTUH DI DALAM FILE HTML UNTUK GITHUB)         -->
+  <!-- ===================================================================== -->
+  <script id="embeddedCodeGsSource" type="text/plain">
+/**
+ * SISTEM CHECKLIST DOKUMEN PENCAIRAN TPG & SELISIH TUKIN MADRASAH
+ * Kemenag Kabupaten Gorontalo Utara (Mendukung Google Apps Script & REST API GitHub Pages)
+ */
+const APP = {
+  NAME: 'SIM-TPG & TUKIN Madrasah',
+  ORG: 'Kementerian Agama Kabupaten Gorontalo Utara',
+  VERSION: '6.0.0',
+  PROP_DB: 'TPG_SPREADSHEET_ID',
+  PROP_FOLDER: 'TPG_ROOT_FOLDER_ID',
+  DEFAULT_ADMIN_USER: 'Admintpg@kemenag.go.id',
+  DEFAULT_ADMIN_PASS: 'Tpggorut',
+  DEFAULT_PENGAWAS_USER: 'Pengawas@kemenag.go.id',
+  DEFAULT_PENGAWAS_PASS: 'Pengawasgorut',
+  HEADERS: {
+    Users: ['Username','Password','Nama','Role','TeacherID','Aktif'],
+    Teachers: ['TeacherID','NIP_NPK','Nama','Kategori','Jenjang','NamaMadrasah','NSM','Kabupaten','Aktif','CreatedAt'],
+    Periods: ['PeriodID','NamaPeriode','TanggalMulai','TanggalAkhir','Aktif','CreatedAt'],
+    Checklist: ['ChecklistID','PeriodID','Kategori','Siklus','Jenjang','NamaDokumen','Wajib','FormatDiizinkan','Urutan','Aktif'],
+    Documents: ['DocumentID','PeriodID','TeacherID','ChecklistID','FileName','MimeType','DriveFileID','FileUrl','Status','CatatanAdmin','CatatanPengawas','CatatanKasi','UploadedAt','UpdatedAt','AdminBy','AdminAt','PengawasBy','PengawasAt','KasiBy','KasiAt','StatusAdmin','StatusPengawas','StatusKasi'],
+    Activity: ['Timestamp','Actor','Role','Action','EntityType','EntityID','Detail']
+  }
+};
+
+function doGet(e) {
+  if (e && e.parameter && e.parameter.action) {
+    try {
+      const args = e.parameter.args ? JSON.parse(e.parameter.args) : [];
+      const res = dispatchAction_(e.parameter.action, args);
+      return ContentService.createTextOutput(JSON.stringify({ ok: true, data: res })).setMimeType(ContentService.MimeType.JSON);
+    } catch (err) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: err.message || String(err) })).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+  return HtmlService.createHtmlOutputFromFile('Index')
+    .setTitle(APP.NAME + ' - ' + APP.ORG)
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents || '{}');
+    const res = dispatchAction_(body.action, body.args || []);
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, data: res })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: err.message || String(err) })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function dispatchAction_(action, args) {
+  const fnMap = {
+    apiPublicTeacherList, apiLogin, apiGetDashboard, apiListDocuments,
+    apiGetMyChecklist, apiSubmitDriveLink, apiVerify, apiSaveTeacher,
+    apiBulkSaveTeachers, apiDeleteTeacher, apiSavePeriod, apiTogglePeriod,
+    apiDeletePeriod, apiSaveChecklist, apiDeleteChecklist, apiAdminData,
+    apiSaveUser, apiDeleteUser, apiExport, apiReport, apiActivity, apiFileUrl
+  };
+  if (!fnMap[action]) throw new Error('Fungsi API tidak dikenali: ' + action);
+  return fnMap[action].apply(null, args || []);
+}
+  </script>
+
+  <script>
+    // =========================================================================
+    // KONFIGURASI URL CLOUD GOOGLE APPS SCRIPT (UNTUK HOSTING GITHUB PAGES)
+    // Jika Anda sudah men-deploy Code.gs sebagai Web App, Anda juga dapat
+    // mengisi URL Web App langsung di variabel DEFAULT_GAS_WEBAPP_URL di bawah ini:
+    // =========================================================================
+    const DEFAULT_GAS_WEBAPP_URL = '';
+    const GAS_URL_STORAGE_KEY = 'SIM_TPG_GAS_ENDPOINT_URL';
+
+    let state = {
+      auth: null,
+      user: null,
+      periods: [],
+      periodId: '',
+      teachers: [],
+      checklist: [],
+      allDocsCache: [],
+      completenessCache: [],
+      publicTeachers: [],
+      guruSiklusFilter: 'SEMUA',
+      guruDataCache: null,
+      currentLoginTab: 'GURU'
+    };
+    const $ = id => document.getElementById(id);
+
+    function getConfiguredGasUrl() {
+      return (localStorage.getItem(GAS_URL_STORAGE_KEY) || DEFAULT_GAS_WEBAPP_URL || '').trim();
+    }
+
+    function updateCloudBadgeUI() {
+      const badge = $('cloudStatusBadge');
+      if (!badge) return;
+      const isNativeGas = typeof google !== 'undefined' && google.script && google.script.run;
+      const remoteUrl = getConfiguredGasUrl();
+      if (isNativeGas || remoteUrl) {
+        badge.textContent = 'Cloud Terhubung';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800';
+      } else {
+        badge.textContent = 'Standalone Ready';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600';
+      }
+      if ($('gasEndpointInput')) $('gasEndpointInput').value = remoteUrl;
+    }
+
+    function saveGasEndpointUrl() {
+      const url = ($('gasEndpointInput')?.value || '').trim();
+      if (url && !url.startsWith('https://script.google.com/')) {
+        alertMsg('URL harus berupa URL Web App Google Apps Script (https://script.google.com/macros/s/.../exec)', 'warning');
+        return;
+      }
+      localStorage.setItem(GAS_URL_STORAGE_KEY, url);
+      updateCloudBadgeUI();
+      alertMsg(url ? 'URL Cloud Google Apps Script berhasil disimpan!' : 'Kembali menggunakan penyimpanan mandiri.');
+      loadPublicTeacherNames();
+    }
+
+    function copyEmbeddedCodeGs() {
+      const code = $('embeddedCodeGsSource')?.textContent?.trim() || '';
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alertMsg('Kode Code.gs berhasil disalin ke Clipboard!');
+    }
+
+    function exportLocalDatabaseJson() {
+      const db = getLocalDb();
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'backup_sim_tpg_gorut_' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function setLoading(show, text = 'Memproses Data...') {
+      $('loaderTitle').textContent = text;
+      $('globalLoader').classList.toggle('hidden-force', !show);
+    }
+
+    // =========================================================================
+    // HYBRID BACKEND ADAPTER (NATIVE GAS + REMOTE FETCH GITHUB + LOCALSTORAGE)
+    // =========================================================================
+    const LOCAL_DB_KEY = 'SIM_TPG_GORUT_DB_V6';
+
+    function getLocalDb() {
+      try {
+        const raw = localStorage.getItem(LOCAL_DB_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      const initDb = {
+        users: [
+          { Username: 'Admintpg@kemenag.go.id', Password: 'Tpggorut', Nama: 'Administrator TPG Kemenag Gorut', Role: 'ADMIN', TeacherID: '', Aktif: true },
+          { Username: 'Pengawas@kemenag.go.id', Password: 'Pengawasgorut', Nama: 'Pengawas Madrasah Gorut', Role: 'PENGAWAS', TeacherID: '', Aktif: true }
+        ],
+        periods: [
+          { PeriodID: 'PER-2026-OKT', NamaPeriode: 'Bulan Oktober', TanggalMulai: '2026-10-01', TanggalAkhir: '2026-10-31', Aktif: false },
+          { PeriodID: 'PER-2026-2', NamaPeriode: 'Semester Genap 2026/2027', TanggalMulai: '2026-07-13', TanggalAkhir: '2026-12-31', Aktif: true },
+          { PeriodID: 'PER-2026-1', NamaPeriode: 'Semester Ganjil TP 2026/2027', TanggalMulai: '2026-07-01', TanggalAkhir: '2026-12-31', Aktif: false }
+        ],
+        teachers: [
+          { TeacherID: 'GR-DEMO01', NIP_NPK: '198504122010011005', Nama: 'Abdul Rahman, S.Pd.I', Kategori: 'TPG', Jenjang: 'MI', NamaMadrasah: 'MIN 1 Gorontalo Utara', Aktif: true },
+          { TeacherID: 'GR-DEMO02', NIP_NPK: '199008192019032008', Nama: 'Siti Aminah, M.Pd', Kategori: 'SELISIH_TUKIN', Jenjang: 'MTs', NamaMadrasah: 'MTsN 1 Gorontalo Utara', Aktif: true }
+        ],
+        checklist: [
+          { ChecklistID: 'CHK-01', PeriodID: 'PER-2026-2', Kategori: 'TPG', Siklus: 'BULANAN', Jenjang: 'SEMUA', NamaDokumen: 'Daftar Hadir / Absensi Bulanan & Jurnal Mengajar (PDF)', Wajib: true, Urutan: 1, Aktif: true },
+          { ChecklistID: 'CHK-02', PeriodID: 'PER-2026-2', Kategori: 'TPG', Siklus: 'SEMESTERAN', Jenjang: 'SEMUA', NamaDokumen: 'SKMT, SKBK & SPTJM Semester Berjalan (PDF)', Wajib: true, Urutan: 2, Aktif: true },
+          { ChecklistID: 'CHK-03', PeriodID: 'PER-2026-2', Kategori: 'SELISIH_TUKIN', Siklus: 'BULANAN', Jenjang: 'SEMUA', NamaDokumen: 'Rekap Fingerprint & Laporan Kinerja Bulanan (PDF)', Wajib: true, Urutan: 1, Aktif: true },
+          { ChecklistID: 'CHK-04', PeriodID: 'PER-2026-2', Kategori: 'SELISIH_TUKIN', Siklus: 'SEMESTERAN', Jenjang: 'SEMUA', NamaDokumen: 'SK Pembagian Tugas & Penilaian Kinerja Semester (PDF)', Wajib: true, Urutan: 2, Aktif: true }
+        ],
+        documents: [],
+        activity: []
+      };
+      saveLocalDb(initDb);
+      return initDb;
+    }
+
+    function saveLocalDb(db) {
+      try { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(db)); } catch (e) {}
+    }
+
+    function normStr(s) {
+      return String(s || '').trim().replace(/\s+/g, ' ').toLowerCase();
+    }
+
+    function extractDriveIdLocal(url) {
+      const s = String(url || '').trim();
+      const m1 = s.match(/\/file\/d\/([a-zA-Z0-9_-]{10,})/);
+      if (m1) return m1[1];
+      const m2 = s.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+      if (m2) return m2[1];
+      const m3 = s.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+      if (m3) return m3[1];
+      return 'DEMO_DRIVE_ID';
+    }
+
+    function matchCheckLocal(c, t) {
+      const jOk = !c.Jenjang || c.Jenjang === 'SEMUA' || c.Jenjang === t.Jenjang;
+      const kOk = !c.Kategori || c.Kategori === 'SEMUA' || c.Kategori === (t.Kategori || 'TPG');
+      return jOk && kOk;
+    }
+
+    function verifyLocalAuth(auth, db) {
+      if (!auth || !auth.mode) throw new Error('Sesi login tidak ditemukan.');
+      if (auth.mode === 'STAFF') {
+        const u = normStr(auth.username);
+        const p = String(auth.password || '').trim();
+        if (u === 'admintpg@kemenag.go.id' && p === 'Tpggorut') {
+          return { username: 'Admintpg@kemenag.go.id', name: 'Administrator TPG', role: 'ADMIN', teacherId: '' };
+        }
+        if (u === 'pengawas@kemenag.go.id' && p === 'Pengawasgorut') {
+          return { username: 'Pengawas@kemenag.go.id', name: 'Pengawas Madrasah', role: 'PENGAWAS', teacherId: '' };
+        }
+        const foundUser = db.users.find(x => normStr(x.Username) === u && String(x.Password).trim() === p && x.Aktif !== false);
+        if (!foundUser) throw new Error('Username atau Password salah.');
+        return { username: foundUser.Username, name: foundUser.Nama || foundUser.Username, role: foundUser.Role, teacherId: '' };
+      }
+      if (auth.mode === 'GURU') {
+        const activeTeachers = db.teachers.filter(t => t.Aktif !== false);
+        let found = null;
+        if (auth.teacherId) found = activeTeachers.find(t => t.TeacherID === auth.teacherId);
+        if (!found && auth.teacherName) found = activeTeachers.find(t => normStr(t.Nama) === normStr(auth.teacherName));
+        if (!found) throw new Error('Nama Guru belum terdaftar. Pastikan ejaan sesuai dengan yang diinput Admin.');
+        return { username: found.Nama, name: found.Nama, role: 'GURU', teacherId: found.TeacherID, kategori: found.Kategori || 'TPG', jenjang: found.Jenjang || 'MI' };
+      }
+      throw new Error('Mode login tidak valid.');
+    }
+
+    function computeLocalCompleteness(db, periodId, user) {
+      const teachers = db.teachers.filter(t => t.Aktif !== false && (user.role !== 'GURU' || t.TeacherID === user.teacherId));
+      const reqList = db.checklist.filter(c => (!periodId || c.PeriodID === periodId) && c.Aktif !== false && c.Wajib);
+      const docs = db.documents.filter(d => !periodId || d.PeriodID === periodId);
+      return teachers.map(t => {
+        const required = reqList.filter(c => matchCheckLocal(c, t));
+        const tDocs = docs.filter(d => d.TeacherID === t.TeacherID);
+        let approved = 0, missing = 0, revision = 0, pending = 0;
+        required.forEach(c => {
+          const d = tDocs.find(x => x.ChecklistID === c.ChecklistID);
+          if (!d) { missing++; return; }
+          const st = d.Status || d.StatusPengawas || 'MENUNGGU_VERIFIKASI';
+          if (st === 'PERLU_PERBAIKAN') revision++;
+          else if (st === 'DISETUJUI') approved++;
+          else pending++;
+        });
+        const complete = required.length > 0 && approved === required.length;
+        return {
+          TeacherID: t.TeacherID, Nama: t.Nama, NIP_NPK: t.NIP_NPK || '-', Kategori: t.Kategori || 'TPG', Jenjang: t.Jenjang || 'MI', NamaMadrasah: t.NamaMadrasah || '-',
+          totalWajib: required.length, disetujui: approved, belumUpload: missing, perluPerbaikan: revision, menunggu: pending,
+          statusKelengkapan: complete ? 'LENGKAP' : (revision ? 'PERLU_PERBAIKAN' : 'BELUM_LENGKAP')
+        };
+      });
+    }
+
+    function computeLocalDocs(db, periodId, user) {
+      let docs = db.documents.filter(d => !periodId || d.PeriodID === periodId);
+      if (user.role === 'GURU') docs = docs.filter(d => d.TeacherID === user.teacherId);
+      return docs.map(d => {
+        const t = db.teachers.find(x => x.TeacherID === d.TeacherID) || {};
+        const c = db.checklist.find(x => x.ChecklistID === d.ChecklistID) || {};
+        return Object.assign({}, d, {
+          NamaGuru: t.Nama || '-', Kategori: t.Kategori || 'TPG', Jenjang: t.Jenjang || '-', NamaMadrasah: t.NamaMadrasah || '-',
+          NamaDokumen: c.NamaDokumen || '-', Siklus: c.Siklus || 'BULANAN',
+          StatusAdmin: d.StatusAdmin || 'MENUNGGU', StatusPengawas: d.StatusPengawas || 'MENUNGGU', StatusKasi: d.StatusKasi || 'MENUNGGU'
+        });
+      });
+    }
+
+    function computeLocalStats(db, periodId, user) {
+      const teachers = db.teachers.filter(t => t.Aktif !== false);
+      const docs = computeLocalDocs(db, periodId, user);
+      const comp = computeLocalCompleteness(db, periodId, user);
+      return {
+        teacherCount: teachers.length,
+        tpgCount: teachers.filter(t => (t.Kategori || 'TPG') === 'TPG').length,
+        tukinCount: teachers.filter(t => t.Kategori === 'SELISIH_TUKIN').length,
+        uploaded: docs.length,
+        verified: docs.filter(d => d.Status === 'DISETUJUI').length,
+        revision: docs.filter(d => d.Status === 'PERLU_PERBAIKAN').length,
+        pending: docs.filter(d => !d.Status || d.Status === 'MENUNGGU_VERIFIKASI').length,
+        completeCount: comp.filter(x => x.statusKelengkapan === 'LENGKAP').length,
+        incompleteCount: comp.filter(x => x.statusKelengkapan !== 'LENGKAP').length
+      };
+    }
+
+    function localApiHandler(name, args) {
+      const db = getLocalDb();
+      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+      if (name === 'apiPublicTeacherList') {
+        return db.teachers.filter(t => t.Aktif !== false).map(t => ({
+          TeacherID: t.TeacherID, Nama: t.Nama, Kategori: t.Kategori || 'TPG', Jenjang: t.Jenjang || 'MI', NamaMadrasah: t.NamaMadrasah || '-'
+        })).sort((a, b) => a.Nama.localeCompare(b.Nama));
+      }
+
+      if (name === 'apiLogin') {
+        const u = verifyLocalAuth(args[0], db);
+        const periods = db.periods.filter(p => p.Aktif);
+        const selPeriod = periods[0] || db.periods[0] || null;
+        const pId = selPeriod ? selPeriod.PeriodID : '';
+        return {
+          user: u, periods, selectedPeriod: selPeriod,
+          teacher: u.role === 'GURU' ? db.teachers.find(t => t.TeacherID === u.teacherId) : null,
+          stats: computeLocalStats(db, pId, u),
+          teachers: u.role !== 'GURU' ? db.teachers.filter(t => t.Aktif !== false) : [],
+          checklist: db.checklist.filter(c => (!pId || c.PeriodID === pId) && c.Aktif !== false)
+        };
+      }
+
+      if (name === 'apiGetDashboard') {
+        const [auth, periodId] = args;
+        const u = verifyLocalAuth(auth, db);
+        return {
+          stats: computeLocalStats(db, periodId, u),
+          documents: computeLocalDocs(db, periodId, u),
+          completeness: computeLocalCompleteness(db, periodId, u)
+        };
+      }
+
+      if (name === 'apiGetMyChecklist') {
+        const [auth, periodId] = args;
+        const u = verifyLocalAuth(auth, db);
+        const teacher = db.teachers.find(t => t.TeacherID === u.teacherId);
+        const items = db.checklist
+          .filter(c => (!periodId || c.PeriodID === periodId) && c.Aktif !== false && matchCheckLocal(c, teacher))
+          .sort((a, b) => Number(a.Urutan || 1) - Number(b.Urutan || 1));
+        const docs = db.documents.filter(d => (!periodId || d.PeriodID === periodId) && d.TeacherID === teacher.TeacherID);
+        return {
+          teacher,
+          completeness: computeLocalCompleteness(db, periodId, u)[0] || null,
+          items: items.map(c => Object.assign({ Siklus: 'BULANAN' }, c, { document: docs.find(d => d.ChecklistID === c.ChecklistID) || null }))
+        };
+      }
+
+      if (name === 'apiSubmitDriveLink') {
+        const [auth, payload] = args;
+        const u = verifyLocalAuth(auth, db);
+        const teacher = db.teachers.find(t => t.TeacherID === u.teacherId);
+        const item = db.checklist.find(c => c.ChecklistID === payload.checklistId);
+        const driveId = extractDriveIdLocal(payload.fileUrl);
+        const cleanUrl = driveId !== 'DEMO_DRIVE_ID' ? `https://drive.google.com/file/d/${driveId}/view` : payload.fileUrl;
+        const existing = db.documents.find(d => d.PeriodID === payload.periodId && d.TeacherID === teacher.TeacherID && d.ChecklistID === payload.checklistId);
+        if (existing) {
+          Object.assign(existing, {
+            FileName: `${item.NamaDokumen} - ${teacher.Nama}.pdf`, DriveFileID: driveId, FileUrl: cleanUrl,
+            Status: 'MENUNGGU_VERIFIKASI', StatusAdmin: 'MENUNGGU', StatusPengawas: 'MENUNGGU', StatusKasi: 'MENUNGGU',
+            CatatanAdmin: '', CatatanPengawas: '', CatatanKasi: '', UpdatedAt: nowStr
+          });
+        } else {
+          db.documents.unshift({
+            DocumentID: 'DOC-' + Date.now(), PeriodID: payload.periodId, TeacherID: teacher.TeacherID, ChecklistID: payload.checklistId,
+            FileName: `${item.NamaDokumen} - ${teacher.Nama}.pdf`, DriveFileID: driveId, FileUrl: cleanUrl,
+            Status: 'MENUNGGU_VERIFIKASI', StatusAdmin: 'MENUNGGU', StatusPengawas: 'MENUNGGU', StatusKasi: 'MENUNGGU',
+            CatatanAdmin: '', CatatanPengawas: '', CatatanKasi: '', UploadedAt: nowStr, UpdatedAt: nowStr
+          });
+        }
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiListDocuments') {
+        const [auth, periodId] = args;
+        const u = verifyLocalAuth(auth, db);
+        return computeLocalDocs(db, periodId, u);
+      }
+
+      if (name === 'apiFileUrl') {
+        const [auth, docId] = args;
+        verifyLocalAuth(auth, db);
+        const d = db.documents.find(x => x.DocumentID === docId);
+        if (!d) throw new Error('Dokumen tidak ditemukan.');
+        const driveId = d.DriveFileID || extractDriveIdLocal(d.FileUrl);
+        return {
+          viewUrl: d.FileUrl,
+          previewUrl: driveId && driveId !== 'DEMO_DRIVE_ID' ? `https://drive.google.com/file/d/${driveId}/preview` : d.FileUrl,
+          fileName: d.FileName || 'Dokumen PDF'
+        };
+      }
+
+      if (name === 'apiVerify') {
+        const [auth, docId, status, note] = args;
+        verifyLocalAuth(auth, db);
+        const d = db.documents.find(x => x.DocumentID === docId);
+        if (!d) throw new Error('Dokumen tidak ditemukan.');
+        d.StatusPengawas = status;
+        d.CatatanPengawas = note || '';
+        d.StatusAdmin = status;
+        d.StatusKasi = status;
+        d.Status = status === 'DISETUJUI' ? 'DISETUJUI' : 'PERLU_PERBAIKAN';
+        d.UpdatedAt = nowStr;
+        saveLocalDb(db);
+        return { ok: true, status: d.Status };
+      }
+
+      if (name === 'apiAdminData') {
+        verifyLocalAuth(args[0], db);
+        return {
+          users: db.users.filter(u => u.Aktif !== false),
+          teachers: db.teachers.filter(t => t.Aktif !== false),
+          periods: db.periods,
+          checklist: db.checklist.filter(c => c.Aktif !== false)
+        };
+      }
+
+      if (name === 'apiBulkSaveTeachers') {
+        const [auth, payload] = args;
+        verifyLocalAuth(auth, db);
+        const lines = String(payload.rawText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        let added = 0, updated = 0;
+        lines.forEach(line => {
+          const cleaned = line.replace(/^\d+[\.\)\-]\s*/, '').trim();
+          const parts = cleaned.includes('|') ? cleaned.split('|').map(s => s.trim()) : cleaned.split('\t').map(s => s.trim());
+          const nama = parts[0];
+          if (!nama) return;
+          const jenjang = (parts[1] && ['RA', 'MI', 'MTs', 'MA'].includes(parts[1].toUpperCase())) ? parts[1].toUpperCase() : (payload.defaultJenjang || 'MI');
+          const madrasah = parts[2] || payload.defaultMadrasah || 'Kemenag Gorontalo Utara';
+          const nip = parts[3] || '';
+          const existing = db.teachers.find(t => normStr(t.Nama) === normStr(nama));
+          if (existing) {
+            Object.assign(existing, { Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip || existing.NIP_NPK, Aktif: true });
+            updated++;
+          } else {
+            db.teachers.push({ TeacherID: 'GR-' + Math.random().toString(36).substring(2, 8).toUpperCase(), Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip, Aktif: true });
+            added++;
+          }
+        });
+        saveLocalDb(db);
+        return { ok: true, added, updated, totalProcessed: added + updated };
+      }
+
+      if (name === 'apiSaveTeacher') {
+        const [auth, data] = args;
+        verifyLocalAuth(auth, db);
+        let existing = data.TeacherID ? db.teachers.find(t => t.TeacherID === data.TeacherID) : null;
+        if (!existing) existing = db.teachers.find(t => normStr(t.Nama) === normStr(data.Nama));
+        if (existing) {
+          Object.assign(existing, {
+            Nama: data.Nama, Kategori: data.Kategori || 'TPG', Jenjang: data.Jenjang || 'MI',
+            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', Aktif: true
+          });
+        } else {
+          db.teachers.push({
+            TeacherID: 'GR-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+            Nama: data.Nama, Kategori: data.Kategori || 'TPG', Jenjang: data.Jenjang || 'MI',
+            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', Aktif: true
+          });
+        }
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiDeleteTeacher') {
+        const [auth, teacherId] = args;
+        verifyLocalAuth(auth, db);
+        const t = db.teachers.find(x => x.TeacherID === teacherId);
+        if (t) t.Aktif = false;
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiSavePeriod') {
+        const [auth, data] = args;
+        verifyLocalAuth(auth, db);
+        const existing = data.PeriodID ? db.periods.find(p => p.PeriodID === data.PeriodID) : null;
+        if (existing) {
+          Object.assign(existing, {
+            NamaPeriode: data.NamaPeriode,
+            TanggalMulai: data.TanggalMulai,
+            TanggalAkhir: data.TanggalAkhir,
+            Aktif: !!data.Aktif
+          });
+        } else {
+          db.periods.unshift({
+            PeriodID: 'PER-' + Date.now(),
+            NamaPeriode: data.NamaPeriode,
+            TanggalMulai: data.TanggalMulai,
+            TanggalAkhir: data.TanggalAkhir,
+            Aktif: !!data.Aktif
+          });
+        }
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiTogglePeriod') {
+        const [auth, periodId, isAktif] = args;
+        verifyLocalAuth(auth, db);
+        const p = db.periods.find(x => x.PeriodID === periodId);
+        if (p) p.Aktif = !!isAktif;
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiDeletePeriod') {
+        const [auth, periodId] = args;
+        verifyLocalAuth(auth, db);
+        db.periods = db.periods.filter(x => x.PeriodID !== periodId);
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiSaveChecklist') {
+        const [auth, data] = args;
+        verifyLocalAuth(auth, db);
+        const existing = data.ChecklistID ? db.checklist.find(c => c.ChecklistID === data.ChecklistID) : null;
+        if (existing) {
+          Object.assign(existing, {
+            PeriodID: data.PeriodID, Kategori: data.Kategori || 'TPG', Siklus: data.Siklus || 'BULANAN',
+            Jenjang: data.Jenjang || 'SEMUA', NamaDokumen: data.NamaDokumen, Wajib: !!data.Wajib,
+            Urutan: Number(data.Urutan || 1), Aktif: true
+          });
+        } else {
+          db.checklist.push({
+            ChecklistID: 'CHK-' + Date.now(), PeriodID: data.PeriodID,
+            Kategori: data.Kategori || 'TPG', Siklus: data.Siklus || 'BULANAN',
+            Jenjang: data.Jenjang || 'SEMUA', NamaDokumen: data.NamaDokumen,
+            Wajib: !!data.Wajib, Urutan: Number(data.Urutan || 1), Aktif: true
+          });
+        }
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiDeleteChecklist') {
+        const [auth, chkId] = args;
+        verifyLocalAuth(auth, db);
+        const c = db.checklist.find(x => x.ChecklistID === chkId);
+        if (c) c.Aktif = false;
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiSaveUser') {
+        const [auth, data] = args;
+        verifyLocalAuth(auth, db);
+        const old = db.users.find(u => normStr(u.Username) === normStr(data.Username));
+        if (old) Object.assign(old, data, { Aktif: true });
+        else db.users.push({ Username: data.Username, Password: data.Password, Nama: data.Nama, Role: data.Role, Aktif: true });
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiDeleteUser') {
+        const [auth, uname] = args;
+        verifyLocalAuth(auth, db);
+        const u = db.users.find(x => normStr(x.Username) === normStr(uname));
+        if (u) u.Aktif = false;
+        saveLocalDb(db);
+        return { ok: true };
+      }
+
+      if (name === 'apiReport' || name === 'apiExport') {
+        return { url: '#mode-lokal', spreadsheetUrl: '#mode-lokal' };
+      }
+
+      return { ok: true };
+    }
+
+    // Antrean Eksekusi Request (Mencegah Tabrakan Pengiriman Data Bersamaan)
+    let apiQueueChain = Promise.resolve();
+    const WRITE_OPERATIONS = new Set([
+      'apiSubmitDriveLink', 'apiVerify', 'apiSaveTeacher', 'apiBulkSaveTeachers',
+      'apiDeleteTeacher', 'apiSavePeriod', 'apiTogglePeriod', 'apiDeletePeriod',
+      'apiSaveChecklist', 'apiDeleteChecklist', 'apiSaveUser', 'apiDeleteUser'
+    ]);
+
+    async function executeRawCall(name, args) {
+      // 1. Jika dibuka langsung di dalam Google Apps Script Web App
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(e => reject(new Error(e.message || e)))[name](...args);
+        });
+      }
+
+      // 2. Jika di-hosting di GitHub Pages dan URL Cloud GAS sudah diatur
+      const remoteGasUrl = getConfiguredGasUrl();
+      if (remoteGasUrl) {
+        const res = await fetch(remoteGasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: name, args: args })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'Terjadi kesalahan pada server Cloud GAS.');
+        return json.data;
+      }
+
+      // 3. Mode Standalone Mandiri (LocalStorage)
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          try { resolve(localApiHandler(name, args)); } catch (err) { reject(err); }
+        }, 90);
+      });
+    }
+
+    function call(name, ...args) {
+      if (WRITE_OPERATIONS.has(name)) {
+        const nextTask = apiQueueChain.then(() => executeRawCall(name, args));
+        apiQueueChain = nextTask.catch(() => {});
+        return nextTask;
+      }
+      return executeRawCall(name, args);
+    }
+
+    function alertMsg(msg, type = 'success') {
+      const colors = {
+        success: 'bg-emerald-600 text-white border-emerald-700',
+        danger: 'bg-rose-600 text-white border-rose-700',
+        warning: 'bg-amber-500 text-slate-900 border-amber-600'
+      };
+      const icons = {
+        success: 'fa-circle-check',
+        danger: 'fa-triangle-exclamation',
+        warning: 'fa-circle-exclamation'
+      };
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 ${colors[type] || colors.success}`;
+      toast.innerHTML = `<div class="flex items-center gap-2.5"><i class="fa-solid ${icons[type] || icons.success} text-sm"></i><span>${esc(msg)}</span></div><button onclick="this.parentElement.remove()" class="opacity-75 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>`;
+      $('alertArea').appendChild(toast);
+      setTimeout(() => { if (toast.parentElement) toast.remove(); }, 4500);
+    }
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function formObj(form) {
+      return Object.fromEntries(new FormData(form).entries());
+    }
+
+    function statusBadge(s) {
+      if (s === 'DISETUJUI') return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800"><i class="fa-solid fa-check"></i> Disetujui</span>`;
+      if (s === 'PERLU_PERBAIKAN') return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800"><i class="fa-solid fa-xmark"></i> Perlu Perbaikan</span>`;
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800"><i class="fa-regular fa-clock"></i> Menunggu Dicek</span>`;
+    }
+
+    function kategoriBadge(k) {
+      if (k === 'SELISIH_TUKIN') return `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300">SELISIH TUKIN</span>`;
+      return `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">TPG</span>`;
+    }
+
+    function siklusBadge(s) {
+      if (s === 'SEMESTERAN') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200"><i class="fa-regular fa-calendar-check"></i> SEMESTERAN</span>`;
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-sky-100 text-sky-800 border border-sky-200"><i class="fa-regular fa-calendar-days"></i> BULANAN</span>`;
+    }
+
+    // =========================================================================
+    // SISTEM LOGIN 3 PORTAL (GURU, PENGAWAS, ADMIN)
+    // =========================================================================
+    async function loadPublicTeacherNames() {
+      try {
+        state.publicTeachers = await call('apiPublicTeacherList');
+      } catch (e) {}
+    }
+
+    function togglePasswordVisibility() {
+      const input = $('staffPassword');
+      const icon = $('eyeIcon');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    }
+
+    function openInfoPemberkasanModal() {
+      $('infoPemberkasanModal')?.classList.remove('hidden-force');
+    }
+
+    function closeInfoPemberkasanModal() {
+      $('infoPemberkasanModal')?.classList.add('hidden-force');
+    }
+
+    function switchLoginTab(tab) {
+      state.currentLoginTab = tab;
+      const isGuru = tab === 'GURU';
+      $('guruLoginForm').classList.toggle('hidden-force', !isGuru);
+      $('staffLoginForm').classList.toggle('hidden-force', isGuru);
+
+      const activeCls = 'py-2 px-2 rounded-lg text-xs font-extrabold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5';
+      const idleCls = 'py-2 px-2 rounded-lg text-xs font-extrabold transition text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5';
+
+      $('tabBtnGuru').className = tab === 'GURU' ? activeCls : idleCls;
+      $('tabBtnPengawas').className = tab === 'PENGAWAS' ? activeCls : idleCls;
+      $('tabBtnAdmin').className = tab === 'ADMIN' ? activeCls : idleCls;
+
+      if (tab === 'GURU') {
+        $('loginInfoText').innerHTML = `Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive.`;
+      } else if (tab === 'PENGAWAS') {
+        $('loginInfoText').innerHTML = `Masuk untuk melanjutkan ke <b>Workspace Pemeriksaan Pengawas</b> & pengaturan lembar ceklis dokumen.`;
+        $('staffUserLabel').textContent = 'Username / Email Pengawas';
+        $('staffUsername').value = '';
+        $('staffPassword').value = '';
+      } else if (tab === 'ADMIN') {
+        $('loginInfoText').innerHTML = `Masuk untuk melanjutkan ke <b>Dashboard Pengelolaan Admin</b> (Peserta TPG/Tukin, Periode, & Akun).`;
+        $('staffUserLabel').textContent = 'Username / Email Admin';
+        $('staffUsername').value = '';
+        $('staffPassword').value = '';
+      }
+    }
+
+    function filterGuruSuggestions(query) {
+      const box = $('guruSuggestions');
+      const q = String(query || '').toLowerCase().trim();
+      if (!state.publicTeachers.length) { box.classList.add('hidden-force'); return; }
+      const matches = state.publicTeachers.filter(t => !q || t.Nama.toLowerCase().includes(q)).slice(0, 15);
+      if (!matches.length) { box.classList.add('hidden-force'); return; }
+
+      box.innerHTML = matches.map(t => `
+        <button type="button" onclick="selectGuruName('${esc(t.Nama)}')" class="w-full px-4 py-2.5 text-left hover:bg-emerald-50 flex items-center justify-between gap-2 transition">
+          <div>
+            <div class="text-xs font-bold text-slate-800">${esc(t.Nama)}</div>
+            <div class="text-[10px] text-slate-500">${esc(t.Jenjang)} · ${esc(t.NamaMadrasah)}</div>
+          </div>
+          ${kategoriBadge(t.Kategori)}
+        </button>
+      `).join('');
+      box.classList.remove('hidden-force');
+    }
+
+    function selectGuruName(name) {
+      $('guruNameInput').value = name;
+      $('guruSuggestions').classList.add('hidden-force');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#guruLoginForm')) $('guruSuggestions')?.classList.add('hidden-force');
+    });
+
+    async function handleGuruLogin(ev) {
+      ev.preventDefault();
+      const name = $('guruNameInput').value.trim();
+      if (!name) { alertMsg('Silakan ketik nama lengkap Anda.', 'warning'); return; }
+      await executeLogin({ mode: 'GURU', teacherName: name });
+    }
+
+    async function handleStaffLogin(ev) {
+      ev.preventDefault();
+      const username = $('staffUsername').value.trim();
+      const password = $('staffPassword').value.trim();
+      if (!username || !password) { alertMsg('Username dan Password wajib diisi.', 'warning'); return; }
+      await executeLogin({ mode: 'STAFF', username, password });
+    }
+
+    async function executeLogin(authPayload) {
+      setLoading(true, 'Memverifikasi Akses...');
+      try {
+        const b = await call('apiLogin', authPayload);
+        state.auth = authPayload;
+        if (b.user.teacherId) state.auth.teacherId = b.user.teacherId;
+
+        state.user = b.user;
+        state.periods = b.periods || [];
+        state.teachers = b.teachers || [];
+        state.checklist = b.checklist || [];
+
+        $('loginScreen').classList.add('hidden-force');
+        $('appHeader').classList.remove('hidden-force');
+
+        $('userName').textContent = b.user.name;
+        $('userRole').textContent = b.user.role === 'GURU' ? `GURU (${b.user.kategori || 'TPG'})` : b.user.role;
+
+        const periodOpts = state.periods.map(p => `<option value="${esc(p.PeriodID)}">${esc(p.NamaPeriode)}</option>`).join('');
+        $('periodSelectTop').innerHTML = periodOpts;
+        $('periodSelectMobile').innerHTML = periodOpts;
+        if ($('checkPeriod')) $('checkPeriod').innerHTML = periodOpts;
+
+        state.periodId = b.selectedPeriod?.PeriodID || state.periods[0]?.PeriodID || '';
+        $('periodSelectTop').value = state.periodId;
+        $('periodSelectMobile').value = state.periodId;
+
+        $('guruApp').classList.add('hidden-force');
+        $('pengawasApp').classList.add('hidden-force');
+        $('adminApp').classList.add('hidden-force');
+
+        if (b.user.role === 'GURU') {
+          $('portalBadge').textContent = 'PORTAL GURU';
+          $('guruApp').classList.remove('hidden-force');
+          await loadMyDocs();
+        } else if (b.user.role === 'PENGAWAS' || b.user.role === 'KASI') {
+          $('portalBadge').textContent = 'PORTAL PENGAWAS';
+          $('pengawasApp').classList.remove('hidden-force');
+          showPengawasTab('verifikasi');
+          await loadPengawasWorkspace();
+        } else {
+          $('portalBadge').textContent = 'PORTAL ADMIN';
+          $('adminApp').classList.remove('hidden-force');
+          showAdminTab('peserta');
+          await loadAdminWorkspace();
+        }
+        alertMsg('Selamat datang, ' + b.user.name + '!');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function logoutApp() {
+      state.auth = null;
+      state.user = null;
+      $('appHeader').classList.add('hidden-force');
+      $('guruApp').classList.add('hidden-force');
+      $('pengawasApp').classList.add('hidden-force');
+      $('adminApp').classList.add('hidden-force');
+      $('loginScreen').classList.remove('hidden-force');
+      $('staffPassword').value = '';
+      loadPublicTeacherNames();
+    }
+
+    async function changePeriod(val) {
+      state.periodId = val;
+      $('periodSelectTop').value = val;
+      $('periodSelectMobile').value = val;
+      if (state.user?.role === 'GURU') {
+        await loadMyDocs();
+      } else if (state.user?.role === 'PENGAWAS' || state.user?.role === 'KASI') {
+        await loadPengawasWorkspace();
+      } else {
+        await loadAdminWorkspace();
+      }
+    }
+
+    // =========================================================================
+    // 1. LOGIKA PORTAL GURU
+    // =========================================================================
+    function setGuruSiklusFilter(siklus) {
+      state.guruSiklusFilter = siklus;
+      ['SEMUA', 'BULANAN', 'SEMESTERAN'].forEach(s => {
+        const btn = $('btnGuruSiklus_' + s);
+        if (!btn) return;
+        btn.className = s === siklus
+          ? 'px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-navy-900 text-white transition'
+          : 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+      });
+      renderGuruChecklistCards();
+    }
+
+    async function loadMyDocs() {
+      try {
+        const d = await call('apiGetMyChecklist', state.auth, state.periodId);
+        state.guruDataCache = d;
+        $('guruPortalName').textContent = d.teacher.Nama;
+        $('guruPortalMeta').textContent = `Jenjang ${d.teacher.Jenjang || '-'} · ${d.teacher.NamaMadrasah || '-'} · NIP/NPK: ${d.teacher.NIP_NPK || '-'}`;
+        $('guruKategoriBadge').textContent = d.teacher.Kategori === 'SELISIH_TUKIN' ? 'PESERTA SELISIH TUKIN' : 'PESERTA TPG';
+
+        if (d.completeness) {
+          const c = d.completeness;
+          const pct = c.totalWajib > 0 ? Math.round((c.disetujui / c.totalWajib) * 100) : 0;
+          $('guruProgressText').textContent = `${c.disetujui} / ${c.totalWajib} Wajib (${pct}%)`;
+          $('guruProgressBar').style.width = `${pct}%`;
+          const fb = $('guruFinalBadge');
+          fb.textContent = c.statusKelengkapan;
+          fb.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ' +
+            (c.statusKelengkapan === 'LENGKAP' ? 'bg-emerald-400 text-navy-950' :
+             c.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-500 text-white' : 'bg-amber-400 text-navy-950');
+        }
+
+        renderGuruChecklistCards();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      }
+    }
+
+    function renderGuruChecklistCards() {
+      const d = state.guruDataCache;
+      if (!d) return;
+      const items = (d.items || []).filter(c => {
+        if (state.guruSiklusFilter === 'SEMUA') return true;
+        return (c.Siklus || 'BULANAN') === state.guruSiklusFilter;
+      });
+
+      $('myChecklist').innerHTML = items.map(c => {
+        const doc = c.document;
+        const note = doc ? (doc.CatatanPengawas || doc.CatatanAdmin || doc.CatatanKasi || '') : '';
+        const currentUrl = doc ? doc.FileUrl : '';
+
+        return `
+          <div class="bg-white p-5 rounded-2xl shadow-xs border ${doc?.Status === 'PERLU_PERBAIKAN' ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200/90'} flex flex-col justify-between gap-4">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-navy-900 text-white text-xs font-extrabold flex items-center justify-center shrink-0">${c.Urutan || 1}</span>
+                  <h4 class="font-bold text-navy-900 text-sm md:text-base">${esc(c.NamaDokumen)}</h4>
+                </div>
+                <div class="flex items-center gap-1 shrink-0">
+                  ${siklusBadge(c.Siklus || 'BULANAN')}
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${c.Wajib ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-slate-100 text-slate-600'}">${c.Wajib ? 'Wajib' : 'Opsional'}</span>
+                </div>
+              </div>
+
+              <div class="my-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-600">Status Pemeriksaan Pengawas:</span>
+                ${doc ? statusBadge(doc.Status) : '<span class="text-xs font-semibold text-slate-400 italic">Belum Upload Link</span>'}
+              </div>
+
+              ${note ? `
+                <div class="mb-3 text-xs text-rose-800 bg-rose-50 p-3 rounded-xl border border-rose-200">
+                  <div class="font-extrabold mb-0.5"><i class="fa-solid fa-comment-medical mr-1"></i> Catatan Pengawas:</div>
+                  <div>${esc(note)}</div>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-2.5">
+              <label class="text-[11px] font-bold text-slate-600 uppercase flex items-center gap-1.5">
+                <i class="fa-brands fa-google-drive text-emerald-600"></i> Link File PDF Google Drive
+              </label>
+              <input type="url" id="link-${c.ChecklistID}" oninput="toggleInstantPreviewBtn('${c.ChecklistID}')" value="${esc(currentUrl)}" placeholder="https://drive.google.com/file/d/xxxxxx/view?usp=sharing" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-600">
+              
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                <button type="button" id="btnPreviewLink-${c.ChecklistID}" onclick="previewDirectUrl('${c.ChecklistID}', '${esc(c.NamaDokumen)}')" class="${currentUrl ? '' : 'hidden-force'} px-3 py-2 bg-amber-100 hover:bg-amber-200 text-navy-950 border border-amber-300 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-pdf text-rose-600"></i> Tampilkan File PDF
+                </button>
+                <button type="button" onclick="submitDriveLink('${c.ChecklistID}')" class="ml-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> ${doc ? 'Perbarui Link PDF' : 'Simpan Link PDF'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('') || '<div class="col-span-full bg-amber-50 border border-amber-200 text-amber-900 p-5 rounded-2xl text-xs font-semibold">Belum ada item lembar ceklis untuk filter ini.</div>';
+    }
+
+    function toggleInstantPreviewBtn(checklistId) {
+      const val = ($('link-' + checklistId)?.value || '').trim();
+      const btn = $('btnPreviewLink-' + checklistId);
+      if (btn) btn.classList.toggle('hidden-force', !val);
+    }
+
+    function previewDirectUrl(checklistId, docTitle) {
+      const rawUrl = ($('link-' + checklistId)?.value || '').trim();
+      if (!rawUrl) { alertMsg('Isi link Google Drive terlebih dahulu.', 'warning'); return; }
+      const driveId = extractDriveIdLocal(rawUrl);
+      const previewUrl = driveId && driveId !== 'DEMO_DRIVE_ID'
+        ? `https://drive.google.com/file/d/${driveId}/preview`
+        : rawUrl;
+
+      $('modalDocTitle').textContent = docTitle || 'Pratinjau File PDF';
+      $('modalTeacherSub').textContent = state.user?.name || 'Pratinjau Dokumen Guru';
+      $('modalExternalLink').href = rawUrl;
+      $('pdfPreviewFrame').src = previewUrl;
+      $('verifyFormPanel').classList.add('hidden-force');
+      $('pdfViewerContainer').className = 'lg:col-span-12 bg-slate-800 relative flex flex-col min-h-[400px]';
+      $('verifyModal').classList.remove('hidden-force');
+    }
+
+    async function submitDriveLink(checklistId) {
+      const input = $('link-' + checklistId);
+      const url = (input.value || '').trim();
+      if (!url) { alertMsg('Silakan tempel link Google Drive terlebih dahulu.', 'warning'); input.focus(); return; }
+      if (!url.includes('drive.google.com') && !url.includes('docs.google.com')) {
+        alertMsg('Tautan harus berasal dari Google Drive (drive.google.com).', 'warning');
+        return;
+      }
+
+      setLoading(true, 'Menyimpan Link PDF...');
+      try {
+        await call('apiSubmitDriveLink', state.auth, {
+          periodId: state.periodId,
+          checklistId: checklistId,
+          fileUrl: url
+        });
+        alertMsg('Link PDF berhasil disimpan! Anda dapat mengklik tombol "Tampilkan File PDF".');
+        await loadMyDocs();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // =========================================================================
+    // 2. LOGIKA PORTAL PENGAWAS
+    // =========================================================================
+    function showPengawasTab(tab) {
+      ['verifikasi', 'ceklis', 'rekap'].forEach(t => {
+        $('pengawasSec-' + t)?.classList.toggle('hidden-force', t !== tab);
+        const btn = $('pTab_' + t);
+        if (btn) btn.classList.toggle('active', t === tab);
+      });
+    }
+
+    async function loadPengawasWorkspace() {
+      try {
+        const [dash, adminData] = await Promise.all([
+          call('apiGetDashboard', state.auth, state.periodId),
+          call('apiAdminData', state.auth)
+        ]);
+        state.allDocsCache = dash.documents || [];
+        state.completenessCache = dash.completeness || [];
+        state.teachers = adminData.teachers || [];
+        state.checklist = adminData.checklist || [];
+        state.periods = adminData.periods || [];
+
+        const s = dash.stats;
+        const statItems = [
+          ['Peserta TPG', s.tpgCount || 0, 'fa-chalkboard-user', 'text-emerald-700', 'bg-emerald-50'],
+          ['Selisih Tukin', s.tukinCount || 0, 'fa-coins', 'text-amber-700', 'bg-amber-50'],
+          ['Berkas Masuk', s.uploaded, 'fa-file-pdf', 'text-navy-800', 'bg-blue-50'],
+          ['Disetujui Pengawas', s.verified, 'fa-circle-check', 'text-emerald-700', 'bg-emerald-50'],
+          ['Perlu Perbaikan', s.revision, 'fa-triangle-exclamation', 'text-rose-700', 'bg-rose-50'],
+          ['Menunggu Dicek', s.pending, 'fa-clock', 'text-indigo-700', 'bg-indigo-50']
+        ];
+        $('pengawasStats').innerHTML = statItems.map(x => `
+          <div class="bg-white p-4 rounded-2xl shadow-xs border border-slate-200/80 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-slate-400 uppercase">${x[0]}</div>
+              <div class="text-2xl font-extrabold ${x[3]} mt-1">${x[1]}</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl ${x[4]} ${x[3]} flex items-center justify-center text-base">
+              <i class="fa-solid ${x[2]}"></i>
+            </div>
+          </div>
+        `).join('');
+
+        applyPengawasDocFilter();
+        renderPengawasChecklistEditor();
+        renderPengawasCompleteness();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      }
+    }
+
+    function applyPengawasDocFilter() {
+      const kat = $('pFilterKategori')?.value || '';
+      const siklus = $('pFilterSiklus')?.value || '';
+      const jenjang = $('pFilterJenjang')?.value || '';
+      const q = ($('pSearchDoc')?.value || '').toLowerCase().trim();
+
+      const filtered = state.allDocsCache.filter(d => {
+        const mKat = !kat || (d.Kategori || 'TPG') === kat;
+        const mSik = !siklus || (d.Siklus || 'BULANAN') === siklus;
+        const mJen = !jenjang || d.Jenjang === jenjang;
+        const mQ = !q || `${d.NamaGuru} ${d.NamaMadrasah} ${d.NamaDokumen}`.toLowerCase().includes(q);
+        return mKat && mSik && mJen && mQ;
+      });
+
+      $('pengawasDocRows').innerHTML = filtered.map(d => `
+        <tr class="hover:bg-slate-50/80">
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-800">${esc(d.NamaGuru)}</span>
+              ${kategoriBadge(d.Kategori)}
+            </div>
+            <div class="text-[11px] text-slate-500 mt-0.5"><span class="font-bold text-navy-800">${esc(d.Jenjang)}</span> · ${esc(d.NamaMadrasah)}</div>
+          </td>
+          <td class="py-3 px-4 font-semibold text-slate-800">${esc(d.NamaDokumen)}</td>
+          <td class="py-3 px-4">${siklusBadge(d.Siklus || 'BULANAN')}</td>
+          <td class="py-3 px-4">
+            <button onclick="openVerifyAndPreview('${d.DocumentID}', true)" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-navy-950 border border-amber-300 rounded-xl text-xs font-extrabold transition inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-file-pdf text-rose-600"></i> Tampilkan File PDF
+            </button>
+          </td>
+          <td class="py-3 px-4">
+            ${statusBadge(d.Status)}
+            ${d.CatatanPengawas ? `<div class="text-[11px] text-rose-600 mt-1 max-w-[200px] truncate" title="${esc(d.CatatanPengawas)}">Catatan: ${esc(d.CatatanPengawas)}</div>` : ''}
+          </td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="openVerifyAndPreview('${d.DocumentID}', false)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition shadow-xs inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-check-double"></i> Periksa & Ceklis
+            </button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" class="py-8 text-center text-slate-400">Belum ada dokumen guru yang diupload pada filter ini.</td></tr>';
+    }
+
+    function renderPengawasChecklistEditor() {
+      const periodOpts = state.periods.filter(p => p.Aktif !== false).map(p => `<option value="${esc(p.PeriodID)}">${esc(p.NamaPeriode)}</option>`).join('');
+      if ($('checkPeriod')) {
+        $('checkPeriod').innerHTML = periodOpts;
+        $('checkPeriod').value = state.periodId;
+      }
+
+      const activeList = state.checklist.filter(c => !state.periodId || c.PeriodID === state.periodId);
+      const tpgItems = activeList.filter(c => c.Kategori === 'TPG' || c.Kategori === 'SEMUA').sort((a, b) => Number(a.Urutan || 1) - Number(b.Urutan || 1));
+      const tukinItems = activeList.filter(c => c.Kategori === 'SELISIH_TUKIN' || c.Kategori === 'SEMUA').sort((a, b) => Number(a.Urutan || 1) - Number(b.Urutan || 1));
+
+      const buildRows = (arr) => arr.map(c => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2.5 px-3 font-bold text-slate-700">${c.Urutan || 1}</td>
+          <td class="py-2.5 px-3">${siklusBadge(c.Siklus || 'BULANAN')}</td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-[10px]">${esc(c.Jenjang)}</span></td>
+          <td class="py-2.5 px-3">
+            <div class="font-bold text-slate-800">${esc(c.NamaDokumen)}</div>
+            <div class="text-[10px] text-slate-400">${c.Wajib ? 'Wajib' : 'Opsional'}</div>
+          </td>
+          <td class="py-2.5 px-3 text-right whitespace-nowrap">
+            <button onclick="startEditChecklist('${c.ChecklistID}')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-bold mr-1">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+            <button onclick="removeChecklist('${c.ChecklistID}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-[11px] font-bold">
+              <i class="fa-solid fa-trash-can"></i> Hapus
+            </button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="5" class="py-6 text-center text-slate-400">Belum ada item lembar ceklis.</td></tr>';
+
+      $('checklistTableTPG').innerHTML = buildRows(tpgItems);
+      $('checklistTableTukin').innerHTML = buildRows(tukinItems);
+    }
+
+    function startEditChecklist(chkId) {
+      const c = state.checklist.find(x => x.ChecklistID === chkId);
+      if (!c) return;
+      $('chkFormId').value = c.ChecklistID;
+      $('checkPeriod').value = c.PeriodID || state.periodId;
+      $('chkFormKategori').value = c.Kategori || 'TPG';
+      $('chkFormSiklus').value = c.Siklus || 'BULANAN';
+      $('chkFormJenjang').value = c.Jenjang || 'SEMUA';
+      $('chkFormNama').value = c.NamaDokumen || '';
+      $('chkFormUrutan').value = c.Urutan || 1;
+      $('chkFormWajib').checked = c.Wajib !== false;
+
+      $('formChecklistTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500"></i> Edit Item Lembar Ceklis: ${esc(c.NamaDokumen)}`;
+      $('btnSubmitChecklist').textContent = 'Update';
+      $('btnCancelEditChecklist').classList.remove('hidden-force');
+      $('checkForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetChecklistForm() {
+      $('checkForm').reset();
+      $('chkFormId').value = '';
+      $('checkPeriod').value = state.periodId;
+      $('formChecklistTitle').innerHTML = `<i class="fa-solid fa-list-check text-emerald-600"></i> Tambah / Edit Lembar Ceklis Kelengkapan Dokumen`;
+      $('btnSubmitChecklist').textContent = 'Simpan';
+      $('btnCancelEditChecklist').classList.add('hidden-force');
+    }
+
+    async function saveChecklist(ev) {
+      ev.preventDefault();
+      setLoading(true, 'Menyimpan Lembar Ceklis...');
+      try {
+        const x = formObj(ev.target);
+        x.Wajib = $('chkFormWajib').checked;
+        await call('apiSaveChecklist', state.auth, x);
+        alertMsg('Lembar ceklis kelengkapan dokumen berhasil disimpan.');
+        resetChecklistForm();
+        await loadPengawasWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function removeChecklist(chkId) {
+      setLoading(true, 'Menghapus Item Ceklis...');
+      try {
+        await call('apiDeleteChecklist', state.auth, chkId);
+        alertMsg('Item lembar ceklis berhasil dihapus.');
+        await loadPengawasWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function renderPengawasCompleteness() {
+      $('pengawasCompletenessRows').innerHTML = (state.completenessCache || []).map(x => {
+        const badgeCls = x.statusKelengkapan === 'LENGKAP'
+          ? 'bg-emerald-100 text-emerald-800'
+          : x.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800';
+        return `
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-3 px-4 font-bold text-slate-800">${esc(x.Nama)}</td>
+            <td class="py-3 px-4">${kategoriBadge(x.Kategori)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-[11px] mr-1">${esc(x.Jenjang)}</span><span class="text-xs text-slate-500">${esc(x.NamaMadrasah)}</span></td>
+            <td class="py-3 px-4 text-center font-semibold">${x.totalWajib}</td>
+            <td class="py-3 px-4 text-center font-bold text-emerald-600">${x.disetujui}</td>
+            <td class="py-3 px-4 text-center text-slate-500">${x.belumUpload}</td>
+            <td class="py-3 px-4 text-center font-bold text-rose-600">${x.perluPerbaikan}</td>
+            <td class="py-3 px-4 text-right flex items-center justify-end gap-2">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${badgeCls}">${esc(x.statusKelengkapan)}</span>
+              <button onclick="generateTeacherChecklistPdfById('${x.TeacherID}')" class="px-2.5 py-1 bg-navy-800 hover:bg-navy-900 text-white rounded-lg text-[11px] font-bold">
+                <i class="fa-solid fa-file-pdf text-amber-400 mr-1"></i> PDF Ceklis
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('') || '<tr><td colspan="8" class="py-8 text-center text-slate-400">Belum ada data kelengkapan peserta.</td></tr>';
+    }
+
+    // =========================================================================
+    // 3. LOGIKA PORTAL ADMIN
+    // =========================================================================
+    function showAdminTab(tab) {
+      ['peserta', 'pengaturan', 'cetak'].forEach(t => {
+        $('adminSec-' + t)?.classList.toggle('hidden-force', t !== tab);
+        const btn = $('aTab_' + t);
+        if (btn) btn.classList.toggle('active', t === tab);
+      });
+    }
+
+    async function loadAdminWorkspace() {
+      try {
+        const [dash, d] = await Promise.all([
+          call('apiGetDashboard', state.auth, state.periodId),
+          call('apiAdminData', state.auth)
+        ]);
+        state.completenessCache = dash.completeness || [];
+        state.allDocsCache = dash.documents || [];
+        state.teachers = d.teachers || [];
+        state.periods = d.periods || [];
+        state.checklist = d.checklist || [];
+
+        renderAdminTeachersTable();
+        renderAdminSettingsAndUsers(d);
+        updateCloudBadgeUI();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      }
+    }
+
+    function renderAdminTeachersTable() {
+      const kat = $('adminFilterKatTeacher')?.value || '';
+      const q = ($('adminSearchTeacher')?.value || '').toLowerCase().trim();
+      const filtered = (state.teachers || []).filter(t => {
+        const mKat = !kat || (t.Kategori || 'TPG') === kat;
+        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${t.NIP_NPK}`.toLowerCase().includes(q);
+        return mKat && mQ;
+      });
+
+      $('teacherRows').innerHTML = filtered.map((t, idx) => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-3 px-4 text-slate-400 font-semibold">${idx + 1}</td>
+          <td class="py-3 px-4 font-bold text-slate-800">${esc(t.Nama)}</td>
+          <td class="py-3 px-4">${kategoriBadge(t.Kategori)}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-xs">${esc(t.Jenjang)}</span></td>
+          <td class="py-3 px-4 text-slate-700">${esc(t.NamaMadrasah)}</td>
+          <td class="py-3 px-4 text-slate-500 font-mono text-xs">${esc(t.NIP_NPK || '-')}</td>
+          <td class="py-3 px-4 text-right whitespace-nowrap">
+            <button onclick="startEditTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition mr-1">
+              <i class="fa-solid fa-pen-to-square"></i> Edit
+            </button>
+            <button onclick="removeTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition">
+              <i class="fa-solid fa-trash-can"></i> Hapus
+            </button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada peserta terdaftar.</td></tr>';
+    }
+
+    function startEditTeacher(teacherId) {
+      const t = state.teachers.find(x => x.TeacherID === teacherId);
+      if (!t) return;
+      $('tFormId').value = t.TeacherID;
+      $('tFormNama').value = t.Nama || '';
+      $('tFormKategori').value = t.Kategori || 'TPG';
+      $('tFormJenjang').value = t.Jenjang || 'MI';
+      $('tFormMadrasah').value = t.NamaMadrasah || '';
+      $('tFormNip').value = t.NIP_NPK || '';
+
+      $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-pen text-amber-500"></i> Edit Data Peserta: ${esc(t.Nama)}`;
+      $('btnSubmitTeacher').textContent = 'Update';
+      $('btnCancelEditTeacher').classList.remove('hidden-force');
+      $('teacherFormCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetTeacherForm() {
+      $('teacherForm').reset();
+      $('tFormId').value = '';
+      $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-plus text-emerald-600"></i> Tambah Peserta Satu per Satu`;
+      $('btnSubmitTeacher').textContent = 'Simpan';
+      $('btnCancelEditTeacher').classList.add('hidden-force');
+    }
+
+    async function saveTeacher(ev) {
+      ev.preventDefault();
+      setLoading(true, 'Menyimpan Data Peserta...');
+      try {
+        await call('apiSaveTeacher', state.auth, formObj(ev.target));
+        resetTeacherForm();
+        alertMsg('Data peserta berhasil disimpan.');
+        await loadAdminWorkspace();
+        await loadPublicTeacherNames();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function removeTeacher(teacherId) {
+      setLoading(true, 'Menghapus Peserta...');
+      try {
+        await call('apiDeleteTeacher', state.auth, teacherId);
+        alertMsg('Peserta berhasil dihapus.');
+        await loadAdminWorkspace();
+        await loadPublicTeacherNames();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function submitBulkTeachers(kategori) {
+      const isTpg = kategori === 'TPG';
+      const rawText = $(isTpg ? 'bulkTpgText' : 'bulkTukinText').value.trim();
+      const defaultJenjang = $(isTpg ? 'bulkTpgJenjang' : 'bulkTukinJenjang').value;
+      const defaultMadrasah = $(isTpg ? 'bulkTpgMadrasah' : 'bulkTukinMadrasah').value.trim();
+
+      if (!rawText) { alertMsg('Silakan tempel (paste) daftar nama peserta terlebih dahulu.', 'warning'); return; }
+
+      setLoading(true, `Menyimpan Massal Peserta ${isTpg ? 'TPG' : 'Selisih Tukin'}...`);
+      try {
+        const res = await call('apiBulkSaveTeachers', state.auth, { kategori, rawText, defaultJenjang, defaultMadrasah });
+        $(isTpg ? 'bulkTpgText' : 'bulkTukinText').value = '';
+        alertMsg(`Berhasil memproses ${res.totalProcessed} peserta (${res.added} baru, ${res.updated} diperbarui).`);
+        await loadAdminWorkspace();
+        await loadPublicTeacherNames();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function renderAdminSettingsAndUsers(d) {
+      $('adminPeriodList').innerHTML = (d.periods || []).map(p => {
+        const isAktif = p.Aktif === true || String(p.Aktif).toLowerCase() === 'true' || String(p.Aktif) === '1';
+        return `
+          <div class="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-slate-50 transition">
+            <div>
+              <span class="font-extrabold text-navy-900 text-xs md:text-sm">${esc(p.NamaPeriode)}</span>
+              <span class="text-slate-400 text-xs ml-2">${esc(p.TanggalMulai)} s.d. ${esc(p.TanggalAkhir)}</span>
+            </div>
+            <div class="flex items-center gap-1.5 self-end sm:self-center">
+              <button type="button" onclick="togglePeriodStatus('${esc(p.PeriodID)}', ${!isAktif})" title="Klik untuk mengubah status Aktif / Nonaktif" class="px-3 py-1 rounded-full text-[11px] font-extrabold transition cursor-pointer ${isAktif ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-200/80 text-slate-600 hover:bg-slate-300'}">
+                ${isAktif ? 'Aktif' : 'Nonaktif'}
+              </button>
+              <button type="button" onclick="startEditPeriod('${esc(p.PeriodID)}')" class="px-2.5 py-1 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold transition">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button type="button" onclick="removePeriod('${esc(p.PeriodID)}')" class="px-2.5 py-1 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold transition">
+                <i class="fa-solid fa-trash-can"></i> Hapus
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('') || '<div class="py-4 text-center text-slate-400 text-xs">Belum ada periode tersimpan.</div>';
+
+      $('userRows').innerHTML = `
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold uppercase text-slate-500">
+                <th class="py-2.5 px-3">Username</th>
+                <th class="py-2.5 px-3">Password</th>
+                <th class="py-2.5 px-3">Nama Pejabat</th>
+                <th class="py-2.5 px-3">Role</th>
+                <th class="py-2.5 px-3 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-xs">
+              ${(d.users || []).map(u => `
+                <tr class="hover:bg-slate-50">
+                  <td class="py-2.5 px-3 font-bold text-slate-800">${esc(u.Username || u.Email)}</td>
+                  <td class="py-2.5 px-3 font-mono text-slate-600">${esc(u.Password || '******')}</td>
+                  <td class="py-2.5 px-3 text-slate-600">${esc(u.Nama)}</td>
+                  <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-navy-800 text-white">${esc(u.Role)}</span></td>
+                  <td class="py-2.5 px-3 text-right whitespace-nowrap">
+                    <button onclick="editUserAccount('${esc(u.Username)}','${esc(u.Password)}','${esc(u.Nama)}','${esc(u.Role)}')" class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[11px] font-bold mr-1">Edit</button>
+                    <button onclick="deleteUserAccount('${esc(u.Username)}')" class="px-2 py-1 bg-rose-50 text-rose-700 rounded-lg text-[11px] font-bold">Hapus</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function editUserAccount(uname, pass, nama, role) {
+      $('uFormUsername').value = uname;
+      $('uFormPassword').value = pass;
+      $('uFormNama').value = nama;
+      $('uFormRole').value = role;
+    }
+
+    async function deleteUserAccount(uname) {
+      setLoading(true, 'Menghapus Akun...');
+      try {
+        await call('apiDeleteUser', state.auth, uname);
+        alertMsg('Akun berhasil dihapus.');
+        await loadAdminWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function startEditPeriod(periodId) {
+      const p = (state.periods || []).find(x => x.PeriodID === periodId);
+      if (!p) return;
+      const isAktif = p.Aktif === true || String(p.Aktif).toLowerCase() === 'true' || String(p.Aktif) === '1';
+      $('pFormId').value = p.PeriodID;
+      $('pFormNama').value = p.NamaPeriode || '';
+      $('pFormMulai').value = String(p.TanggalMulai || '').substring(0, 10);
+      $('pFormAkhir').value = String(p.TanggalAkhir || '').substring(0, 10);
+      $('pFormAktif').checked = isAktif;
+
+      $('periodFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500"></i> Edit Periode: ${esc(p.NamaPeriode)}`;
+      $('btnSubmitPeriod').textContent = 'Update Periode';
+      $('btnCancelEditPeriod').classList.remove('hidden-force');
+      $('periodForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetPeriodForm() {
+      $('periodForm').reset();
+      $('pFormId').value = '';
+      $('pFormAktif').checked = true;
+      $('periodFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-emerald-600"></i> Pengaturan Periode Pencairan`;
+      $('btnSubmitPeriod').textContent = 'Simpan Periode';
+      $('btnCancelEditPeriod').classList.add('hidden-force');
+    }
+
+    async function togglePeriodStatus(periodId, nextAktif) {
+      setLoading(true, 'Memperbarui Status Periode...');
+      try {
+        await call('apiTogglePeriod', state.auth, periodId, nextAktif);
+        alertMsg(`Status periode diubah menjadi ${nextAktif ? 'Aktif' : 'Nonaktif'}.`);
+        await executeLogin(state.auth);
+        showAdminTab('pengaturan');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function removePeriod(periodId) {
+      setLoading(true, 'Menghapus Periode...');
+      try {
+        await call('apiDeletePeriod', state.auth, periodId);
+        alertMsg('Periode berhasil dihapus.');
+        resetPeriodForm();
+        await executeLogin(state.auth);
+        showAdminTab('pengaturan');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function savePeriod(ev) {
+      ev.preventDefault();
+      setLoading(true, 'Menyimpan Periode...');
+      try {
+        const x = formObj(ev.target);
+        x.Aktif = $('pFormAktif').checked;
+        await call('apiSavePeriod', state.auth, x);
+        alertMsg('Periode berhasil disimpan.');
+        resetPeriodForm();
+        await executeLogin(state.auth);
+        showAdminTab('pengaturan');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function saveUser(ev) {
+      ev.preventDefault();
+      setLoading(true, 'Menyimpan Akun...');
+      try {
+        await call('apiSaveUser', state.auth, formObj(ev.target));
+        ev.target.reset();
+        alertMsg('Akun berhasil disimpan.');
+        await loadAdminWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // =========================================================================
+    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS
+    // =========================================================================
+    async function openVerifyAndPreview(docId, readOnly = false) {
+      setLoading(true, 'Menampilkan File PDF...');
+      try {
+        const doc = state.allDocsCache.find(x => x.DocumentID === docId);
+        const linkInfo = await call('apiFileUrl', state.auth, docId);
+
+        $('verifyId').value = docId;
+        $('verifyNote').value = doc ? (doc.CatatanPengawas || '') : '';
+        $('modalDocTitle').textContent = doc ? `${doc.NamaDokumen}` : linkInfo.fileName;
+        $('modalTeacherSub').textContent = doc ? `${doc.NamaGuru} (${doc.Kategori || 'TPG'} · ${doc.Jenjang} - ${doc.NamaMadrasah})` : 'Tampilan File PDF';
+        $('modalExternalLink').href = linkInfo.viewUrl;
+        $('pdfPreviewFrame').src = linkInfo.previewUrl;
+
+        if (doc) {
+          $('modalStageSummary').innerHTML = `
+            <div class="flex justify-between"><span>Status Saat Ini:</span> <b>${esc(doc.Status)}</b></div>
+            <div class="flex justify-between"><span>Siklus Ceklis:</span> <b>${esc(doc.Siklus || 'BULANAN')}</b></div>
+          `;
+        }
+
+        const hideForm = readOnly || state.user?.role === 'GURU';
+        $('verifyFormPanel').classList.toggle('hidden-force', hideForm);
+        $('pdfViewerContainer').className = hideForm
+          ? 'lg:col-span-12 bg-slate-800 relative flex flex-col min-h-[420px]'
+          : 'lg:col-span-8 bg-slate-800 relative flex flex-col min-h-[280px] lg:min-h-0';
+
+        $('verifyModal').classList.remove('hidden-force');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function closeVerifyModal() {
+      $('pdfPreviewFrame').src = 'about:blank';
+      $('verifyModal').classList.add('hidden-force');
+    }
+
+    async function submitVerify() {
+      setLoading(true, 'Menyimpan Hasil Pengecekan Pengawas...');
+      try {
+        await call('apiVerify', state.auth, $('verifyId').value, $('verifyStatus').value, $('verifyNote').value);
+        closeVerifyModal();
+        alertMsg('Hasil pemeriksaan lembar ceklis berhasil disimpan.');
+        await loadPengawasWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // =========================================================================
+    // GENERATOR LAPORAN OTOMATIS & REKAPAN SIAP CETAK (PDF)
+    // =========================================================================
+    function generateReadyToPrintPdf(mode) {
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      let title = 'LAPORAN REKAPITULASI KELENGKAPAN DOKUMEN TPG & SELISIH TUKIN';
+      let bodyHtml = '';
+
+      if (mode === 'GURU_PERSONAL' || mode === 'GURU_REKAP') {
+        const d = state.guruDataCache;
+        if (!d || !d.teacher) { alertMsg('Data ceklis guru belum termuat.', 'warning'); return; }
+        const t = d.teacher;
+        const c = d.completeness || {};
+        title = `LEMBAR CEKLIS KELENGKAPAN DOKUMEN ${t.Kategori === 'SELISIH_TUKIN' ? 'SELISIH TUKIN' : 'TPG'} MADRASAH`;
+        const items = d.items || [];
+
+        bodyHtml = `
+          <table style="border:0; margin-bottom: 12px; width:100%">
+            <tr>
+              <td style="border:0; width:18%"><b>Nama Guru</b></td><td style="border:0; width:32%">: ${esc(t.Nama)}</td>
+              <td style="border:0; width:18%"><b>Kategori</b></td><td style="border:0; width:32%">: ${esc(t.Kategori === 'SELISIH_TUKIN' ? 'Penerima Selisih Tukin' : 'Penerima TPG')}</td>
+            </tr>
+            <tr>
+              <td style="border:0"><b>NIP / NPK</b></td><td style="border:0">: ${esc(t.NIP_NPK || '-')}</td>
+              <td style="border:0"><b>Periode</b></td><td style="border:0">: ${esc(periodName)}</td>
+            </tr>
+            <tr>
+              <td style="border:0"><b>Jenjang / Satker</b></td><td style="border:0">: ${esc(t.Jenjang)} - ${esc(t.NamaMadrasah)}</td>
+              <td style="border:0"><b>Status Akhir</b></td><td style="border:0">: <b>${esc(c.statusKelengkapan || 'BELUM LENGKAP')}</b></td>
+            </tr>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                <th style="width:5%">No</th>
+                <th style="width:14%">Siklus</th>
+                <th style="width:36%">Nama Dokumen Persyaratan Ceklis</th>
+                <th style="width:10%">Sifat</th>
+                <th style="width:15%">Status Upload</th>
+                <th style="width:20%">Hasil Ceklis Pengawas</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map((item, i) => {
+                const doc = item.document;
+                return `
+                  <tr>
+                    <td style="text-align:center">${i + 1}</td>
+                    <td>${esc(item.Siklus || 'BULANAN')}</td>
+                    <td><b>${esc(item.NamaDokumen)}</b></td>
+                    <td style="text-align:center">${item.Wajib ? 'Wajib' : 'Opsional'}</td>
+                    <td style="text-align:center">${doc ? 'Sudah Upload PDF' : 'Belum Ada Link'}</td>
+                    <td><b>${doc ? esc(doc.Status) : 'BELUM DICEK'}</b>${doc?.CatatanPengawas ? `<br><span style="font-size:8pt;color:#b91c1c">Catatan: ${esc(doc.CatatanPengawas)}</span>` : ''}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        `;
+      } else if (mode === 'ADMIN_PESERTA') {
+        title = 'DAFTAR NAMA PESERTA PENERIMA TPG & SELISIH TUKIN MADRASAH';
+        const list = state.teachers || [];
+        bodyHtml = `
+          <p><b>Periode:</b> ${esc(periodName)} &nbsp;|&nbsp; <b>Total Peserta Terdaftar:</b> ${list.length} Guru</p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:6%">No</th>
+                <th style="width:30%">Nama Lengkap Guru</th>
+                <th style="width:16%">Kategori</th>
+                <th style="width:10%">Jenjang</th>
+                <th style="width:23%">Nama Madrasah</th>
+                <th style="width:15%">NIP / NPK</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map((t, i) => `
+                <tr>
+                  <td style="text-align:center">${i + 1}</td>
+                  <td><b>${esc(t.Nama)}</b></td>
+                  <td>${esc(t.Kategori === 'SELISIH_TUKIN' ? 'SELISIH TUKIN' : 'TPG')}</td>
+                  <td style="text-align:center">${esc(t.Jenjang)}</td>
+                  <td>${esc(t.NamaMadrasah)}</td>
+                  <td>${esc(t.NIP_NPK || '-')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } else {
+        let list = state.completenessCache || [];
+        if (mode === 'TPG_ONLY') {
+          title = 'REKAPITULASI CEKLIS KELENGKAPAN DOKUMEN TPG MADRASAH';
+          list = list.filter(x => (x.Kategori || 'TPG') === 'TPG');
+        } else if (mode === 'TUKIN_ONLY') {
+          title = 'REKAPITULASI CEKLIS KELENGKAPAN DOKUMEN SELISIH TUKIN MADRASAH';
+          list = list.filter(x => x.Kategori === 'SELISIH_TUKIN');
+        }
+        const totalLengkap = list.filter(x => x.statusKelengkapan === 'LENGKAP').length;
+        bodyHtml = `
+          <p><b>Periode:</b> ${esc(periodName)} &nbsp;|&nbsp; <b>Total Peserta:</b> ${list.length} &nbsp;|&nbsp; <b>Lengkap:</b> ${totalLengkap} &nbsp;|&nbsp; <b>Belum Lengkap:</b> ${list.length - totalLengkap}</p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:5%">No</th>
+                <th style="width:25%">Nama Lengkap Guru</th>
+                <th style="width:13%">Kategori</th>
+                <th style="width:8%">Jenjang</th>
+                <th style="width:20%">Madrasah</th>
+                <th style="width:7%">Wajib</th>
+                <th style="width:8%">Disetujui</th>
+                <th style="width:14%">Status Akhir</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map((x, i) => `
+                <tr>
+                  <td style="text-align:center">${i + 1}</td>
+                  <td><b>${esc(x.Nama)}</b></td>
+                  <td>${esc(x.Kategori)}</td>
+                  <td style="text-align:center">${esc(x.Jenjang)}</td>
+                  <td>${esc(x.NamaMadrasah)}</td>
+                  <td style="text-align:center">${x.totalWajib}</td>
+                  <td style="text-align:center">${x.disetujui}</td>
+                  <td><b>${esc(x.statusKelengkapan)}</b></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+
+      const fullHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${esc(title)}</title>
+          <style>
+            @page { size: A4 landscape; margin: 14mm; }
+            body { font-family: Arial, sans-serif; color: #111; font-size: 9.5pt; margin: 0; padding: 15px; }
+            .kop { text-align: center; border-bottom: 3px double #111; padding-bottom: 8px; margin-bottom: 14px; }
+            .kop h3 { margin: 2px 0; font-size: 11pt; font-weight: bold; }
+            .kop h2 { margin: 2px 0; font-size: 13pt; font-weight: bold; }
+            .kop p { margin: 2px 0; font-size: 9pt; }
+            .judul { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 12px; text-decoration: underline; }
+            table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+            th, td { border: 1px solid #333; padding: 6px 8px; text-align: left; vertical-align: top; }
+            th { background-color: #e2e8f0; font-weight: bold; text-align: center; }
+            .catatan { margin-top: 10px; font-size: 8.5pt; font-style: italic; }
+            .ttd { width: 100%; margin-top: 26px; border: 0; }
+            .ttd td { border: 0; text-align: center; width: 50%; }
+          </style>
+        </head>
+        <body>
+          <div class="kop">
+            <h3>KEMENTERIAN AGAMA REPUBLIK INDONESIA</h3>
+            <h2>KANTOR KEMENTERIAN AGAMA KABUPATEN GORONTALO UTARA</h2>
+            <p>SEKSI PENDIDIKAN MADRASAH</p>
+          </div>
+          <div class="judul">${esc(title)}</div>
+          ${bodyHtml}
+          <div class="catatan">* Catatan Penting: Semua dokumen yang diupload WAJIB di arsipkan bukti fisiknya di madrasah masing-masing untuk kepentingan monev dan pemeriksaan Inspektorat Jenderal.</div>
+          <table class="ttd">
+            <tr>
+              <td>Mengetahui,<br>Kepala Seksi Pendidikan Madrasah<br><br><br><br><b>(..................................................)</b><br>NIP. ............................................</td>
+              <td>Gorontalo Utara, ${today}<br>Pengawas Madrasah Pemeriksa<br><br><br><br><b>(..................................................)</b><br>NIP. ............................................</td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const frame = $('printReportFrame');
+      frame.srcdoc = fullHtml;
+      $('printReportModal').classList.remove('hidden-force');
+    }
+
+    function generateTeacherChecklistPdfById(teacherId) {
+      const t = state.teachers.find(x => x.TeacherID === teacherId);
+      if (!t) return;
+      const comp = state.completenessCache.find(x => x.TeacherID === teacherId) || {};
+      const items = state.checklist.filter(c => (!state.periodId || c.PeriodID === state.periodId) && matchCheckLocal(c, t));
+      const tDocs = state.allDocsCache.filter(d => d.TeacherID === teacherId);
+      state.guruDataCache = {
+        teacher: t,
+        completeness: comp,
+        items: items.map(c => Object.assign({}, c, { document: tDocs.find(d => d.ChecklistID === c.ChecklistID) || null }))
+      };
+      generateReadyToPrintPdf('GURU_PERSONAL');
+    }
+
+    function triggerIframePrint() {
+      const frame = $('printReportFrame');
+      if (frame && frame.contentWindow) {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      }
+    }
+
+    function closePrintReportModal() {
+      $('printReportModal').classList.add('hidden-force');
+    }
+
+    async function makePdf() {
+      setLoading(true, 'Menyusun Laporan PDF di Server...');
+      try {
+        const r = await call('apiReport', state.auth, state.periodId);
+        if (r.url === '#mode-lokal') {
+          setLoading(false);
+          generateReadyToPrintPdf('ALL_REKAP');
+          return;
+        }
+        $('reportResult').innerHTML = `<div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center justify-between"><span>PDF tersimpan di Google Drive.</span><a href="${esc(r.url)}" target="_blank" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg">Unduh PDF</a></div>`;
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function exportExcel() {
+      setLoading(true, 'Membuat Rekap Spreadsheet...');
+      try {
+        const r = await call('apiExport', state.auth, state.periodId);
+        if (r.spreadsheetUrl === '#mode-lokal') {
+          alertMsg('Pada mode pratinjau lokal, gunakan tombol Cetak / Simpan sebagai PDF.', 'warning');
+          return;
+        }
+        $('reportResult').innerHTML = `<div class="p-3 rounded-xl bg-blue-50 border border-blue-200 text-navy-900 text-xs flex items-center justify-between"><span>Spreadsheet berhasil dibuat.</span><a href="${esc(r.spreadsheetUrl)}" target="_blank" class="px-3 py-1 bg-navy-800 text-white font-bold rounded-lg">Buka Excel</a></div>`;
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      $('teacherForm')?.addEventListener('submit', saveTeacher);
+      $('periodForm')?.addEventListener('submit', savePeriod);
+      $('checkForm')?.addEventListener('submit', saveChecklist);
+      $('userForm')?.addEventListener('submit', saveUser);
+      updateCloudBadgeUI();
+      loadPublicTeacherNames();
+    });
+  </script>
+</body>
+</html>
