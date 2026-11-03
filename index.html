@@ -1142,7 +1142,7 @@ function dispatchAction_(action, args) {
     // Jika Anda sudah men-deploy Code.gs sebagai Web App, Anda juga dapat
     // mengisi URL Web App langsung di variabel DEFAULT_GAS_WEBAPP_URL di bawah ini:
     // =========================================================================
-    const DEFAULT_GAS_WEBAPP_URL = ''https://script.google.com/macros/s/AKfycbwWecwgTk1KisUdQ1Ux_B8iFgeqcouXs6RYPz02xLyNd8Jjo383sBa3rGv0tKZqz-dB0A/exec'';
+    const DEFAULT_GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8bnyhDiZZOLllVyoLXkHt-a35HZV2I7X1y0FFFJL_6kHuplGJaxHvpRcU7Ja4W-DjfQ/exec';
     const GAS_URL_STORAGE_KEY = 'SIM_TPG_GAS_ENDPOINT_URL';
 
     let state = {
@@ -1657,29 +1657,17 @@ function dispatchAction_(action, args) {
       // 2. Jika di-hosting di GitHub Pages dan URL Cloud GAS sudah diatur
       const remoteGasUrl = getConfiguredGasUrl();
       if (remoteGasUrl) {
-        try {
-          const res = await fetch(remoteGasUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: name, args: args })
-          });
-          const json = await res.json();
-          if (json && json.ok) return json.data;
-
-          const errMsg = String(json?.error || '');
-          if (errMsg.includes('Password salah') || errMsg.includes('belum terdaftar') || errMsg.includes('tidak memiliki akses')) {
-            throw new Error(errMsg);
-          }
-          console.warn('Cloud GAS mengalami kendala (' + errMsg + '), beralih ke mode penyimpanan lokal.');
-        } catch (fetchErr) {
-          if (fetchErr.message.includes('Password salah') || fetchErr.message.includes('belum terdaftar')) {
-            throw fetchErr;
-          }
-          console.warn('Gagal menghubungi Cloud GAS, beralih ke mode penyimpanan lokal:', fetchErr.message);
-        }
+        const res = await fetch(remoteGasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: name, args: args })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'Terjadi kesalahan pada server Cloud GAS.');
+        return json.data;
       }
 
-      // 3. Mode Standalone Mandiri (LocalStorage Fallback)
+      // 3. Mode Standalone Mandiri (LocalStorage)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           try { resolve(localApiHandler(name, args)); } catch (err) { reject(err); }
