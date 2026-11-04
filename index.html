@@ -416,7 +416,7 @@
   <!-- ===================================================================== -->
   <div id="pengawasApp" class="max-w-[1600px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
     
-    <!-- Navigasi Tab Utama Pengawas -->
+    <!-- Navii Tab Utama Pengawas -->
     <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="showPengawasTab('verifikasi')" id="pTab_verifikasi" class="nav-btn active px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold flex items-center gap-2 transition">
@@ -646,7 +646,7 @@
   <!-- ===================================================================== -->
   <div id="adminApp" class="max-w-[1400px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
     
-    <!-- Bar Navigasi Sederhana Admin -->
+    <!-- Bar Navii Sederhana Admin -->
     <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="showAdminTab('peserta')" id="aTab_peserta" class="nav-btn active px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold flex items-center gap-2 transition">
@@ -1075,12 +1075,12 @@
   <script id="embeddedCodeGsSource" type="text/plain">
 /**
  * SISTEM CHECKLIST DOKUMEN PENCAIRAN TPG & SELISIH TUKIN MADRASAH
- * Kemenag Kabupaten Gorontalo Utara (Mendukung Google Apps Script & REST API GitHub Pages)
+ * Kemenag Kabupaten Gorontalo Utara (Fast Cached & Anti-Date-Bug Version)
  */
-const APP = {
+var APP = {
   NAME: 'SIM-TPG & TUKIN Madrasah',
   ORG: 'Kementerian Agama Kabupaten Gorontalo Utara',
-  VERSION: '6.0.0',
+  VERSION: '6.2.0',
   PROP_DB: 'TPG_SPREADSHEET_ID',
   PROP_FOLDER: 'TPG_ROOT_FOLDER_ID',
   DEFAULT_ADMIN_USER: 'Admintpg@kemenag.go.id',
@@ -1097,11 +1097,13 @@ const APP = {
   }
 };
 
+var REQ_CACHE_ = { ss: null, sheets: {}, rows: {} };
+
 function doGet(e) {
   if (e && e.parameter && e.parameter.action) {
     try {
-      const args = e.parameter.args ? JSON.parse(e.parameter.args) : [];
-      const res = dispatchAction_(e.parameter.action, args);
+      var args = e.parameter.args ? JSON.parse(e.parameter.args) : [];
+      var res = dispatchAction_(e.parameter.action, args);
       return ContentService.createTextOutput(JSON.stringify({ ok: true, data: res })).setMimeType(ContentService.MimeType.JSON);
     } catch (err) {
       return ContentService.createTextOutput(JSON.stringify({ ok: false, error: err.message || String(err) })).setMimeType(ContentService.MimeType.JSON);
@@ -1115,8 +1117,8 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    const body = JSON.parse(e.postData.contents || '{}');
-    const res = dispatchAction_(body.action, body.args || []);
+    var body = JSON.parse((e && e.postData && e.postData.contents) ? e.postData.contents : '{}');
+    var res = dispatchAction_(body.action, body.args || []);
     return ContentService.createTextOutput(JSON.stringify({ ok: true, data: res })).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ ok: false, error: err.message || String(err) })).setMimeType(ContentService.MimeType.JSON);
@@ -1124,15 +1126,133 @@ function doPost(e) {
 }
 
 function dispatchAction_(action, args) {
-  const fnMap = {
-    apiPublicTeacherList, apiLogin, apiGetDashboard, apiListDocuments,
-    apiGetMyChecklist, apiSubmitDriveLink, apiVerify, apiSaveTeacher,
-    apiBulkSaveTeachers, apiDeleteTeacher, apiSavePeriod, apiTogglePeriod,
-    apiDeletePeriod, apiSaveChecklist, apiDeleteChecklist, apiAdminData,
-    apiSaveUser, apiDeleteUser, apiExport, apiReport, apiActivity, apiFileUrl
+  var fnMap = {
+    apiPublicTeacherList: apiPublicTeacherList, apiLogin: apiLogin, apiGetDashboard: apiGetDashboard,
+    apiListDocuments: apiListDocuments, apiGetMyChecklist: apiGetMyChecklist, apiSubmitDriveLink: apiSubmitDriveLink,
+    apiVerify: apiVerify, apiSaveTeacher: apiSaveTeacher, apiBulkSaveTeachers: apiBulkSaveTeachers,
+    apiDeleteTeacher: apiDeleteTeacher, apiSavePeriod: apiSavePeriod, apiTogglePeriod: apiTogglePeriod,
+    apiDeletePeriod: apiDeletePeriod, apiSaveChecklist: apiSaveChecklist, apiDeleteChecklist: apiDeleteChecklist,
+    apiAdminData: apiAdminData, apiSaveUser: apiSaveUser, apiDeleteUser: apiDeleteUser,
+    apiExport: apiExport, apiReport: apiReport, apiActivity: apiActivity, apiFileUrl: apiFileUrl
   };
   if (!fnMap[action]) throw new Error('Fungsi API tidak dikenali: ' + action);
   return fnMap[action].apply(null, args || []);
+}
+
+function withScriptLock_(fn) {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) throw new Error('Server sedang sibuk. Silakan coba lagi.');
+  try {
+    return fn();
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getDb_() {
+  if (REQ_CACHE_.ss) return REQ_CACHE_.ss;
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty(APP.PROP_DB);
+  if (id) {
+    try {
+      REQ_CACHE_.ss = SpreadsheetApp.openById(id);
+      return REQ_CACHE_.ss;
+    } catch (e) {}
+  }
+  return setupApplication();
+}
+
+function getSheet_(name) {
+  if (REQ_CACHE_.sheets[name]) return REQ_CACHE_.sheets[name];
+  var db = getDb_();
+  var sh = db.getSheetByName(name);
+  if (!sh) { setupApplication(); sh = db.getSheetByName(name); }
+  REQ_CACHE_.sheets[name] = sh;
+  return sh;
+}
+
+function formatCellVal_(val, headerName) {
+  if (val instanceof Date) {
+    var tz = Session.getScriptTimeZone() || 'Asia/Makassar';
+    if (headerName === 'NamaPeriode') {
+      var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      var d = new Date(val.getTime() + 4 * 3600 * 1000);
+      return months[d.getMonth()] + ' ' + d.getFullYear();
+    }
+    if (headerName === 'TanggalMulai' || headerName === 'TanggalAkhir') {
+      return Utilities.formatDate(val, tz, 'yyyy-MM-dd');
+    }
+    return Utilities.formatDate(val, tz, 'yyyy-MM-dd HH:mm:ss');
+  }
+  return val;
+}
+
+function rows_(name) {
+  if (REQ_CACHE_.rows[name]) return REQ_CACHE_.rows[name];
+  var sh = getSheet_(name);
+  if (!sh || sh.getLastRow() < 2) { REQ_CACHE_.rows[name] = []; return []; }
+  var lastCol = sh.getLastColumn();
+  var data = sh.getRange(1, 1, sh.getLastRow(), lastCol).getValues();
+  var headers = data[0].map(String);
+  var res = [];
+  for (var r = 1; r < data.length; r++) {
+    var row = data[r], o = {};
+    for (var i = 0; i < headers.length; i++) {
+      o[headers[i]] = formatCellVal_(row[i], headers[i]);
+    }
+    res.push(o);
+  }
+  REQ_CACHE_.rows[name] = res;
+  return res;
+}
+
+function append_(name, obj) {
+  delete REQ_CACHE_.rows[name];
+  var sh = getSheet_(name);
+  var lastCol = sh.getLastColumn();
+  var headers = sh.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  var newRow = headers.map(function(h) {
+    var v = obj[h] === undefined ? '' : obj[h];
+    if (h === 'NamaPeriode' || h === 'NIP_NPK' || h === 'NSM') return "'" + String(v);
+    return v;
+  });
+  sh.appendRow(newRow);
+}
+
+function updateById_(sheetName, idHeader, id, patch) {
+  delete REQ_CACHE_.rows[sheetName];
+  var sh = getSheet_(sheetName);
+  var lastCol = sh.getLastColumn();
+  var headers = sh.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  var idCol = headers.indexOf(idHeader) + 1;
+  if (idCol < 1 || sh.getLastRow() < 2) throw new Error('Data tidak ditemukan.');
+  var ids = sh.getRange(2, idCol, sh.getLastRow() - 1, 1).getValues().map(function(r) { return r[0]; });
+  var idx = ids.findIndex(function(v) { return String(v).trim().toLowerCase() === String(id).trim().toLowerCase(); });
+  if (idx < 0) throw new Error('Data tidak ditemukan.');
+  var rowNo = idx + 2;
+  var currentRow = sh.getRange(rowNo, 1, 1, lastCol).getValues()[0];
+  Object.keys(patch).forEach(function(k) {
+    var colIdx = headers.indexOf(k);
+    if (colIdx >= 0) {
+      var val = patch[k];
+      if (k === 'NamaPeriode' || k === 'NIP_NPK' || k === 'NSM') val = "'" + String(val);
+      currentRow[colIdx] = val;
+    }
+  });
+  sh.getRange(rowNo, 1, 1, lastCol).setValues([currentRow]);
+}
+
+function deleteRowById_(sheetName, idHeader, id) {
+  delete REQ_CACHE_.rows[sheetName];
+  var sh = getSheet_(sheetName);
+  var lastCol = sh.getLastColumn();
+  var headers = sh.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  var idCol = headers.indexOf(idHeader) + 1;
+  if (idCol < 1 || sh.getLastRow() < 2) return false;
+  var ids = sh.getRange(2, idCol, sh.getLastRow() - 1, 1).getValues().map(function(r) { return r[0]; });
+  var idx = ids.findIndex(function(v) { return String(v).trim().toLowerCase() === String(id).trim().toLowerCase(); });
+  if (idx >= 0) { sh.deleteRow(idx + 2); return true; }
+  return false;
 }
   </script>
 
@@ -1142,7 +1262,7 @@ function dispatchAction_(action, args) {
     // Jika Anda sudah men-deploy Code.gs sebagai Web App, Anda juga dapat
     // mengisi URL Web App langsung di variabel DEFAULT_GAS_WEBAPP_URL di bawah ini:
     // =========================================================================
-    const DEFAULT_GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8bnyhDiZZOLllVyoLXkHt-a35HZV2I7X1y0FFFJL_6kHuplGJaxHvpRcU7Ja4W-DjfQ/exec';
+    const DEFAULT_GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzT0AJRCDXKScpmV0pxwfgh1rXEQR7p0bzL1hDPa3jiD2LryWSkUMBEZ_BTysdrGbjtQQ/exec';
     const GAS_URL_STORAGE_KEY = 'SIM_TPG_GAS_ENDPOINT_URL';
 
     let state = {
@@ -1706,6 +1826,41 @@ function dispatchAction_(action, args) {
       return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
+    function formatPeriodNameClean(raw) {
+      const s = String(raw ?? '').trim();
+      if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+        const d = new Date(new Date(s).getTime() + 12 * 3600 * 1000);
+        if (!isNaN(d.getTime())) {
+          const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+          return months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+        }
+      }
+      return s;
+    }
+
+    function formatDateClean(raw) {
+      const s = String(raw ?? '').trim();
+      if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+        const d = new Date(new Date(s).getTime() + 8 * 3600 * 1000);
+        if (!isNaN(d.getTime())) return d.toISOString().substring(0, 10);
+      }
+      return s.substring(0, 10);
+    }
+
+    function refreshPeriodDropdowns() {
+      const activePeriods = (state.periods || []).filter(p => p.Aktif === true || String(p.Aktif).toLowerCase() === 'true' || String(p.Aktif) === '1');
+      const list = activePeriods.length ? activePeriods : (state.periods || []);
+      const periodOpts = list.map(p => `<option value="${esc(p.PeriodID)}">${esc(formatPeriodNameClean(p.NamaPeriode))}</option>`).join('');
+      if ($('periodSelectTop')) $('periodSelectTop').innerHTML = periodOpts;
+      if ($('periodSelectMobile')) $('periodSelectMobile').innerHTML = periodOpts;
+      if ($('checkPeriod')) $('checkPeriod').innerHTML = periodOpts;
+      if (!list.some(p => p.PeriodID === state.periodId)) {
+        state.periodId = list[0]?.PeriodID || '';
+      }
+      if ($('periodSelectTop')) $('periodSelectTop').value = state.periodId;
+      if ($('periodSelectMobile')) $('periodSelectMobile').value = state.periodId;
+    }
+
     function formObj(form) {
       return Object.fromEntries(new FormData(form).entries());
     }
@@ -1845,14 +2000,8 @@ function dispatchAction_(action, args) {
         $('userName').textContent = b.user.name;
         $('userRole').textContent = b.user.role === 'GURU' ? `GURU (${b.user.kategori || 'TPG'})` : b.user.role;
 
-        const periodOpts = state.periods.map(p => `<option value="${esc(p.PeriodID)}">${esc(p.NamaPeriode)}</option>`).join('');
-        $('periodSelectTop').innerHTML = periodOpts;
-        $('periodSelectMobile').innerHTML = periodOpts;
-        if ($('checkPeriod')) $('checkPeriod').innerHTML = periodOpts;
-
         state.periodId = b.selectedPeriod?.PeriodID || state.periods[0]?.PeriodID || '';
-        $('periodSelectTop').value = state.periodId;
-        $('periodSelectMobile').value = state.periodId;
+        refreshPeriodDropdowns();
 
         $('guruApp').classList.add('hidden-force');
         $('pengawasApp').classList.add('hidden-force');
@@ -2039,7 +2188,26 @@ function dispatchAction_(action, args) {
         return;
       }
 
-      setLoading(true, 'Menyimpan Link PDF...');
+      // Update UI instan tanpa menunggu reload penuh
+      const driveId = extractDriveIdLocal(url);
+      const cleanUrl = driveId !== 'DEMO_DRIVE_ID' ? `https://drive.google.com/file/d/${driveId}/view` : url;
+      if (state.guruDataCache && state.guruDataCache.items) {
+        const itemObj = state.guruDataCache.items.find(x => x.ChecklistID === checklistId);
+        if (itemObj) {
+          itemObj.document = Object.assign(itemObj.document || {}, {
+            ChecklistID: checklistId,
+            PeriodID: state.periodId,
+            DriveFileID: driveId,
+            FileUrl: cleanUrl,
+            Status: 'MENUNGGU_VERIFIKASI',
+            StatusPengawas: 'MENUNGGU',
+            CatatanPengawas: ''
+          });
+          renderGuruChecklistCards();
+        }
+      }
+
+      alertMsg('Menyimpan link PDF...');
       try {
         await call('apiSubmitDriveLink', state.auth, {
           periodId: state.periodId,
@@ -2047,11 +2215,9 @@ function dispatchAction_(action, args) {
           fileUrl: url
         });
         alertMsg('Link PDF berhasil disimpan! Anda dapat mengklik tombol "Tampilkan File PDF".');
-        await loadMyDocs();
       } catch (e) {
         alertMsg(e.message, 'danger');
-      } finally {
-        setLoading(false);
+        await loadMyDocs();
       }
     }
 
@@ -2151,7 +2317,7 @@ function dispatchAction_(action, args) {
     }
 
     function renderPengawasChecklistEditor() {
-      const periodOpts = state.periods.filter(p => p.Aktif !== false).map(p => `<option value="${esc(p.PeriodID)}">${esc(p.NamaPeriode)}</option>`).join('');
+      const periodOpts = state.periods.filter(p => p.Aktif !== false).map(p => `<option value="${esc(p.PeriodID)}">${esc(formatPeriodNameClean(p.NamaPeriode))}</option>`).join('');
       if ($('checkPeriod')) {
         $('checkPeriod').innerHTML = periodOpts;
         $('checkPeriod').value = state.periodId;
@@ -2214,18 +2380,50 @@ function dispatchAction_(action, args) {
 
     async function saveChecklist(ev) {
       ev.preventDefault();
-      setLoading(true, 'Menyimpan Lembar Ceklis...');
+      const x = formObj(ev.target);
+      x.Wajib = $('chkFormWajib').checked;
+      const isEdit = !!x.ChecklistID;
+      const tempId = x.ChecklistID || ('CHK-' + Date.now());
+
+      // Optimistic UI: langsung tampilkan di tabel tanpa loading lama
+      if (isEdit) {
+        const idx = state.checklist.findIndex(c => c.ChecklistID === x.ChecklistID);
+        if (idx >= 0) Object.assign(state.checklist[idx], x, { Urutan: Number(x.Urutan || 1), Aktif: true });
+      } else {
+        state.checklist.push(Object.assign({}, x, { ChecklistID: tempId, Urutan: Number(x.Urutan || 1), Aktif: true }));
+      }
+      resetChecklistForm();
+      renderPengawasChecklistEditor();
+      recomputeFrontendCompleteness();
+      renderPengawasCompleteness();
+
       try {
-        const x = formObj(ev.target);
-        x.Wajib = $('chkFormWajib').checked;
-        await call('apiSaveChecklist', state.auth, x);
+        const res = await call('apiSaveChecklist', state.auth, x);
+        if (!isEdit && res && res.checklistId) {
+          const added = state.checklist.find(c => c.ChecklistID === tempId);
+          if (added) added.ChecklistID = res.checklistId;
+          renderPengawasChecklistEditor();
+        }
         alertMsg('Lembar ceklis kelengkapan dokumen berhasil disimpan.');
-        resetChecklistForm();
-        await loadPengawasWorkspace();
       } catch (e) {
         alertMsg(e.message, 'danger');
-      } finally {
-        setLoading(false);
+        await loadPengawasWorkspace();
+      }
+    }
+
+    async function removeChecklist(chkId) {
+      // Optimistic UI: langsung hapus dari tabel
+      state.checklist = state.checklist.filter(c => c.ChecklistID !== chkId);
+      renderPengawasChecklistEditor();
+      recomputeFrontendCompleteness();
+      renderPengawasCompleteness();
+
+      try {
+        await call('apiDeleteChecklist', state.auth, chkId);
+        alertMsg('Item lembar ceklis berhasil dihapus.');
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        await loadPengawasWorkspace();
       }
     }
 
@@ -2353,17 +2551,47 @@ function dispatchAction_(action, args) {
 
     async function saveTeacher(ev) {
       ev.preventDefault();
-      setLoading(true, 'Menyimpan Data Peserta...');
+      const data = formObj(ev.target);
+      const isEdit = !!data.TeacherID;
+      const tempId = data.TeacherID || ('GR-' + Date.now());
+
+      // Optimistic UI: langsung perbarui tabel peserta
+      if (isEdit) {
+        const t = state.teachers.find(x => x.TeacherID === data.TeacherID);
+        if (t) Object.assign(t, data, { Aktif: true });
+      } else {
+        state.teachers.push(Object.assign({ TeacherID: tempId, Aktif: true }, data));
+      }
+      resetTeacherForm();
+      renderAdminTeachersTable();
+
       try {
-        await call('apiSaveTeacher', state.auth, formObj(ev.target));
-        resetTeacherForm();
+        const res = await call('apiSaveTeacher', state.auth, data);
+        if (!isEdit && res && res.teacherId) {
+          const added = state.teachers.find(x => x.TeacherID === tempId);
+          if (added) added.TeacherID = res.teacherId;
+          renderAdminTeachersTable();
+        }
         alertMsg('Data peserta berhasil disimpan.');
-        await loadAdminWorkspace();
-        await loadPublicTeacherNames();
+        loadPublicTeacherNames();
       } catch (e) {
         alertMsg(e.message, 'danger');
-      } finally {
-        setLoading(false);
+        await loadAdminWorkspace();
+      }
+    }
+
+    async function removeTeacher(teacherId) {
+      // Optimistic UI: langsung hapus dari tabel
+      state.teachers = state.teachers.filter(x => x.TeacherID !== teacherId);
+      renderAdminTeachersTable();
+
+      try {
+        await call('apiDeleteTeacher', state.auth, teacherId);
+        alertMsg('Peserta berhasil dihapus.');
+        loadPublicTeacherNames();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        await loadAdminWorkspace();
       }
     }
 
@@ -2406,11 +2634,14 @@ function dispatchAction_(action, args) {
     function renderAdminSettingsAndUsers(d) {
       $('adminPeriodList').innerHTML = (d.periods || []).map(p => {
         const isAktif = p.Aktif === true || String(p.Aktif).toLowerCase() === 'true' || String(p.Aktif) === '1';
+        const cleanName = formatPeriodNameClean(p.NamaPeriode);
+        const cleanStart = formatDateClean(p.TanggalMulai);
+        const cleanEnd = formatDateClean(p.TanggalAkhir);
         return `
           <div class="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-slate-50 transition">
             <div>
-              <span class="font-extrabold text-navy-900 text-xs md:text-sm">${esc(p.NamaPeriode)}</span>
-              <span class="text-slate-400 text-xs ml-2">${esc(p.TanggalMulai)} s.d. ${esc(p.TanggalAkhir)}</span>
+              <span class="font-extrabold text-navy-900 text-xs md:text-sm">${esc(cleanName)}</span>
+              <span class="text-slate-400 text-xs ml-2">${esc(cleanStart)} s.d. ${esc(cleanEnd)}</span>
             </div>
             <div class="flex items-center gap-1.5 self-end sm:self-center">
               <button type="button" onclick="togglePeriodStatus('${esc(p.PeriodID)}', ${!isAktif})" title="Klik untuk mengubah status Aktif / Nonaktif" class="px-3 py-1 rounded-full text-[11px] font-extrabold transition cursor-pointer ${isAktif ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-200/80 text-slate-600 hover:bg-slate-300'}">
@@ -2482,13 +2713,14 @@ function dispatchAction_(action, args) {
       const p = (state.periods || []).find(x => x.PeriodID === periodId);
       if (!p) return;
       const isAktif = p.Aktif === true || String(p.Aktif).toLowerCase() === 'true' || String(p.Aktif) === '1';
+      const cleanName = formatPeriodNameClean(p.NamaPeriode);
       $('pFormId').value = p.PeriodID;
-      $('pFormNama').value = p.NamaPeriode || '';
-      $('pFormMulai').value = String(p.TanggalMulai || '').substring(0, 10);
-      $('pFormAkhir').value = String(p.TanggalAkhir || '').substring(0, 10);
+      $('pFormNama').value = cleanName;
+      $('pFormMulai').value = formatDateClean(p.TanggalMulai);
+      $('pFormAkhir').value = formatDateClean(p.TanggalAkhir);
       $('pFormAktif').checked = isAktif;
 
-      $('periodFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500"></i> Edit Periode: ${esc(p.NamaPeriode)}`;
+      $('periodFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500"></i> Edit Periode: ${esc(cleanName)}`;
       $('btnSubmitPeriod').textContent = 'Update Periode';
       $('btnCancelEditPeriod').classList.remove('hidden-force');
       $('periodForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2504,16 +2736,192 @@ function dispatchAction_(action, args) {
     }
 
     async function togglePeriodStatus(periodId, nextAktif) {
-      setLoading(true, 'Memperbarui Status Periode...');
+      const target = (state.periods || []).find(p => p.PeriodID === periodId);
+      if (target) target.Aktif = nextAktif;
+      renderAdminSettingsAndUsers({ periods: state.periods, users: [] });
+      refreshPeriodDropdowns();
       try {
         await call('apiTogglePeriod', state.auth, periodId, nextAktif);
         alertMsg(`Status periode diubah menjadi ${nextAktif ? 'Aktif' : 'Nonaktif'}.`);
-        await executeLogin(state.auth);
-        showAdminTab('pengaturan');
+        await loadAdminWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        await loadAdminWorkspace();
+      }
+    }
+
+    async function removePeriod(periodId) {
+      state.periods = (state.periods || []).filter(p => p.PeriodID !== periodId);
+      renderAdminSettingsAndUsers({ periods: state.periods, users: [] });
+      refreshPeriodDropdowns();
+      resetPeriodForm();
+      try {
+        await call('apiDeletePeriod', state.auth, periodId);
+        alertMsg('Periode berhasil dihapus.');
+        await loadAdminWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        await loadAdminWorkspace();
+      }
+    }
+
+    async function savePeriod(ev) {
+      ev.preventDefault();
+      const x = formObj(ev.target);
+      x.Aktif = $('pFormAktif').checked;
+      x.NamaPeriode = String(x.NamaPeriode || '').trim();
+
+      const existing = x.PeriodID ? (state.periods || []).find(p => p.PeriodID === x.PeriodID) : null;
+      if (existing) {
+        Object.assign(existing, x);
+      } else {
+        state.periods.unshift({
+          PeriodID: 'PER-' + Date.now(),
+          NamaPeriode: x.NamaPeriode,
+          TanggalMulai: x.TanggalMulai,
+          TanggalAkhir: x.TanggalAkhir,
+          Aktif: x.Aktif
+        });
+      }
+      resetPeriodForm();
+      renderAdminSettingsAndUsers({ periods: state.periods, users: [] });
+      refreshPeriodDropdowns();
+
+      try {
+        await call('apiSavePeriod', state.auth, x);
+        alertMsg('Periode "' + x.NamaPeriode + '" berhasil disimpan.');
+        await loadAdminWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        await loadAdminWorkspace();
+      }
+    }
+
+    async function saveUser(ev) {
+      ev.preventDefault();
+      setLoading(true, 'Menyimpan Akun...');
+      try {
+        await call('apiSaveUser', state.auth, formObj(ev.target));
+        ev.target.reset();
+        alertMsg('Akun berhasil disimpan.');
+        await loadAdminWorkspace();
       } catch (e) {
         alertMsg(e.message, 'danger');
       } finally {
         setLoading(false);
+      }
+    }
+
+    // =========================================================================
+    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS (INSTAN TANPA LOADING LAMA)
+    // =========================================================================
+    async function openVerifyAndPreview(docId, readOnly = false) {
+      try {
+        const doc = state.allDocsCache.find(x => x.DocumentID === docId);
+        let viewUrl = doc?.FileUrl || '';
+        let previewUrl = '';
+
+        if (doc) {
+          const driveId = doc.DriveFileID || extractDriveIdLocal(doc.FileUrl);
+          viewUrl = doc.FileUrl || (driveId ? `https://drive.google.com/file/d/${driveId}/view` : '#');
+          previewUrl = driveId && driveId !== 'DEMO_DRIVE_ID' ? `https://drive.google.com/file/d/${driveId}/preview` : viewUrl;
+        } else {
+          setLoading(true, 'Menampilkan File PDF...');
+          const linkInfo = await call('apiFileUrl', state.auth, docId);
+          viewUrl = linkInfo.viewUrl;
+          previewUrl = linkInfo.previewUrl;
+          setLoading(false);
+        }
+
+        $('verifyId').value = docId;
+        $('verifyStatus').value = (doc && doc.Status === 'PERLU_PERBAIKAN') ? 'PERLU_PERBAIKAN' : 'DISETUJUI';
+        $('verifyNote').value = doc ? (doc.CatatanPengawas || '') : '';
+        $('modalDocTitle').textContent = doc ? `${doc.NamaDokumen}` : 'Dokumen PDF';
+        $('modalTeacherSub').textContent = doc ? `${doc.NamaGuru} (${doc.Kategori || 'TPG'} · ${doc.Jenjang} - ${doc.NamaMadrasah})` : 'Tampilan File PDF';
+        $('modalExternalLink').href = viewUrl;
+        $('pdfPreviewFrame').src = previewUrl;
+
+        if (doc) {
+          $('modalStageSummary').innerHTML = `
+            <div class="flex justify-between"><span>Status Saat Ini:</span> <b>${esc(doc.Status)}</b></div>
+            <div class="flex justify-between"><span>Siklus Ceklis:</span> <b>${esc(doc.Siklus || 'BULANAN')}</b></div>
+          `;
+        }
+
+        const hideForm = readOnly || state.user?.role === 'GURU';
+        $('verifyFormPanel').classList.toggle('hidden-force', hideForm);
+        $('pdfViewerContainer').className = hideForm
+          ? 'lg:col-span-12 bg-slate-800 relative flex flex-col min-h-[420px]'
+          : 'lg:col-span-8 bg-slate-800 relative flex flex-col min-h-[280px] lg:min-h-0';
+
+        $('verifyModal').classList.remove('hidden-force');
+      } catch (e) {
+        setLoading(false);
+        alertMsg(e.message, 'danger');
+      }
+    }
+
+    function closeVerifyModal() {
+      $('pdfPreviewFrame').src = 'about:blank';
+      $('verifyModal').classList.add('hidden-force');
+    }
+
+    async function submitVerify() {
+      const docId = $('verifyId').value;
+      const status = $('verifyStatus').value;
+      const note = $('verifyNote').value;
+
+      // Update tampilan tabel secara instan (Optimistic UI)
+      const doc = state.allDocsCache.find(x => x.DocumentID === docId);
+      if (doc) {
+        doc.Status = status === 'DISETUJUI' ? 'DISETUJUI' : 'PERLU_PERBAIKAN';
+        doc.StatusPengawas = status;
+        doc.CatatanPengawas = note;
+      }
+      closeVerifyModal();
+      applyPengawasDocFilter();
+      alertMsg('Hasil pemeriksaan lembar ceklis disimpan.');
+
+      try {
+        await call('apiVerify', state.auth, docId, status, note);
+        loadPengawasWorkspace();
+      } catch (e) {
+        alertMsg(e.message, 'danger');
+        loadPengawasWorkspace();
+      }
+    }
+
+    function closeVerifyModal() {
+      $('pdfPreviewFrame').src = 'about:blank';
+      $('verifyModal').classList.add('hidden-force');
+    }
+
+    async function submitVerify() {
+      const docId = $('verifyId').value;
+      const status = $('verifyStatus').value;
+      const note = $('verifyNote').value;
+
+      // Optimistic UI: langsung tutup modal dan ubah badge di tabel detik itu juga!
+      closeVerifyModal();
+      const doc = (state.allDocsCache || []).find(x => x.DocumentID === docId);
+      if (doc) {
+        doc.Status = status === 'DISETUJUI' ? 'DISETUJUI' : 'PERLU_PERBAIKAN';
+        doc.StatusPengawas = status;
+        doc.StatusAdmin = status;
+        doc.StatusKasi = status;
+        doc.CatatanPengawas = note || '';
+      }
+      applyPengawasDocFilter();
+      recomputeFrontendCompleteness();
+      renderPengawasCompleteness();
+      renderPengawasStatsBar();
+      alertMsg('Hasil pemeriksaan lembar ceklis berhasil disimpan.');
+
+      try {
+        await call('apiVerify', state.auth, docId, status, note);
+      } catch (e) {
+        alertMsg('Gagal menyimpan ke server: ' + e.message, 'danger');
+        await loadPengawasWorkspace();
       }
     }
 
