@@ -678,7 +678,7 @@
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
-                <th class="py-3 px-4">Nama Guru</th>
+                <th class="py-3 px-4">Nama Guru & No. WA</th>
                 <th class="py-3 px-4">Kategori</th>
                 <th class="py-3 px-4">Jenjang & Madrasah</th>
                 <th class="py-3 px-4 text-center">Wajib</th>
@@ -686,7 +686,7 @@
                 <th class="py-3 px-4 text-center">Belum Upload</th>
                 <th class="py-3 px-4 text-center">Perbaikan</th>
                 <th class="py-3 px-4">Tahapan Pencairan</th>
-                <th class="py-3 px-4 text-right">Status & Cetak Kartu</th>
+                <th class="py-3 px-4 text-right">Notifikasi WA & Cetak</th>
               </tr>
             </thead>
             <tbody id="pengawasCompletenessRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
@@ -698,7 +698,7 @@
 
 
   <!-- ===================================================================== -->
-  <!-- 3. TAMPILAN KHUSUS ADMIN (#adminApp) DENGAN MENU UPDATE STATUS        -->
+  <!-- 3. TAMPILAN KHUSUS ADMIN (#adminApp) DENGAN MENU UPDATE STATUS & WA   -->
   <!-- ===================================================================== -->
   <div id="adminApp" class="max-w-[1400px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
     
@@ -753,7 +753,7 @@
               <input id="bulkTpgMadrasah" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" placeholder="Contoh: Kemenag Gorut">
             </div>
           </div>
-          <textarea id="bulkTpgText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Tempel (Paste) daftar nama guru penerima TPG di sini...&#10;Abdul Rahman, S.Pd.I&#10;Ahmad Fauzi, S.Ag | MTs | MTsN 1 Gorut"></textarea>
+          <textarea id="bulkTpgText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Format: Nama | Jenjang | Madrasah | NIP | No.WA&#10;Abdul Rahman, S.Pd.I | MI | MIN 1 Gorut | 19850412 | 081234567890&#10;Ahmad Fauzi, S.Ag | MTs | MTsN 1 Gorut | - | 085240112233"></textarea>
           <div class="flex items-center justify-end mt-3">
             <button onclick="submitBulkTeachers('TPG')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
               <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Massal Peserta TPG
@@ -786,7 +786,7 @@
               <input id="bulkTukinMadrasah" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" placeholder="Contoh: Kemenag Gorut">
             </div>
           </div>
-          <textarea id="bulkTukinText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Tempel (Paste) daftar nama guru penerima Selisih Tukin di sini...&#10;Siti Aminah, M.Pd&#10;Mahmud Yunus, S.Pd.I | MA | MAN 1 Gorut"></textarea>
+          <textarea id="bulkTukinText" rows="4" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Format: Nama | Jenjang | Madrasah | NIP | No.WA&#10;Siti Aminah, M.Pd | MTs | MTsN 1 Gorut | 19900819 | 081344556677&#10;Mahmud Yunus, S.Pd.I | MA | MAN 1 Gorut | - | 082199887766"></textarea>
           <div class="flex items-center justify-end mt-3">
             <button onclick="submitBulkTeachers('SELISIH_TUKIN')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5">
               <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Massal Selisih Tukin
@@ -795,7 +795,7 @@
         </div>
       </div>
 
-      <!-- Form Input Satu per Satu / Edit Peserta -->
+      <!-- Form Input Satu per Satu / Edit Peserta (Lengkap dengan Nomor WhatsApp) -->
       <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/80" id="teacherFormCard">
         <div class="flex items-center justify-between mb-3">
           <h3 id="teacherFormTitle" class="font-bold text-navy-900 text-sm md:text-base flex items-center gap-2">
@@ -824,13 +824,17 @@
               <option>RA</option><option selected>MI</option><option>MTs</option><option>MA</option>
             </select>
           </div>
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-2">
             <label class="text-[11px] font-bold text-slate-500 uppercase">Nama Madrasah</label>
             <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="NamaMadrasah" id="tFormMadrasah" placeholder="MIN 1 Gorontalo Utara" required>
           </div>
-          <div class="lg:col-span-2">
+          <div class="lg:col-span-1">
             <label class="text-[11px] font-bold text-slate-500 uppercase">NIP / NPK</label>
             <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="NIP_NPK" id="tFormNip" placeholder="Opsional">
+          </div>
+          <div class="lg:col-span-2">
+            <label class="text-[11px] font-bold text-emerald-700 uppercase flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> Nomor WA Guru</label>
+            <input class="w-full mt-1 px-3 py-2 bg-emerald-50/50 border border-emerald-300 rounded-xl text-xs font-semibold text-slate-800" name="NoWA" id="tFormPhone" placeholder="081234567890">
           </div>
           <div class="lg:col-span-1 flex items-end">
             <button type="submit" id="btnSubmitTeacher" class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
@@ -845,7 +849,7 @@
         <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
           <div>
             <h4 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Nama Peserta TPG & Selisih Tukin</h4>
-            <p class="text-xs text-slate-500">Gunakan tombol <b>Edit</b> atau <b>Hapus</b> di samping daftar nama untuk memperbarui data</p>
+            <p class="text-xs text-slate-500">Pastikan setiap guru memiliki <b>Nomor WhatsApp</b> agar Pengawas & Admin dapat mengirim notifikasi langsung</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <select id="adminFilterKatTeacher" onchange="renderAdminTeachersTable()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
@@ -853,7 +857,7 @@
               <option value="TPG">Peserta TPG</option>
               <option value="SELISIH_TUKIN">Peserta Selisih Tukin</option>
             </select>
-            <input type="text" id="adminSearchTeacher" oninput="renderAdminTeachersTable()" placeholder="Cari nama / madrasah..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none sm:w-56">
+            <input type="text" id="adminSearchTeacher" oninput="renderAdminTeachersTable()" placeholder="Cari nama / madrasah / WA..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none sm:w-56">
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -862,8 +866,8 @@
               <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
                 <th class="py-3 px-4">No</th>
                 <th class="py-3 px-4">Nama Lengkap Guru (Username Login)</th>
-                <th class="py-3 px-4">Kategori</th>
-                <th class="py-3 px-4">Jenjang</th>
+                <th class="py-3 px-4">Nomor WhatsApp</th>
+                <th class="py-3 px-4">Kategori & Jenjang</th>
                 <th class="py-3 px-4">Nama Madrasah</th>
                 <th class="py-3 px-4">Tahapan Pencairan</th>
                 <th class="py-3 px-4 text-right">Aksi (Edit / Hapus)</th>
@@ -876,14 +880,14 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- TAB ADMIN 2: UPDATE STATUS BERKAS TPG (FITUR BARU 7 TAHAPAN)        -->
+    <!-- TAB ADMIN 2: UPDATE STATUS BERKAS TPG & BROADCAST WA                -->
     <!-- =================================================================== -->
     <section id="adminSec-updatestatus" class="page-sec hidden-force space-y-6">
       
       <!-- Statistik Ringkas 7 Tahapan Pencairan -->
       <div id="adminStageStatsGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"></div>
 
-      <!-- Panel Update Status Massal / Sekaligus (Seluruh Periode, Per Jenjang, atau Peserta Terpilih) -->
+      <!-- Panel Update Status Massal / Sekaligus + Tombol Kirim Pemberitahuan WA Massal -->
       <div class="bg-white p-5 md:p-6 rounded-3xl shadow-xs border-2 border-emerald-500/30 space-y-5">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div class="flex items-start sm:items-center gap-3.5">
@@ -892,16 +896,21 @@
             </div>
             <div>
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 mb-1">
-                Sinkronisasi Real-Time ke Menu Guru
+                Sinkronisasi Real-Time ke Menu Guru & Notifikasi WhatsApp
               </div>
               <h3 class="font-extrabold text-navy-900 text-base md:text-lg">Update Status Tahapan Pencairan Berkas TPG</h3>
-              <p class="text-xs text-slate-500">Pilih tahapan proses berkas (1 s.d. 7). Setiap perubahan status akan otomatis tampil beserta keterangannya di halaman Portal Guru.</p>
+              <p class="text-xs text-slate-500">Pilih tahapan proses berkas (1 s.d. 7), terapkan ke guru, lalu klik <b>Kirim Pemberitahuan WA</b> ke seluruh nomor terdaftar.</p>
             </div>
           </div>
 
-          <div class="bg-amber-50 border border-amber-200/80 px-4 py-2.5 rounded-2xl text-xs text-amber-950 font-semibold flex items-center gap-2 shrink-0">
-            <i class="fa-solid fa-calendar-check text-amber-600"></i>
-            <span>Periode Aktif: <b id="adminStatusActivePeriodLabel" class="font-extrabold text-navy-900">-</b></span>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <div class="bg-amber-50 border border-amber-200/80 px-3.5 py-2 rounded-2xl text-xs text-amber-950 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-amber-600"></i>
+              <span>Periode: <b id="adminStatusActivePeriodLabel" class="font-extrabold text-navy-900">-</b></span>
+            </div>
+            <button type="button" onclick="openBroadcastWaModalFromCurrentFilter()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#1da851] text-white font-extrabold text-xs rounded-2xl shadow-sm transition flex items-center gap-2 cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-base"></i> Kirim Pemberitahuan WA Massal
+            </button>
           </div>
         </div>
 
@@ -914,7 +923,7 @@
         </div>
 
         <!-- Form Kontrol Target Penerapan & Keterangan Tambahan -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2 items-end bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 pt-2 items-end bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
           <div class="lg:col-span-3">
             <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">2. Target Penerima Update</label>
             <select id="bulkStageTargetMode" onchange="onChangeBulkStageTargetMode()" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-extrabold text-navy-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
@@ -942,14 +951,17 @@
             </select>
           </div>
 
-          <div class="lg:col-span-4">
-            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">3. Keterangan / Informasi Tambahan untuk Guru (Opsional)</label>
-            <input type="text" id="bulkStageCustomNote" placeholder="Contoh: Berkas gelombang I sedang diproses bendahara / No. SP2D..." class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">3. Keterangan Tambahan (Opsional)</label>
+            <input type="text" id="bulkStageCustomNote" placeholder="Contoh: Berkas gelombang I sedang diproses..." class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600">
           </div>
 
-          <div class="lg:col-span-2">
-            <button type="button" onclick="applyBulkPaymentStage()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-paper-plane"></i> Terapkan Status
+          <div class="lg:col-span-3 flex flex-col sm:flex-row gap-2">
+            <button type="button" onclick="applyBulkPaymentStage(false)" class="flex-1 py-2.5 px-3 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Status
+            </button>
+            <button type="button" onclick="applyBulkPaymentStage(true)" class="flex-1 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Update & Kirim WA
             </button>
           </div>
         </div>
@@ -959,8 +971,8 @@
       <div class="bg-white rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden">
         <div class="p-4 md:px-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h4 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Status Tahapan Berkas Per Guru</h4>
-            <p class="text-xs text-slate-500">Anda juga dapat mengubah tahapan status pencairan secara langsung pada masing-masing baris guru di bawah ini</p>
+            <h4 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Status Tahapan Berkas & Notifikasi WA Per Guru</h4>
+            <p class="text-xs text-slate-500">Ubah status tahapan secara langsung atau klik tombol hijau <b>Kirim WA</b> untuk memberi tahu guru bersangkutan</p>
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
@@ -997,12 +1009,12 @@
                 <th class="py-3 px-4 w-10 text-center">
                   <input type="checkbox" id="chkSelectAllTeachersStatus" onchange="toggleSelectAllTeachersStatus(this.checked)" class="w-4 h-4 rounded text-emerald-600 cursor-pointer">
                 </th>
-                <th class="py-3 px-3">Nama Guru & Madrasah</th>
+                <th class="py-3 px-3">Nama Guru, Madrasah & WA</th>
                 <th class="py-3 px-3">Kelengkapan Ceklis</th>
                 <th class="py-3 px-3">Status Tahapan Saat Ini</th>
                 <th class="py-3 px-3">Pilih Update Status Tahapan</th>
                 <th class="py-3 px-3">Keterangan / Catatan Guru</th>
-                <th class="py-3 px-4 text-right">Simpan</th>
+                <th class="py-3 px-4 text-right">Simpan & Kirim WA</th>
               </tr>
             </thead>
             <tbody id="adminUpdateStatusRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
@@ -1062,13 +1074,13 @@
           </div>
         </div>
 
-        <!-- Kelola Akun Pengawas & Admin -->
+        <!-- Kelola Akun Pengawas & Admin (Dilengkapi Nomor WhatsApp) -->
         <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
           <div>
             <h3 class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2">
-              <i class="fa-solid fa-user-shield text-emerald-600"></i> Kelola Akun Pengawas & Admin
+              <i class="fa-solid fa-user-shield text-emerald-600"></i> Kelola Akun & Nomor WA Pengawas / Admin
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">Tambahkan atau ubah akun login untuk Pengawas maupun Admin</p>
+            <p class="text-xs text-slate-500 mt-0.5">Tambahkan akun login beserta Nomor WhatsApp Pengawas & Admin untuk integrasi pemberitahuan</p>
           </div>
           <form id="userForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -1084,17 +1096,45 @@
               <input class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs" name="Nama" id="uFormNama" placeholder="Nama lengkap" required>
             </div>
             <div>
+              <label class="text-[11px] font-bold text-emerald-700 uppercase flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> Nomor WA Pengawas/Admin</label>
+              <input class="w-full mt-1 px-3 py-2 bg-emerald-50/50 border border-emerald-300 rounded-xl text-xs font-semibold text-slate-800" name="NoWA" id="uFormPhone" placeholder="081234567890">
+            </div>
+            <div class="sm:col-span-2">
               <label class="text-[11px] font-bold text-slate-500 uppercase">Role Akses</label>
               <div class="flex gap-2 mt-1">
                 <select class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold" name="Role" id="uFormRole">
                   <option value="PENGAWAS">PENGAWAS</option>
                   <option value="ADMIN">ADMIN</option>
                 </select>
-                <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shrink-0">Simpan</button>
+                <button class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shrink-0">Simpan Akun</button>
               </div>
             </div>
           </form>
           <div id="userRows" class="pt-2"></div>
+        </div>
+      </div>
+
+      <!-- PENGATURAN GATEWAY WHATSAPP OTOMATIS (OPSIONAL FONNTE) & CLOUD GAS -->
+      <div class="bg-white p-6 rounded-3xl shadow-xs border-2 border-emerald-600/20 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2">
+              <i class="fa-brands fa-whatsapp text-[#25D366] text-xl"></i> Pengaturan Notifikasi WhatsApp (Mode Langsung & API Broadcast Otomatis)
+            </h3>
+            <p class="text-xs text-slate-500">Secara bawaan, tombol kirim WA menggunakan <b>WhatsApp Direct (Gratis 100% dari nomor WA Pengawas/Admin yang sedang login)</b>. Jika Anda ingin mengirim ke seluruh nomor secara otomatis dalam 1x klik di latar belakang, isi API Token Fonnte di bawah ini (Opsional).</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200/80">
+          <div class="lg:col-span-9">
+            <label class="text-[11px] font-bold text-emerald-950 uppercase block mb-1">API Token WhatsApp Gateway Fonnte (Opsional - Kosongkan jika memakai WA Web / WA HP Gratis)</label>
+            <input type="password" id="waFonnteTokenInput" placeholder="Masukkan Token Fonnte (https://fonnte.com) jika ingin fitur Kirim Semua Otomatis 1x Klik..." class="w-full px-3.5 py-2.5 bg-white border border-emerald-300 rounded-xl text-xs font-mono">
+          </div>
+          <div class="lg:col-span-3 flex gap-2">
+            <button type="button" onclick="saveWaGatewayToken()" class="w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#1da851] text-white font-extrabold text-xs rounded-xl transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-check"></i> Simpan Konfigurasi WA
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1227,15 +1267,94 @@
               <label class="text-xs font-bold text-slate-700 uppercase block mb-1.5">Catatan Pengawas</label>
               <textarea id="verifyNote" rows="4" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Tuliskan catatan pemeriksaan untuk guru..."></textarea>
             </div>
+
+            <!-- Opsi Kirim Pemberitahuan WhatsApp ke Guru Saat Simpan Pemeriksaan -->
+            <div class="p-3.5 rounded-xl bg-[#edf7f2] border border-[#25D366]/40 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-extrabold text-emerald-950 flex items-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-[#25D366] text-sm"></i> Nomor WA Guru Penerima:
+                </span>
+                <span id="modalTeacherWaBadge" class="text-[11px] font-mono font-bold text-emerald-800">-</span>
+              </div>
+              <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer pt-1">
+                <input type="checkbox" id="chkAutoSendWaOnVerify" checked class="w-4 h-4 rounded text-[#25D366] focus:ring-emerald-600">
+                <span>Langsung kirim notifikasi WA dari nomor Pengawas ke Guru setelah disimpan</span>
+              </label>
+            </div>
           </div>
 
-          <div class="pt-4 border-t border-slate-100 flex justify-end gap-2 mt-4">
-            <button onclick="closeVerifyModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition">Tutup</button>
-            <button onclick="submitVerify()" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Hasil Ceklis
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap justify-end gap-2 mt-4">
+            <button onclick="closeVerifyModal()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition">Tutup</button>
+            <button onclick="submitVerify(false)" class="py-2.5 px-3.5 rounded-xl text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white shadow-sm transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Saja
+            </button>
+            <button onclick="submitVerify(true)" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-extrabold bg-[#25D366] hover:bg-[#1da851] text-white shadow-sm transition flex items-center justify-center gap-1.5">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Simpan & Kirim WA
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL ASISTEN BROADCAST PEMBERITAHUAN WHATSAPP MASSAL (ADMIN/PENGAWAS)-->
+  <!-- ===================================================================== -->
+  <div id="waBroadcastModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 hidden-force">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
+      <div class="px-6 py-4 bg-gradient-to-r from-navy-900 via-emerald-900 to-[#1da851] text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center text-white text-xl">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-sm md:text-base">Pusat Pengiriman Pemberitahuan WhatsApp</h4>
+            <p id="waBroadcastSubTitle" class="text-[11px] text-emerald-100">Kirim pemberitahuan update status berkas TPG ke nomor WhatsApp yang terdaftar</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeWaBroadcastModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 flex items-center justify-center text-white transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-5 md:p-6 overflow-y-auto space-y-5 flex-1">
+        <!-- Pratinjau & Editor Template Pesan Broadcast / Grup -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <label class="text-xs font-extrabold text-navy-900 uppercase flex items-center gap-1.5">
+              <i class="fa-solid fa-message text-emerald-600"></i> Isi Pesan Pemberitahuan Resmi:
+            </label>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="copyBroadcastMessageText()" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-navy-900 border border-slate-300 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-copy text-emerald-600"></i> Salin Teks Pengumuman (Untuk Grup WA)
+              </button>
+              <button type="button" onclick="sendAllViaGatewayApi()" class="px-3.5 py-1.5 bg-[#25D366] hover:bg-[#1da851] text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5">
+                <i class="fa-solid fa-bolt"></i> Kirim Otomatis ke Semua Nomor (Gateway API)
+              </button>
+            </div>
+          </div>
+          <textarea id="waBroadcastMessageText" rows="5" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs font-sans leading-relaxed text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600"></textarea>
+          <p class="text-[11px] text-slate-500">
+            <i class="fa-solid fa-circle-info text-emerald-600 mr-1"></i>
+            <b>Tips Pengiriman:</b> Anda dapat menekan tombol <b>"Kirim WA"</b> pada daftar penerima di bawah untuk mengirim langsung dari WhatsApp Anda (Gratis), atau gunakan tombol <b>"Kirim Otomatis ke Semua Nomor"</b> jika Token Gateway sudah diisi.
+          </p>
+        </div>
+
+        <!-- Daftar Antrean Nomor Penerima (Guru, Pengawas, Admin) -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden">
+          <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
+            <span class="text-xs font-extrabold text-navy-900">Daftar Nomor WhatsApp Penerima Pemberitahuan (<span id="waQueueTotalCount">0</span> Nomor)</span>
+            <span class="text-[11px] text-slate-500">Status tombol akan berubah menjadi <b>Terkirim ✓</b> setelah diklik</span>
+          </div>
+          <div class="max-h-72 overflow-y-auto divide-y divide-slate-100" id="waBroadcastRecipientsList"></div>
+        </div>
+      </div>
+
+      <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+        <span class="text-xs text-slate-500">Pesan dikirim atas nama Seksi Pendidikan Madrasah Kemenag Gorontalo Utara</span>
+        <button type="button" onclick="closeWaBroadcastModal()" class="px-5 py-2 bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs rounded-xl transition">
+          Selesai & Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -1370,6 +1489,8 @@ var APP = {
     ];
 
     const STAGE_CHECKLIST_RESERVED_ID = '__SYS_TPG_STAGE_TRACKER__';
+    const WA_FONNTE_TOKEN_STORAGE_KEY = 'SIM_TPG_WA_FONNTE_TOKEN';
+    const LOCAL_PHONES_STORAGE_KEY = 'SIM_TPG_PHONES_MAP_V1';
 
     let state = {
       auth: null,
@@ -1387,7 +1508,9 @@ var APP = {
       currentLoginTab: 'GURU',
       selectedAdminBulkStage: 1,
       selectedTeacherIdsForStatus: new Set(),
-      paymentStagesMap: {} // key: `${periodId}_${teacherId}` -> { step, note, updatedAt, updatedBy }
+      paymentStagesMap: {}, // key: `${periodId}_${teacherId}` -> { step, note, updatedAt, updatedBy }
+      phonesMap: {},        // key: `T_${teacherId}` or `U_${username}` -> phone string
+      currentBroadcastQueue: []
     };
     const $ = id => document.getElementById(id);
 
@@ -1408,6 +1531,13 @@ var APP = {
         badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600';
       }
       if ($('gasEndpointInput')) $('gasEndpointInput').value = remoteUrl;
+      if ($('waFonnteTokenInput')) $('waFonnteTokenInput').value = localStorage.getItem(WA_FONNTE_TOKEN_STORAGE_KEY) || '';
+    }
+
+    function saveWaGatewayToken() {
+      const token = ($('waFonnteTokenInput')?.value || '').trim();
+      localStorage.setItem(WA_FONNTE_TOKEN_STORAGE_KEY, token);
+      alertMsg(token ? 'Token WhatsApp Gateway berhasil disimpan! Fitur Broadcast Otomatis 1x Klik aktif.' : 'Token dikosongkan. Menggunakan mode WhatsApp Direct (Gratis).');
     }
 
     function saveGasEndpointUrl() {
@@ -1450,13 +1580,8 @@ var APP = {
     }
 
     // =========================================================================
-    // HELPER PENYIMPANAN & SINKRONISASI STATUS 7 TAHAPAN (CLOUD & LOCAL)
+    // HELPER PENYIMPANAN & SINKRONISASI STATUS 7 TAHAPAN + NOMOR WHATSAPP
     // =========================================================================
-    // Agar status 7 tahapan tersimpan di Google Spreadsheet tanpa harus mengubah
-    // skema Code.gs yang sudah di-deploy di URL GAS, kita menyimpannya secara
-    // cerdas di localStorage DAN menyinkronkannya melalui field NSM/Kabupaten
-    // atau metadata pada data Teacher sehingga Guru di perangkat lain langsung
-    // membaca tahapan terbaru dari server GAS!
     const LOCAL_STAGE_STORAGE_KEY = 'SIM_TPG_STAGE_TRACKER_V1';
 
     function loadLocalStagesMap() {
@@ -1467,6 +1592,12 @@ var APP = {
           state.paymentStagesMap = Object.assign({}, parsed, state.paymentStagesMap);
         }
       } catch (e) {}
+      try {
+        const rawPhones = localStorage.getItem(LOCAL_PHONES_STORAGE_KEY);
+        if (rawPhones) {
+          state.phonesMap = Object.assign({}, JSON.parse(rawPhones), state.phonesMap);
+        }
+      } catch (e) {}
     }
 
     function saveLocalStagesMap() {
@@ -1475,29 +1606,106 @@ var APP = {
       } catch (e) {}
     }
 
-    function encodeStageToTeacherField(stageObj) {
-      if (!stageObj || !stageObj.step) return '';
-      // Format ringkas yang disimpan di kolom NSM/Kabupaten atau NIP_NPK metadata bila tersedia
+    function saveLocalPhonesMap() {
+      try {
+        localStorage.setItem(LOCAL_PHONES_STORAGE_KEY, JSON.stringify(state.phonesMap));
+      } catch (e) {}
+    }
+
+    // Normalisasi Nomor WhatsApp ke format Internasional Indonesia (628xxxx)
+    function normalizeWaNumber(rawPhone) {
+      let digits = String(rawPhone || '').replace(/[^0-9]/g, '');
+      if (!digits) return '';
+      if (digits.startsWith('08')) digits = '62' + digits.substring(1);
+      else if (digits.startsWith('8')) digits = '62' + digits;
+      else if (digits.startsWith('0062')) digits = digits.substring(2);
+      return digits;
+    }
+
+    function formatWaDisplay(rawPhone) {
+      const norm = normalizeWaNumber(rawPhone);
+      if (!norm) return '';
+      if (norm.startsWith('62')) return '0' + norm.substring(2);
+      return norm;
+    }
+
+    function getTeacherPhone(teacherObjOrId) {
+      loadLocalStagesMap();
+      const t = typeof teacherObjOrId === 'object' && teacherObjOrId !== null
+        ? teacherObjOrId
+        : (state.teachers || []).find(x => x.TeacherID === teacherObjOrId)
+          || (state.guruDataCache?.teacher?.TeacherID === teacherObjOrId ? state.guruDataCache.teacher : null);
+
+      if (t) {
+        if (t.NoWA) return formatWaDisplay(t.NoWA);
+        const decoded = decodeStageFromTeacher(t, state.periodId);
+        if (decoded && decoded.phone) {
+          state.phonesMap['T_' + t.TeacherID] = formatWaDisplay(decoded.phone);
+          return formatWaDisplay(decoded.phone);
+        }
+        if (state.phonesMap['T_' + t.TeacherID]) return formatWaDisplay(state.phonesMap['T_' + t.TeacherID]);
+      } else if (typeof teacherObjOrId === 'string' && state.phonesMap['T_' + teacherObjOrId]) {
+        return formatWaDisplay(state.phonesMap['T_' + teacherObjOrId]);
+      }
+      return '';
+    }
+
+    function setTeacherPhoneLocal(teacherId, rawPhone) {
+      const clean = formatWaDisplay(rawPhone);
+      state.phonesMap['T_' + teacherId] = clean;
+      saveLocalPhonesMap();
+      const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
+      if (t) t.NoWA = clean;
+      return clean;
+    }
+
+    function getUserStaffPhone(userObjOrUsername) {
+      loadLocalStagesMap();
+      const uname = typeof userObjOrUsername === 'object' && userObjOrUsername !== null
+        ? (userObjOrUsername.Username || userObjOrUsername.username || '')
+        : String(userObjOrUsername || '');
+      const u = (state.usersList || []).find(x => normStr(x.Username) === normStr(uname));
+      if (u && u.NoWA) return formatWaDisplay(u.NoWA);
+      // Cek apakah tersimpan di Nama pejabat dengan delimiter [WA:08xxx]
+      if (u && u.Nama) {
+        const m = String(u.Nama).match(/\[WA:([0-9+]+)\]/);
+        if (m) return formatWaDisplay(m[1]);
+      }
+      return formatWaDisplay(state.phonesMap['U_' + normStr(uname)] || '');
+    }
+
+    function setUserStaffPhoneLocal(username, rawPhone) {
+      const clean = formatWaDisplay(rawPhone);
+      state.phonesMap['U_' + normStr(username)] = clean;
+      saveLocalPhonesMap();
+      const u = (state.usersList || []).find(x => normStr(x.Username) === normStr(username));
+      if (u) u.NoWA = clean;
+      return clean;
+    }
+
+    function cleanStaffNameDisplay(rawName) {
+      return String(rawName || '').replace(/\s*\[WA:[0-9+]+\]/g, '').trim();
+    }
+
+    function packStaffNameWithWa(cleanName, rawPhone) {
+      const base = cleanStaffNameDisplay(cleanName);
+      const wa = formatWaDisplay(rawPhone);
+      return wa ? `${base} [WA:${wa}]` : base;
+    }
+
+    function encodeStageToTeacherField(stageObj, phoneStr) {
       const payload = {
-        s: Number(stageObj.step),
-        n: String(stageObj.note || '').substring(0, 160),
-        t: String(stageObj.updatedAt || ''),
-        p: String(stageObj.periodId || '')
+        s: Number(stageObj?.step || 1),
+        n: String(stageObj?.note || '').substring(0, 140),
+        t: String(stageObj?.updatedAt || ''),
+        p: String(stageObj?.periodId || ''),
+        w: formatWaDisplay(phoneStr || stageObj?.phone || '')
       };
       return '__TPGSTAGE__:' + JSON.stringify(payload);
     }
 
     function decodeStageFromTeacher(teacher, currentPeriodId) {
       if (!teacher) return null;
-      // 1. Cek jika objek teacher memiliki properti langsung StatusPencairan
-      if (teacher.StatusPencairanStep) {
-        return {
-          step: Number(teacher.StatusPencairanStep),
-          note: teacher.StatusPencairanNote || '',
-          updatedAt: teacher.StatusPencairanUpdatedAt || ''
-        };
-      }
-      // 2. Cek apakah ada metadata terenkode pada field NSM / Kabupaten / NIP_NPK
       const fieldsToCheck = [teacher.NSM, teacher.Kabupaten, teacher.NIP_NPK];
       for (const f of fieldsToCheck) {
         const str = String(f || '');
@@ -1506,16 +1714,25 @@ var APP = {
           try {
             const jsonStr = str.substring(idx + '__TPGSTAGE__:'.length);
             const parsed = JSON.parse(jsonStr);
-            if (parsed && parsed.s) {
+            if (parsed) {
               return {
-                step: Number(parsed.s),
+                step: Number(parsed.s || 1),
                 note: parsed.n || '',
                 updatedAt: parsed.t || '',
-                periodId: parsed.p || currentPeriodId
+                periodId: parsed.p || currentPeriodId,
+                phone: parsed.w || ''
               };
             }
           } catch (e) {}
         }
+      }
+      if (teacher.StatusPencairanStep) {
+        return {
+          step: Number(teacher.StatusPencairanStep),
+          note: teacher.StatusPencairanNote || '',
+          updatedAt: teacher.StatusPencairanUpdatedAt || '',
+          phone: teacher.NoWA || ''
+        };
       }
       return null;
     }
@@ -1529,10 +1746,9 @@ var APP = {
       return s;
     }
 
-    function packNipWithStage(cleanNip, stageObj) {
+    function packNipWithStage(cleanNip, stageObj, phoneStr) {
       const base = cleanNipDisplay(cleanNip);
-      if (!stageObj || !stageObj.step) return base;
-      const encoded = encodeStageToTeacherField(stageObj);
+      const encoded = encodeStageToTeacherField(stageObj, phoneStr);
       return base ? `${base} || ${encoded}` : encoded;
     }
 
@@ -1546,30 +1762,32 @@ var APP = {
       const key = `${periodId || 'ALL'}_${teacherId}`;
       const fallbackKey = `ALL_${teacherId}`;
 
-      // Cek dari data Guru (hasil sinkronisasi Cloud GAS via NIP_NPK metadata)
       const teacherObj = (state.teachers || []).find(t => t.TeacherID === teacherId)
         || (state.guruDataCache?.teacher?.TeacherID === teacherId ? state.guruDataCache.teacher : null);
 
       const cloudDecoded = decodeStageFromTeacher(teacherObj, periodId);
       if (cloudDecoded && cloudDecoded.step) {
+        if (cloudDecoded.phone) state.phonesMap['T_' + teacherId] = formatWaDisplay(cloudDecoded.phone);
         state.paymentStagesMap[key] = cloudDecoded;
         return cloudDecoded;
       }
 
       if (state.paymentStagesMap[key]) return state.paymentStagesMap[key];
       if (state.paymentStagesMap[fallbackKey]) return state.paymentStagesMap[fallbackKey];
-      return { step: 1, note: '', updatedAt: '' };
+      return { step: 1, note: '', updatedAt: '', phone: getTeacherPhone(teacherId) };
     }
 
     function setTeacherPaymentStageLocal(teacherId, periodId, step, note) {
       const nowFormatted = new Date().toLocaleDateString('id-ID', {
         day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
       });
+      const existingPhone = getTeacherPhone(teacherId);
       const stageData = {
         step: Number(step),
         note: String(note || '').trim(),
         updatedAt: nowFormatted,
-        periodId: periodId || state.periodId
+        periodId: periodId || state.periodId,
+        phone: existingPhone
       };
       const key = `${periodId || 'ALL'}_${teacherId}`;
       const fallbackKey = `ALL_${teacherId}`;
@@ -1577,7 +1795,6 @@ var APP = {
       state.paymentStagesMap[fallbackKey] = stageData;
       saveLocalStagesMap();
 
-      // Update di state.teachers agar langsung sinkron
       const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
       if (t) {
         t.StatusPencairanStep = stageData.step;
@@ -1595,6 +1812,242 @@ var APP = {
           <span>${esc(st.label)}</span>
         </span>
       `;
+    }
+
+    // =========================================================================
+    // ENGINE PEMBERITAHUAN WHATSAPP (PENGAWAS -> GURU & ADMIN -> SEMUA NOMOR)
+    // =========================================================================
+    function openWhatsAppChatWindow(rawPhone, messageText) {
+      const norm = normalizeWaNumber(rawPhone);
+      if (!norm) {
+        alertMsg('Nomor WhatsApp belum diisi untuk penerima ini. Silakan lengkapi nomor WA terlebih dahulu di menu Admin.', 'warning');
+        return false;
+      }
+      const waUrl = `https://wa.me/${norm}?text=${encodeURIComponent(messageText)}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+      return true;
+    }
+
+    function buildPengawasDocWaMessage(doc, statusOverride, noteOverride) {
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      const st = statusOverride || doc.Status || 'MENUNGGU_VERIFIKASI';
+      const note = noteOverride !== undefined ? noteOverride : (doc.CatatanPengawas || '');
+      const statusText = st === 'DISETUJUI'
+        ? '✅ *DISETUJUI / LENGKAP*'
+        : (st === 'PERLU_PERBAIKAN' ? '⚠️ *PERLU PERBAIKAN*' : '⏳ *MENUNGGU VERIFIKASI*');
+      const pengawasName = cleanStaffNameDisplay(state.user?.name || 'Pengawas Madrasah');
+
+      return `Assalamu'alaikum Wr. Wb.\nYth. Bapak/Ibu Guru *${doc.NamaGuru}*\n(${doc.Jenjang} - ${doc.NamaMadrasah})\n\nBerikut informasi hasil pemeriksaan berkas *${doc.Kategori === 'SELISIH_TUKIN' ? 'Selisih Tukin' : 'TPG'}* Anda pada periode *${periodName}*:\n\n📄 *Nama Dokumen:* ${doc.NamaDokumen}\n📌 *Status Pemeriksaan:* ${statusText}\n📝 *Catatan Pengawas:* ${note ? note : 'Berkas telah sesuai dengan lembar ceklis.'}\n\n${st === 'PERLU_PERBAIKAN' ? 'Mohon segera memperbaiki tautan berkas PDF Anda melalui portal SIM-TPG.' : 'Terima kasih, berkas dokumen ini telah disetujui.'}\n\n_Pengawas Pemeriksa: ${pengawasName}_\n_Seksi Pendidikan Madrasah Kemenag Kab. Gorontalo Utara_`;
+    }
+
+    function sendPengawasDocWaById(docId) {
+      const doc = (state.allDocsCache || []).find(x => x.DocumentID === docId);
+      if (!doc) return;
+      const phone = getTeacherPhone(doc.TeacherID);
+      if (!phone) {
+        alertMsg(`Nomor WhatsApp untuk guru "${doc.NamaGuru}" belum terdaftar. Admin dapat menambahkannya di menu Kelola Peserta.`, 'warning');
+        return;
+      }
+      const msg = buildPengawasDocWaMessage(doc);
+      openWhatsAppChatWindow(phone, msg);
+    }
+
+    function sendPengawasCompletenessWaByTeacherId(teacherId) {
+      const comp = (state.completenessCache || []).find(x => x.TeacherID === teacherId);
+      const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
+      if (!comp && !t) return;
+      const name = comp?.Nama || t?.Nama || 'Guru';
+      const phone = getTeacherPhone(teacherId);
+      if (!phone) {
+        alertMsg(`Nomor WhatsApp untuk "${name}" belum terdaftar.`, 'warning');
+        return;
+      }
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      const pengawasName = cleanStaffNameDisplay(state.user?.name || 'Pengawas Madrasah');
+      const msg = `Assalamu'alaikum Wr. Wb.\nYth. Bapak/Ibu Guru *${name}*\n(${comp?.Jenjang || t?.Jenjang} - ${comp?.NamaMadrasah || t?.NamaMadrasah})\n\nBerikut rekapitulasi pemeriksaan kelengkapan dokumen *${(comp?.Kategori || t?.Kategori) === 'SELISIH_TUKIN' ? 'Selisih Tukin' : 'TPG'}* Anda pada periode *${periodName}*:\n\n📊 *Progres Dokumen Wajib:* ${comp?.disetujui || 0} dari ${comp?.totalWajib || 0} Disetujui\n⚠️ *Perlu Perbaikan:* ${comp?.perluPerbaikan || 0} Dokumen\n📌 *Status Akhir Ceklis:* *${comp?.statusKelengkapan || 'BELUM LENGKAP'}*\n\n_Pengawas Pemeriksa: ${pengawasName}_\n_Seksi Pendidikan Madrasah Kemenag Kab. Gorontalo Utara_`;
+      openWhatsAppChatWindow(phone, msg);
+    }
+
+    function buildAdminStageWaMessageForTeacher(teacher, stageStep, customNote) {
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      const stInfo = getStageInfoByStep(stageStep) || TPG_PAYMENT_STAGES[0];
+      return `Assalamu'alaikum Wr. Wb.\nYth. Bapak/Ibu Guru *${teacher.Nama}*\n(${teacher.Jenjang} - ${teacher.NamaMadrasah})\n\n*PEMBERITAHUAN UPDATE STATUS BERKAS TPG / TUKIN*\nPeriode: *${periodName}*\n\nBerkas pembayaran Anda saat ini telah diperbarui oleh Admin ke tahapan:\n👉 *Tahap ${stInfo.step} dari 7: ${stInfo.label}*\n\nℹ️ *Keterangan Tahapan:*\n${stInfo.desc}${customNote ? `\n\n📢 *Catatan Tambahan Admin:*\n"${customNote}"` : ''}\n\nSilakan login ke Portal Guru SIM-TPG Kemenag Gorontalo Utara untuk memantau progres secara detail.\nTerima kasih.`;
+    }
+
+    function sendAdminStageWaSingleTeacher(teacherId) {
+      const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
+      if (!t) return;
+      const phone = getTeacherPhone(t);
+      if (!phone) {
+        alertMsg(`Nomor WhatsApp untuk "${t.Nama}" belum diisi. Silakan isi di menu Kelola Peserta terlebih dahulu.`, 'warning');
+        return;
+      }
+      const stData = getTeacherPaymentStage(teacherId, state.periodId);
+      const msg = buildAdminStageWaMessageForTeacher(t, stData.step, stData.note);
+      openWhatsAppChatWindow(phone, msg);
+    }
+
+    // Membuka Modal Broadcast WA Massal (Semua Guru Terkait + Pengawas + Admin)
+    function openBroadcastWaModal(targetTeachers, stageStep, customNote) {
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      const stInfo = getStageInfoByStep(stageStep) || TPG_PAYMENT_STAGES[0];
+
+      const broadcastTemplate = `Assalamu'alaikum Wr. Wb.\nBapak/Ibu Guru Penerima TPG & Selisih Tukin serta Pengawas Madrasah di lingkungan Kemenag Kab. Gorontalo Utara.\n\n*INFORMASI UPDATE STATUS PENCAIRAN BERKAS TPG*\n🗓️ *Periode:* ${periodName}\n📌 *Tahapan Saat Ini:* *Tahap ${stInfo.step} dari 7 — ${stInfo.label}*\n\nℹ️ *Keterangan:*\n${stInfo.desc}${customNote ? `\n\n📢 *Catatan Admin:*\n"${customNote}"` : ''}\n\nBapak/Ibu Guru dapat mengecek rincian progres berkas masing-masing melalui aplikasi SIM-TPG.\nTerima kasih.\n_Admin SIM-TPG Seksi Pendidikan Madrasah Kemenag Gorontalo Utara_`;
+
+      $('waBroadcastMessageText').value = broadcastTemplate;
+      $('waBroadcastSubTitle').textContent = `Tahap ${stInfo.step}: ${stInfo.label} (${periodName})`;
+
+      // Kumpulkan daftar nomor penerima (Guru target + Pengawas + Admin)
+      const recipients = [];
+      (targetTeachers || []).forEach(t => {
+        const ph = getTeacherPhone(t);
+        const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        recipients.push({
+          id: 'T_' + t.TeacherID,
+          name: t.Nama,
+          roleLabel: `GURU (${t.Jenjang} · ${t.NamaMadrasah})`,
+          phone: ph,
+          personalMessage: buildAdminStageWaMessageForTeacher(t, st.step || stageStep, customNote || st.note),
+          sent: false
+        });
+      });
+
+      // Tambahkan juga Pengawas & Admin yang memiliki nomor WA
+      (state.usersList || []).forEach(u => {
+        const ph = getUserStaffPhone(u);
+        if (ph) {
+          recipients.push({
+            id: 'U_' + u.Username,
+            name: cleanStaffNameDisplay(u.Nama || u.Username),
+            roleLabel: `${u.Role} KEMENAG`,
+            phone: ph,
+            personalMessage: broadcastTemplate,
+            sent: false
+          });
+        }
+      });
+
+      state.currentBroadcastQueue = recipients;
+      renderWaBroadcastRecipientsQueue();
+      $('waBroadcastModal').classList.remove('hidden-force');
+    }
+
+    function openBroadcastWaModalFromCurrentFilter() {
+      const step = Number($('bulkStageSelectDropdown')?.value || state.selectedAdminBulkStage || 1);
+      const note = ($('bulkStageCustomNote')?.value || '').trim();
+      const filtered = getFilteredTeachersForStatusTable();
+      openBroadcastWaModal(filtered, step, note);
+    }
+
+    function renderWaBroadcastRecipientsQueue() {
+      const list = state.currentBroadcastQueue || [];
+      const withPhoneCount = list.filter(r => !!r.phone).length;
+      $('waQueueTotalCount').textContent = `${withPhoneCount} Nomor Aktif dari ${list.length} Penerima`;
+
+      $('waBroadcastRecipientsList').innerHTML = list.map((r, idx) => {
+        if (!r.phone) {
+          return `
+            <div class="px-4 py-3 flex items-center justify-between gap-3 bg-slate-50/60">
+              <div>
+                <div class="font-bold text-xs text-slate-600">${esc(r.name)}</div>
+                <div class="text-[10px] text-slate-400">${esc(r.roleLabel)}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-bold">Nomor WA Belum Diisi</span>
+            </div>
+          `;
+        }
+        return `
+          <div class="px-4 py-3 flex items-center justify-between gap-3 hover:bg-emerald-50/40 transition">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-xs text-slate-800">${esc(r.name)}</span>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono text-[10px] font-bold"><i class="fa-brands fa-whatsapp text-[#25D366] mr-1"></i>${esc(r.phone)}</span>
+              </div>
+              <div class="text-[10px] text-slate-500">${esc(r.roleLabel)}</div>
+            </div>
+            <button type="button" onclick="triggerQueueWaSend(${idx})" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 cursor-pointer ${
+              r.sent ? 'bg-slate-200 text-emerald-800' : 'bg-[#25D366] hover:bg-[#1da851] text-white shadow-2xs'
+            }">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>${r.sent ? 'Terkirim ✓ (Kirim Ulang)' : 'Kirim WA'}</span>
+            </button>
+          </div>
+        `;
+      }).join('') || '<div class="p-6 text-center text-xs text-slate-400">Tidak ada daftar penerima.</div>';
+    }
+
+    function triggerQueueWaSend(index) {
+      const item = state.currentBroadcastQueue[index];
+      if (!item || !item.phone) return;
+      const customGlobalText = ($('waBroadcastMessageText')?.value || '').trim();
+      const msgToUse = item.id.startsWith('T_') ? item.personalMessage : (customGlobalText || item.personalMessage);
+      if (openWhatsAppChatWindow(item.phone, msgToUse)) {
+        item.sent = true;
+        renderWaBroadcastRecipientsQueue();
+      }
+    }
+
+    function copyBroadcastMessageText() {
+      const text = ($('waBroadcastMessageText')?.value || '').trim();
+      if (!text) return;
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alertMsg('Teks pemberitahuan berhasil disalin! Silakan tempel (Paste) di Grup WhatsApp Guru.');
+    }
+
+    async function sendAllViaGatewayApi() {
+      const token = (localStorage.getItem(WA_FONNTE_TOKEN_STORAGE_KEY) || '').trim();
+      const validRecipients = (state.currentBroadcastQueue || []).filter(r => !!normalizeWaNumber(r.phone));
+      if (!validRecipients.length) {
+        alertMsg('Belum ada nomor WhatsApp yang terdaftar pada daftar penerima ini.', 'warning');
+        return;
+      }
+
+      if (!token) {
+        alertMsg('Untuk mengirim otomatis ke semua nomor dalam 1x klik tanpa membuka tab WA, masukkan Token Fonnte di menu Pengaturan -> Konfigurasi WA, atau klik tombol "Kirim WA" di daftar bawah.', 'warning');
+        return;
+      }
+
+      setLoading(true, `Mengirim Broadcast WA ke ${validRecipients.length} Nomor...`);
+      let successCount = 0;
+      const customGlobalText = ($('waBroadcastMessageText')?.value || '').trim();
+
+      for (const r of validRecipients) {
+        try {
+          const targetPhone = normalizeWaNumber(r.phone);
+          const msg = r.id.startsWith('T_') ? r.personalMessage : (customGlobalText || r.personalMessage);
+          const formData = new FormData();
+          formData.append('target', targetPhone);
+          formData.append('message', msg);
+
+          const res = await fetch('https://api.fonnte.com/send', {
+            method: 'POST',
+            headers: { Authorization: token },
+            body: formData
+          });
+          const json = await res.json();
+          if (json && json.status !== false) {
+            r.sent = true;
+            successCount++;
+          }
+        } catch (err) {}
+      }
+
+      setLoading(false);
+      renderWaBroadcastRecipientsQueue();
+      if (successCount > 0) {
+        alertMsg(`Berhasil mengirim pemberitahuan WhatsApp otomatis ke ${successCount} nomor!`);
+      } else {
+        alertMsg('Gagal menghubungi server WhatsApp Gateway. Periksa kembali API Token Anda.', 'danger');
+      }
+    }
+
+    function closeWaBroadcastModal() {
+      $('waBroadcastModal')?.classList.add('hidden-force');
     }
 
     // =========================================================================
@@ -1645,8 +2098,8 @@ var APP = {
       } catch (e) {}
       const initDb = {
         users: [
-          { Username: 'Admintpg@kemenag.go.id', Password: 'Tpggorut', Nama: 'Administrator TPG Kemenag Gorut', Role: 'ADMIN', TeacherID: '', Aktif: true },
-          { Username: 'Pengawas@kemenag.go.id', Password: 'Pengawasgorut', Nama: 'Pengawas Madrasah Gorut', Role: 'PENGAWAS', TeacherID: '', Aktif: true }
+          { Username: 'Admintpg@kemenag.go.id', Password: 'Tpggorut', Nama: 'Administrator TPG Kemenag Gorut [WA:081244556677]', NoWA: '081244556677', Role: 'ADMIN', TeacherID: '', Aktif: true },
+          { Username: 'Pengawas@kemenag.go.id', Password: 'Pengawasgorut', Nama: 'Pengawas Madrasah Gorut [WA:085240112233]', NoWA: '085240112233', Role: 'PENGAWAS', TeacherID: '', Aktif: true }
         ],
         periods: [
           { PeriodID: 'PER-2026-OKT', NamaPeriode: 'Oktober 2026', TanggalMulai: '2026-10-01', TanggalAkhir: '2026-10-31', Aktif: true },
@@ -1654,8 +2107,8 @@ var APP = {
           { PeriodID: 'PER-2026-1', NamaPeriode: 'Semester Ganjil TP 2026/2027', TanggalMulai: '2026-07-01', TanggalAkhir: '2026-12-31', Aktif: false }
         ],
         teachers: [
-          { TeacherID: 'GR-DEMO01', NIP_NPK: '198504122010011005', Nama: 'Abdul Rahman, S.Pd.I', Kategori: 'TPG', Jenjang: 'MI', NamaMadrasah: 'MIN 1 Gorontalo Utara', Aktif: true },
-          { TeacherID: 'GR-DEMO02', NIP_NPK: '199008192019032008', Nama: 'Siti Aminah, M.Pd', Kategori: 'SELISIH_TUKIN', Jenjang: 'MTs', NamaMadrasah: 'MTsN 1 Gorontalo Utara', Aktif: true }
+          { TeacherID: 'GR-DEMO01', NIP_NPK: '198504122010011005', NoWA: '081234567890', Nama: 'Abdul Rahman, S.Pd.I', Kategori: 'TPG', Jenjang: 'MI', NamaMadrasah: 'MIN 1 Gorontalo Utara', Aktif: true },
+          { TeacherID: 'GR-DEMO02', NIP_NPK: '199008192019032008', NoWA: '081344556677', Nama: 'Siti Aminah, M.Pd', Kategori: 'SELISIH_TUKIN', Jenjang: 'MTs', NamaMadrasah: 'MTsN 1 Gorontalo Utara', Aktif: true }
         ],
         checklist: [
           { ChecklistID: 'CHK-01', PeriodID: 'PER-2026-2', Kategori: 'TPG', Siklus: 'BULANAN', Jenjang: 'SEMUA', NamaDokumen: 'Daftar Hadir / Absensi Bulanan & Jurnal Mengajar (PDF)', Wajib: true, Urutan: 1, Aktif: true },
@@ -1909,12 +2362,13 @@ var APP = {
           const jenjang = (parts[1] && ['RA', 'MI', 'MTs', 'MA'].includes(parts[1].toUpperCase())) ? parts[1].toUpperCase() : (payload.defaultJenjang || 'MI');
           const madrasah = parts[2] || payload.defaultMadrasah || 'Kemenag Gorontalo Utara';
           const nip = parts[3] || '';
+          const phone = parts[4] || '';
           const existing = db.teachers.find(t => normStr(t.Nama) === normStr(nama));
           if (existing) {
-            Object.assign(existing, { Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip || existing.NIP_NPK, Aktif: true });
+            Object.assign(existing, { Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip || existing.NIP_NPK, NoWA: phone || existing.NoWA || '', Aktif: true });
             updated++;
           } else {
-            db.teachers.push({ TeacherID: 'GR-' + Math.random().toString(36).substring(2, 8).toUpperCase(), Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip, Aktif: true });
+            db.teachers.push({ TeacherID: 'GR-' + Math.random().toString(36).substring(2, 8).toUpperCase(), Nama: nama, Kategori: payload.kategori, Jenjang: jenjang, NamaMadrasah: madrasah, NIP_NPK: nip, NoWA: phone, Aktif: true });
             added++;
           }
         });
@@ -1930,13 +2384,13 @@ var APP = {
         if (existing) {
           Object.assign(existing, {
             Nama: data.Nama, Kategori: data.Kategori || 'TPG', Jenjang: data.Jenjang || 'MI',
-            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', Aktif: true
+            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', NoWA: data.NoWA || existing.NoWA || '', Aktif: true
           });
         } else {
           db.teachers.push({
             TeacherID: 'GR-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
             Nama: data.Nama, Kategori: data.Kategori || 'TPG', Jenjang: data.Jenjang || 'MI',
-            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', Aktif: true
+            NamaMadrasah: data.NamaMadrasah || '-', NIP_NPK: data.NIP_NPK || '', NoWA: data.NoWA || '', Aktif: true
           });
         }
         saveLocalDb(db);
@@ -2652,7 +3106,7 @@ var APP = {
       const jenjang = $('pFilterJenjang')?.value || '';
       const q = ($('pSearchDoc')?.value || '').toLowerCase().trim();
 
-      const filtered = state.allDocsCache.filter(d => {
+      const filtered = (state.allDocsCache || []).filter(d => {
         const mKat = !kat || (d.Kategori || 'TPG') === kat;
         const mSik = !siklus || (d.Siklus || 'BULANAN') === siklus;
         const mJen = !jenjang || d.Jenjang === jenjang;
@@ -2660,14 +3114,19 @@ var APP = {
         return mKat && mSik && mJen && mQ;
       });
 
-      $('pengawasDocRows').innerHTML = filtered.map(d => `
+      $('pengawasDocRows').innerHTML = filtered.map(d => {
+        const phone = getTeacherPhone(d.TeacherID);
+        return `
         <tr class="hover:bg-slate-50/80">
           <td class="py-3 px-4">
             <div class="flex items-center gap-2">
               <span class="font-bold text-slate-800">${esc(d.NamaGuru)}</span>
               ${kategoriBadge(d.Kategori)}
             </div>
-            <div class="text-[11px] text-slate-500 mt-0.5"><span class="font-bold text-navy-800">${esc(d.Jenjang)}</span> · ${esc(d.NamaMadrasah)}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">
+              <span class="font-bold text-navy-800">${esc(d.Jenjang)}</span> · ${esc(d.NamaMadrasah)}
+              ${phone ? `<span class="ml-1 text-emerald-700 font-mono font-bold"><i class="fa-brands fa-whatsapp"></i> ${esc(phone)}</span>` : '<span class="ml-1 text-slate-400 italic">(Belum ada WA)</span>'}
+            </div>
           </td>
           <td class="py-3 px-4 font-semibold text-slate-800">${esc(d.NamaDokumen)}</td>
           <td class="py-3 px-4">${siklusBadge(d.Siklus || 'BULANAN')}</td>
@@ -2680,13 +3139,16 @@ var APP = {
             ${statusBadge(d.Status)}
             ${d.CatatanPengawas ? `<div class="text-[11px] text-rose-600 mt-1 max-w-[200px] truncate" title="${esc(d.CatatanPengawas)}">Catatan: ${esc(d.CatatanPengawas)}</div>` : ''}
           </td>
-          <td class="py-3 px-4 text-right">
-            <button onclick="openVerifyAndPreview('${d.DocumentID}', false)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition shadow-xs inline-flex items-center gap-1.5">
-              <i class="fa-solid fa-check-double"></i> Periksa & Ceklis
+          <td class="py-3 px-4 text-right whitespace-nowrap">
+            <button onclick="openVerifyAndPreview('${d.DocumentID}', false)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition shadow-xs inline-flex items-center gap-1.5 mr-1">
+              <i class="fa-solid fa-check-double"></i> Periksa
+            </button>
+            <button onclick="sendPengawasDocWaById('${d.DocumentID}')" title="Kirim Pemberitahuan Hasil Pemeriksaan ke WhatsApp Guru" class="px-3 py-1.5 bg-[#25D366] hover:bg-[#1da851] text-white rounded-xl text-xs font-extrabold transition shadow-xs inline-flex items-center gap-1">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Kirim WA
             </button>
           </td>
         </tr>
-      `).join('') || '<tr><td colspan="6" class="py-8 text-center text-slate-400">Belum ada dokumen guru yang diupload pada filter ini.</td></tr>';
+      `}).join('') || '<tr><td colspan="6" class="py-8 text-center text-slate-400">Belum ada dokumen guru yang diupload pada filter ini.</td></tr>';
     }
 
     function renderPengawasChecklistEditor() {
@@ -2804,9 +3266,15 @@ var APP = {
           ? 'bg-emerald-100 text-emerald-800'
           : x.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800';
         const stData = getTeacherPaymentStage(x.TeacherID, state.periodId);
+        const phone = getTeacherPhone(x.TeacherID);
         return `
           <tr class="hover:bg-slate-50/80">
-            <td class="py-3 px-4 font-bold text-slate-800">${esc(x.Nama)}</td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-800">${esc(x.Nama)}</div>
+              <div class="text-[11px] font-mono ${phone ? 'text-emerald-700 font-bold' : 'text-slate-400'}">
+                <i class="fa-brands fa-whatsapp"></i> ${esc(phone || 'Belum diisi')}
+              </div>
+            </td>
             <td class="py-3 px-4">${kategoriBadge(x.Kategori)}</td>
             <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-[11px] mr-1">${esc(x.Jenjang)}</span><span class="text-xs text-slate-500">${esc(x.NamaMadrasah)}</span></td>
             <td class="py-3 px-4 text-center font-semibold">${x.totalWajib}</td>
@@ -2814,10 +3282,13 @@ var APP = {
             <td class="py-3 px-4 text-center text-slate-500">${x.belumUpload}</td>
             <td class="py-3 px-4 text-center font-bold text-rose-600">${x.perluPerbaikan}</td>
             <td class="py-3 px-4">${renderStageBadgeHtml(stData.step)}</td>
-            <td class="py-3 px-4 text-right flex items-center justify-end gap-2">
+            <td class="py-3 px-4 text-right flex items-center justify-end gap-1.5">
               <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${badgeCls}">${esc(x.statusKelengkapan)}</span>
+              <button onclick="sendPengawasCompletenessWaByTeacherId('${x.TeacherID}')" title="Kirim Rekap Ceklis ke WA Guru" class="px-2.5 py-1 bg-[#25D366] hover:bg-[#1da851] text-white rounded-lg text-[11px] font-extrabold">
+                <i class="fa-brands fa-whatsapp"></i> WA
+              </button>
               <button onclick="generateTeacherChecklistPdfById('${x.TeacherID}')" class="px-2.5 py-1 bg-navy-800 hover:bg-navy-900 text-white rounded-lg text-[11px] font-bold">
-                <i class="fa-solid fa-file-pdf text-amber-400 mr-1"></i> PDF Ceklis
+                <i class="fa-solid fa-file-pdf text-amber-400"></i> PDF
               </button>
             </td>
           </tr>
@@ -2881,38 +3352,37 @@ var APP = {
         counts[stepNum] = (counts[stepNum] || 0) + 1;
       });
 
-      // Statistik 7 Tahapan di Atas
+      // Render 7 Statistik Atas
       if ($('adminStageStatsGrid')) {
         $('adminStageStatsGrid').innerHTML = TPG_PAYMENT_STAGES.map(st => `
-          <div onclick="filterAdminTableByStage(${st.step})" class="bg-white p-3.5 rounded-2xl shadow-xs border border-slate-200/80 hover:border-emerald-500 cursor-pointer transition flex flex-col justify-between">
+          <div onclick="filterAdminTableByStage(${st.step})" class="bg-white p-3.5 rounded-2xl shadow-xs border border-slate-200/80 hover:border-emerald-500/60 transition cursor-pointer flex flex-col justify-between">
             <div class="flex items-center justify-between gap-2">
-              <span class="w-6 h-6 rounded-lg bg-navy-900 text-amber-300 font-extrabold text-xs flex items-center justify-center">${st.step}</span>
-              <span class="text-xl font-extrabold text-emerald-700">${counts[st.step] || 0} <span class="text-[10px] font-bold text-slate-400">Guru</span></span>
+              <span class="w-6 h-6 rounded-lg bg-navy-900 text-amber-300 text-xs font-extrabold flex items-center justify-center">${st.step}</span>
+              <span class="text-xl font-extrabold text-navy-900">${counts[st.step] || 0} <span class="text-[10px] font-semibold text-slate-400">Guru</span></span>
             </div>
-            <div class="mt-2 text-[11px] font-extrabold text-slate-700 leading-snug">${esc(st.label)}</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-2 leading-snug">${esc(st.label)}</div>
           </div>
         `).join('');
       }
 
-      // Pilihan Kartu 7 Tahapan
+      // Render 7 Kartu Pemilih Tahapan untuk Update Massal
       if ($('adminStageCardsSelector')) {
         $('adminStageCardsSelector').innerHTML = TPG_PAYMENT_STAGES.map(st => {
           const isSelected = state.selectedAdminBulkStage === st.step;
           return `
-            <button type="button" onclick="selectAdminStageCard(${st.step})" class="text-left p-3.5 rounded-2xl border-2 transition-all flex flex-col justify-between gap-2 cursor-pointer ${
+            <button type="button" onclick="selectAdminStageCard(${st.step})" class="p-3 rounded-2xl border text-left transition flex flex-col justify-between gap-2 cursor-pointer ${
               isSelected
-                ? 'bg-gradient-to-br from-navy-900 to-emerald-900 text-white border-amber-400 shadow-md scale-[1.01]'
-                : 'bg-slate-50/80 hover:bg-white text-slate-800 border-slate-200'
+                ? 'bg-gradient-to-br from-emerald-700 to-navy-900 text-white border-emerald-600 shadow-md ring-2 ring-emerald-500/30'
+                : 'bg-slate-50 hover:bg-emerald-50/50 text-slate-700 border-slate-200/90'
             }">
               <div class="flex items-center justify-between w-full">
-                <span class="w-7 h-7 rounded-xl ${isSelected ? 'bg-amber-400 text-navy-950' : 'bg-navy-900 text-white'} font-extrabold text-xs flex items-center justify-center">
+                <span class="w-6 h-6 rounded-lg ${isSelected ? 'bg-amber-400 text-navy-950' : 'bg-navy-900 text-white'} font-extrabold text-xs flex items-center justify-center">
                   ${st.step}
                 </span>
-                <i class="fa-solid ${st.icon} ${isSelected ? 'text-amber-300' : 'text-emerald-600'} text-sm"></i>
+                <i class="fa-solid ${st.icon} ${isSelected ? 'text-amber-300' : 'text-slate-400'} text-sm"></i>
               </div>
-              <div>
-                <div class="text-xs font-extrabold leading-snug">${esc(st.label)}</div>
-                <div class="text-[10px] mt-1 ${isSelected ? 'text-emerald-200' : 'text-slate-400'}">Klik untuk memilih</div>
+              <div class="text-xs font-extrabold leading-snug ${isSelected ? 'text-white' : 'text-navy-900'}">
+                ${esc(st.label)}
               </div>
             </button>
           `;
@@ -2922,6 +3392,7 @@ var APP = {
       if ($('bulkStageSelectDropdown')) {
         $('bulkStageSelectDropdown').value = String(state.selectedAdminBulkStage);
       }
+      updateSelectedTeachersCountBadge();
     }
 
     function selectAdminStageCard(stepNumber) {
@@ -2930,47 +3401,43 @@ var APP = {
     }
 
     function filterAdminTableByStage(stepNumber) {
-      const sel = $('adminStatusFilterStage');
-      if (!sel) return;
-      sel.value = sel.value === String(stepNumber) ? '' : String(stepNumber);
-      renderAdminUpdateStatusTable();
-    }
-
-    function updateSelectedTeachersCounterUI() {
-      const count = state.selectedTeacherIdsForStatus.size;
-      const opt = $('selectedTeachersCountOpt');
-      if (opt) opt.textContent = count;
-      const selMode = $('bulkStageTargetMode');
-      if (selMode) {
-        const optionEl = selMode.querySelector('option[value="SELECTED"]');
-        if (optionEl) optionEl.textContent = `Guru yang Dicentang di Tabel (${count} Guru)`;
+      if ($('adminStatusFilterStage')) {
+        const currentVal = $('adminStatusFilterStage').value;
+        $('adminStatusFilterStage').value = currentVal === String(stepNumber) ? '' : String(stepNumber);
+        renderAdminUpdateStatusTable();
       }
     }
 
     function onChangeBulkStageTargetMode() {
-      updateSelectedTeachersCounterUI();
+      updateSelectedTeachersCountBadge();
+    }
+
+    function updateSelectedTeachersCountBadge() {
+      const count = state.selectedTeacherIdsForStatus.size;
+      const opt = document.querySelector('#bulkStageTargetMode option[value="SELECTED"]');
+      if (opt) opt.textContent = `Guru yang Dicentang di Tabel (${count} Guru)`;
+    }
+
+    function toggleSelectAllTeachersStatus(checked) {
+      const visibleIds = getFilteredTeachersForStatusTable().map(t => t.TeacherID);
+      visibleIds.forEach(id => {
+        if (checked) state.selectedTeacherIdsForStatus.add(id);
+        else state.selectedTeacherIdsForStatus.delete(id);
+      });
+      if (checked && $('bulkStageTargetMode')) {
+        $('bulkStageTargetMode').value = 'SELECTED';
+      }
+      updateSelectedTeachersCountBadge();
+      renderAdminUpdateStatusTable();
     }
 
     function toggleSelectTeacherStatusRow(teacherId, checked) {
       if (checked) state.selectedTeacherIdsForStatus.add(teacherId);
       else state.selectedTeacherIdsForStatus.delete(teacherId);
-      updateSelectedTeachersCounterUI();
       if (state.selectedTeacherIdsForStatus.size > 0 && $('bulkStageTargetMode')) {
         $('bulkStageTargetMode').value = 'SELECTED';
       }
-    }
-
-    function toggleSelectAllTeachersStatus(checked) {
-      const filtered = getFilteredTeachersForStatusTable();
-      filtered.forEach(t => {
-        if (checked) state.selectedTeacherIdsForStatus.add(t.TeacherID);
-        else state.selectedTeacherIdsForStatus.delete(t.TeacherID);
-      });
-      updateSelectedTeachersCounterUI();
-      if (checked && filtered.length > 0 && $('bulkStageTargetMode')) {
-        $('bulkStageTargetMode').value = 'SELECTED';
-      }
-      renderAdminUpdateStatusTable();
+      updateSelectedTeachersCountBadge();
     }
 
     function getFilteredTeachersForStatusTable() {
@@ -2991,19 +3458,20 @@ var APP = {
     }
 
     function renderAdminUpdateStatusTable() {
+      if (!$('adminUpdateStatusRows')) return;
       const filtered = getFilteredTeachersForStatusTable();
-      updateSelectedTeachersCounterUI();
 
       $('adminUpdateStatusRows').innerHTML = filtered.map(t => {
         const comp = (state.completenessCache || []).find(c => c.TeacherID === t.TeacherID);
-        const compBadge = comp
-          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              comp.statusKelengkapan === 'LENGKAP' ? 'bg-emerald-100 text-emerald-800' :
-              comp.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
-            }">${esc(comp.statusKelengkapan)} (${comp.disetujui}/${comp.totalWajib})</span>`
-          : '<span class="text-xs text-slate-400">-</span>';
+        const compStatus = comp ? comp.statusKelengkapan : 'BELUM_LENGKAP';
+        const compBadge = compStatus === 'LENGKAP'
+          ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">Ceklis Lengkap</span>'
+          : (compStatus === 'PERLU_PERBAIKAN'
+              ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800">Perlu Perbaikan</span>'
+              : '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">Belum Lengkap</span>');
 
         const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const phone = getTeacherPhone(t);
         const isChecked = state.selectedTeacherIdsForStatus.has(t.TeacherID);
 
         const optionsHtml = TPG_PAYMENT_STAGES.map(item =>
@@ -3022,6 +3490,7 @@ var APP = {
               </div>
               <div class="text-[11px] text-slate-500 mt-0.5">
                 <span class="font-bold text-navy-800">${esc(t.Jenjang)}</span> · ${esc(t.NamaMadrasah)}
+                ${phone ? `<span class="ml-1 text-emerald-700 font-mono font-bold"><i class="fa-brands fa-whatsapp"></i> ${esc(phone)}</span>` : '<span class="ml-1 text-rose-500 text-[10px]">(WA kosong)</span>'}
               </div>
             </td>
             <td class="py-3 px-3">${compBadge}</td>
@@ -3030,16 +3499,19 @@ var APP = {
               ${st.updatedAt ? `<div class="text-[10px] text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i>${esc(st.updatedAt)}</div>` : ''}
             </td>
             <td class="py-3 px-3">
-              <select id="rowStageSelect-${t.TeacherID}" onchange="saveSingleTeacherPaymentStage('${t.TeacherID}')" class="w-full min-w-[230px] px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-navy-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+              <select id="rowStageSelect-${t.TeacherID}" onchange="saveSingleTeacherPaymentStage('${t.TeacherID}', false)" class="w-full min-w-[220px] px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-navy-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
                 ${optionsHtml}
               </select>
             </td>
             <td class="py-3 px-3">
-              <input type="text" id="rowStageNote-${t.TeacherID}" value="${esc(st.note || '')}" placeholder="Keterangan tambahan untuk guru..." class="w-full min-w-[190px] px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+              <input type="text" id="rowStageNote-${t.TeacherID}" value="${esc(st.note || '')}" placeholder="Keterangan tambahan untuk guru..." class="w-full min-w-[180px] px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-600">
             </td>
             <td class="py-3 px-4 text-right whitespace-nowrap">
-              <button type="button" onclick="saveSingleTeacherPaymentStage('${t.TeacherID}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1.5 cursor-pointer">
-                <i class="fa-solid fa-check"></i> Update
+              <button type="button" onclick="saveSingleTeacherPaymentStage('${t.TeacherID}', false)" class="px-3 py-2 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1 cursor-pointer mr-1">
+                <i class="fa-solid fa-check"></i> Simpan
+              </button>
+              <button type="button" onclick="saveSingleTeacherPaymentStage('${t.TeacherID}', true)" title="Update Status & Kirim Pemberitahuan WA ke Guru" class="px-3 py-2 bg-[#25D366] hover:bg-[#1da851] text-white font-extrabold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-sm"></i> Kirim WA
               </button>
             </td>
           </tr>
@@ -3047,8 +3519,8 @@ var APP = {
       }).join('') || '<tr><td colspan="7" class="py-8 text-center text-slate-400">Tidak ada data guru yang sesuai filter.</td></tr>';
     }
 
-    // Simpan Perubahan Status Tahapan 1 Guru & Sinkronkan ke Cloud GAS
-    async function saveSingleTeacherPaymentStage(teacherId) {
+    // Simpan Perubahan Status Tahapan 1 Guru & Sinkronkan ke Cloud GAS (+ Opsi Kirim WA)
+    async function saveSingleTeacherPaymentStage(teacherId, alsoSendWa = false) {
       const selectEl = $('rowStageSelect-' + teacherId);
       const noteEl = $('rowStageNote-' + teacherId);
       if (!selectEl) return;
@@ -3065,10 +3537,14 @@ var APP = {
       const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
       alertMsg(`Status "${t ? t.Nama : 'Guru'}" diperbarui ke: ${step}. ${stageInfo.label}`);
 
-      // Sinkronkan juga ke Cloud GAS melalui apiSaveTeacher (menyisipkan metadata tahapan di NIP_NPK)
+      if (alsoSendWa && t) {
+        sendAdminStageWaSingleTeacher(teacherId);
+      }
+
       if (t) {
         try {
-          const packedNip = packNipWithStage(t.NIP_NPK, stageData);
+          const phone = getTeacherPhone(t);
+          const packedNip = packNipWithStage(t.NIP_NPK, stageData, phone);
           t.NIP_NPK = packedNip;
           await call('apiSaveTeacher', state.auth, {
             TeacherID: t.TeacherID,
@@ -3076,16 +3552,15 @@ var APP = {
             Kategori: t.Kategori || 'TPG',
             Jenjang: t.Jenjang || 'MI',
             NamaMadrasah: t.NamaMadrasah || '-',
-            NIP_NPK: packedNip
+            NIP_NPK: packedNip,
+            NoWA: phone
           });
-        } catch (e) {
-          // Tetap tersimpan di localStorage jika sedang offline
-        }
+        } catch (e) {}
       }
     }
 
-    // Terapkan Update Status Massal (Semua Guru / Guru Terpilih / Per Kategori / Per Jenjang)
-    async function applyBulkPaymentStage() {
+    // Terapkan Update Status Massal (+ Opsi Buka Panel Broadcast WA Massal)
+    async function applyBulkPaymentStage(openWaBroadcastAfter = false) {
       const targetMode = $('bulkStageTargetMode')?.value || 'ALL';
       const step = Number($('bulkStageSelectDropdown')?.value || state.selectedAdminBulkStage || 1);
       const customNote = ($('bulkStageCustomNote')?.value || '').trim();
@@ -3120,13 +3595,18 @@ var APP = {
         const existingStage = getTeacherPaymentStage(t.TeacherID, state.periodId);
         const finalNote = customNote !== '' ? customNote : (existingStage.note || '');
         const stageData = setTeacherPaymentStageLocal(t.TeacherID, state.periodId, step, finalNote);
-        t.NIP_NPK = packNipWithStage(t.NIP_NPK, stageData);
+        const phone = getTeacherPhone(t);
+        t.NIP_NPK = packNipWithStage(t.NIP_NPK, stageData, phone);
       });
 
       renderAdminStageStatsAndSelector();
       renderAdminUpdateStatusTable();
       renderAdminTeachersTable();
       alertMsg(`Berhasil memperbarui status ${targets.length} guru ke Tahap ${step}: ${stageInfo.label}!`);
+
+      if (openWaBroadcastAfter) {
+        openBroadcastWaModal(targets, step, customNote);
+      }
 
       // Sinkronkan ke Cloud GAS di latar belakang
       for (const t of targets) {
@@ -3136,7 +3616,8 @@ var APP = {
           Kategori: t.Kategori || 'TPG',
           Jenjang: t.Jenjang || 'MI',
           NamaMadrasah: t.NamaMadrasah || '-',
-          NIP_NPK: t.NIP_NPK
+          NIP_NPK: t.NIP_NPK,
+          NoWA: getTeacherPhone(t)
         }).catch(() => {});
       }
     }
@@ -3145,13 +3626,15 @@ var APP = {
       const kat = $('adminFilterKatTeacher')?.value || '';
       const q = ($('adminSearchTeacher')?.value || '').toLowerCase().trim();
       const filtered = (state.teachers || []).filter(t => {
+        const phone = getTeacherPhone(t);
         const mKat = !kat || (t.Kategori || 'TPG') === kat;
-        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${cleanNipDisplay(t.NIP_NPK)}`.toLowerCase().includes(q);
+        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${cleanNipDisplay(t.NIP_NPK)} ${phone}`.toLowerCase().includes(q);
         return mKat && mQ;
       });
 
       $('teacherRows').innerHTML = filtered.map((t, idx) => {
         const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const phone = getTeacherPhone(t);
         return `
           <tr class="hover:bg-slate-50">
             <td class="py-3 px-4 text-slate-400 font-semibold">${idx + 1}</td>
@@ -3159,8 +3642,17 @@ var APP = {
               <div class="font-bold text-slate-800">${esc(t.Nama)}</div>
               <div class="text-[11px] text-slate-400 font-mono">NIP/NPK: ${esc(cleanNipDisplay(t.NIP_NPK) || '-')}</div>
             </td>
-            <td class="py-3 px-4">${kategoriBadge(t.Kategori)}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-xs">${esc(t.Jenjang)}</span></td>
+            <td class="py-3 px-4">
+              ${phone
+                ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono text-xs font-bold"><i class="fa-brands fa-whatsapp text-[#25D366]"></i> ${esc(phone)}</span>`
+                : `<button onclick="startEditTeacher('${t.TeacherID}')" class="text-[11px] font-bold text-amber-700 hover:underline"><i class="fa-solid fa-plus-circle mr-1"></i>Isi No. WA</button>`}
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-1.5">
+                ${kategoriBadge(t.Kategori)}
+                <span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-xs">${esc(t.Jenjang)}</span>
+              </div>
+            </td>
             <td class="py-3 px-4 text-slate-700">${esc(t.NamaMadrasah)}</td>
             <td class="py-3 px-4">
               <button type="button" onclick="showAdminTab('updatestatus')" title="Klik untuk mengubah tahapan status berkas" class="text-left cursor-pointer hover:opacity-85 transition">
@@ -3189,8 +3681,9 @@ var APP = {
       $('tFormJenjang').value = t.Jenjang || 'MI';
       $('tFormMadrasah').value = t.NamaMadrasah || '';
       $('tFormNip').value = cleanNipDisplay(t.NIP_NPK) || '';
+      $('tFormPhone').value = getTeacherPhone(t) || '';
 
-      $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-pen text-amber-500"></i> Edit Data Peserta: ${esc(t.Nama)}`;
+      $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-pen text-amber-500"></i> Edit Data & Nomor WA Peserta: ${esc(t.Nama)}`;
       $('btnSubmitTeacher').textContent = 'Update';
       $('btnCancelEditTeacher').classList.remove('hidden-force');
       $('teacherFormCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -3199,6 +3692,7 @@ var APP = {
     function resetTeacherForm() {
       $('teacherForm').reset();
       $('tFormId').value = '';
+      $('tFormPhone').value = '';
       $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-plus text-emerald-600"></i> Tambah Peserta Satu per Satu`;
       $('btnSubmitTeacher').textContent = 'Simpan';
       $('btnCancelEditTeacher').classList.add('hidden-force');
@@ -3209,25 +3703,33 @@ var APP = {
       const data = formObj(ev.target);
       const isEdit = !!data.TeacherID;
       const tempId = data.TeacherID || ('GR-' + Date.now());
+      const cleanPhone = formatWaDisplay(data.NoWA || '');
+
+      const existingStage = getTeacherPaymentStage(tempId, state.periodId);
+      data.NIP_NPK = packNipWithStage(data.NIP_NPK, existingStage, cleanPhone);
+      data.NoWA = cleanPhone;
 
       if (isEdit) {
-        const existingStage = getTeacherPaymentStage(data.TeacherID, state.periodId);
-        data.NIP_NPK = packNipWithStage(data.NIP_NPK, existingStage);
+        setTeacherPhoneLocal(data.TeacherID, cleanPhone);
         const t = state.teachers.find(x => x.TeacherID === data.TeacherID);
         if (t) Object.assign(t, data, { Aktif: true });
       } else {
+        setTeacherPhoneLocal(tempId, cleanPhone);
         state.teachers.push(Object.assign({ TeacherID: tempId, Aktif: true }, data));
       }
       resetTeacherForm();
       renderAdminTeachersTable();
       renderAdminUpdateStatusWorkspace();
-      alertMsg('Data peserta berhasil disimpan.');
+      alertMsg('Data peserta & Nomor WhatsApp berhasil disimpan.');
 
       try {
         const res = await call('apiSaveTeacher', state.auth, data);
         if (!isEdit && res && res.teacherId) {
           const added = state.teachers.find(x => x.TeacherID === tempId);
-          if (added) added.TeacherID = res.teacherId;
+          if (added) {
+            added.TeacherID = res.teacherId;
+            setTeacherPhoneLocal(res.teacherId, cleanPhone);
+          }
           renderAdminTeachersTable();
           renderAdminUpdateStatusWorkspace();
         }
@@ -3308,36 +3810,46 @@ var APP = {
             <thead>
               <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold uppercase text-slate-500">
                 <th class="py-2.5 px-3">Username</th>
-                <th class="py-2.5 px-3">Password</th>
-                <th class="py-2.5 px-3">Nama Pejabat</th>
+                <th class="py-2.5 px-3">Nama Pejabat & No. WA</th>
                 <th class="py-2.5 px-3">Role</th>
                 <th class="py-2.5 px-3 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-xs">
-              ${users.map(u => `
+              ${users.map(u => {
+                const staffPhone = getUserStaffPhone(u);
+                const cleanNama = cleanStaffNameDisplay(u.Nama);
+                return `
                 <tr class="hover:bg-slate-50">
-                  <td class="py-2.5 px-3 font-bold text-slate-800">${esc(u.Username || u.Email)}</td>
-                  <td class="py-2.5 px-3 font-mono text-slate-600">${esc(u.Password || '******')}</td>
-                  <td class="py-2.5 px-3 text-slate-600">${esc(u.Nama)}</td>
+                  <td class="py-2.5 px-3">
+                    <div class="font-bold text-slate-800">${esc(u.Username || u.Email)}</div>
+                    <div class="font-mono text-[10px] text-slate-400">Pass: ${esc(u.Password || '******')}</div>
+                  </td>
+                  <td class="py-2.5 px-3">
+                    <div class="font-semibold text-slate-700">${esc(cleanNama)}</div>
+                    <div class="text-[11px] font-mono ${staffPhone ? 'text-emerald-700 font-bold' : 'text-slate-400'}">
+                      <i class="fa-brands fa-whatsapp"></i> ${esc(staffPhone || 'Belum diisi')}
+                    </div>
+                  </td>
                   <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-navy-800 text-white">${esc(u.Role)}</span></td>
                   <td class="py-2.5 px-3 text-right whitespace-nowrap">
-                    <button onclick="editUserAccount('${esc(u.Username)}','${esc(u.Password)}','${esc(u.Nama)}','${esc(u.Role)}')" class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[11px] font-bold mr-1">Edit</button>
+                    <button onclick="editUserAccount('${esc(u.Username)}','${esc(u.Password)}','${esc(cleanNama)}','${esc(u.Role)}','${esc(staffPhone)}')" class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[11px] font-bold mr-1">Edit</button>
                     <button onclick="deleteUserAccount('${esc(u.Username)}')" class="px-2 py-1 bg-rose-50 text-rose-700 rounded-lg text-[11px] font-bold">Hapus</button>
                   </td>
                 </tr>
-              `).join('')}
+              `}).join('')}
             </tbody>
           </table>
         </div>
       `;
     }
 
-    function editUserAccount(uname, pass, nama, role) {
+    function editUserAccount(uname, pass, nama, role, phone = '') {
       $('uFormUsername').value = uname;
       $('uFormPassword').value = pass;
-      $('uFormNama').value = nama;
+      $('uFormNama').value = cleanStaffNameDisplay(nama);
       $('uFormRole').value = role;
+      if ($('uFormPhone')) $('uFormPhone').value = phone;
     }
 
     async function deleteUserAccount(uname) {
@@ -3453,13 +3965,17 @@ var APP = {
     async function saveUser(ev) {
       ev.preventDefault();
       const data = formObj(ev.target);
+      const cleanPhone = formatWaDisplay(data.NoWA || '');
+      setUserStaffPhoneLocal(data.Username, cleanPhone);
+      data.Nama = packStaffNameWithWa(data.Nama, cleanPhone);
+
       const old = (state.usersList || []).find(u => normStr(u.Username) === normStr(data.Username));
       if (old) Object.assign(old, data, { Aktif: true });
       else state.usersList.push(Object.assign({}, data, { Aktif: true }));
 
       ev.target.reset();
       renderAdminSettingsAndUsers();
-      alertMsg('Akun berhasil disimpan.');
+      alertMsg('Akun & Nomor WhatsApp pejabat berhasil disimpan.');
 
       try {
         await call('apiSaveUser', state.auth, data);
@@ -3470,7 +3986,7 @@ var APP = {
     }
 
     // =========================================================================
-    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS
+    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS (+ KIRIM NOTIFIKASI WA)
     // =========================================================================
     async function openVerifyAndPreview(docId, readOnly = false) {
       try {
@@ -3498,6 +4014,11 @@ var APP = {
         $('modalExternalLink').href = viewUrl;
         $('pdfPreviewFrame').src = previewUrl;
 
+        const teacherPhone = doc ? getTeacherPhone(doc.TeacherID) : '';
+        if ($('modalTeacherWaBadge')) {
+          $('modalTeacherWaBadge').textContent = teacherPhone || 'Belum Diisi Admin';
+        }
+
         if (doc) {
           $('modalStageSummary').innerHTML = `
             <div class="flex justify-between"><span>Status Saat Ini:</span> <b>${esc(doc.Status)}</b></div>
@@ -3523,10 +4044,11 @@ var APP = {
       $('verifyModal').classList.add('hidden-force');
     }
 
-    async function submitVerify() {
+    async function submitVerify(forceSendWa = null) {
       const docId = $('verifyId').value;
       const status = $('verifyStatus').value;
       const note = $('verifyNote').value;
+      const shouldSendWa = forceSendWa !== null ? forceSendWa : ($('chkAutoSendWaOnVerify')?.checked || false);
 
       closeVerifyModal();
       const doc = (state.allDocsCache || []).find(x => x.DocumentID === docId);
@@ -3542,6 +4064,16 @@ var APP = {
       renderPengawasCompleteness();
       renderPengawasStatsBar();
       alertMsg('Hasil pemeriksaan lembar ceklis berhasil disimpan.');
+
+      if (shouldSendWa && doc) {
+        const phone = getTeacherPhone(doc.TeacherID);
+        if (phone) {
+          const msg = buildPengawasDocWaMessage(doc, doc.Status, note);
+          openWhatsAppChatWindow(phone, msg);
+        } else {
+          alertMsg(`Hasil disimpan, namun nomor WhatsApp "${doc.NamaGuru}" belum terdaftar.`, 'warning');
+        }
+      }
 
       try {
         await call('apiVerify', state.auth, docId, status, note);
