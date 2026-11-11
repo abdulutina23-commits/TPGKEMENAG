@@ -50,6 +50,15 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .step-active-pulse {
+      animation: pulseRing 2s infinite;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -99,7 +108,7 @@
         </h1>
 
         <p class="text-sm sm:text-base text-slate-300/90 leading-relaxed font-normal">
-          Masuk untuk mengakses lembar ceklis dokumen pencairan, unggah tautan berkas PDF Google Drive, verifikasi pengawas, dan laporan eksekutif <b class="text-amber-300 font-bold">SIM-TPG & TUKIN</b> sesuai peran Anda.
+          Masuk untuk mengakses lembar ceklis dokumen pencairan, unggah tautan berkas PDF Google Drive, pantau progres tahapan pencairan berkas TPG (Validasi s.d. SP2D), dan laporan eksekutif <b class="text-amber-300 font-bold">SIM-TPG & TUKIN</b> sesuai peran Anda.
         </p>
 
         <!-- 3 Kartu Fitur di Bawah Deskripsi -->
@@ -117,10 +126,10 @@
 
           <div onclick="openInfoPemberkasanModal()" class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.09] transition cursor-pointer">
             <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-sm mb-3">
-              <i class="fa-solid fa-clipboard-check"></i>
+              <i class="fa-solid fa-timeline"></i>
             </div>
-            <h3 class="font-bold text-sm text-white mb-1">Ceklis Pengawas</h3>
-            <p class="text-xs text-slate-300/80 leading-relaxed">Kelola lembar ceklis bulanan & semesteran serta verifikasi berkas guru.</p>
+            <h3 class="font-bold text-sm text-white mb-1">Pelacakan 7 Tahap</h3>
+            <p class="text-xs text-slate-300/80 leading-relaxed">Pantau proses berkas mulai dari Validasi Pembayaran, SPP, SPM, KPPN hingga terbit SP2D.</p>
           </div>
 
           <div onclick="openInfoPemberkasanModal()" class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.09] transition cursor-pointer">
@@ -136,7 +145,7 @@
       <!-- Footer Panel Kiri -->
       <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400 z-10">
         <div>Seksi Pendidikan Madrasah Kementerian Agama Kabupaten Gorontalo Utara</div>
-        <div class="font-bold text-slate-300">SIM-TPG v6.0 (GitHub & GAS Ready)</div>
+        <div class="font-bold text-slate-300">SIM-TPG v6.5 (Tracking Status & GAS Ready)</div>
       </div>
     </div>
 
@@ -188,7 +197,7 @@
         <div id="loginInfoBox" class="bg-[#edf7f2] border border-[#c6e7d6] rounded-xl p-3.5 mb-5 flex items-start gap-2.5 text-xs text-[#1b4b35]">
           <i class="fa-solid fa-circle-info text-[#2e6b4e] mt-0.5"></i>
           <div id="loginInfoText" class="leading-relaxed font-medium">
-            Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive.
+            Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive dan memantau tahapan pencairan.
           </div>
         </div>
 
@@ -368,7 +377,7 @@
               <div id="guruProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
             <div class="mt-2 flex items-center justify-between">
-              <span class="text-[11px] text-white/75">Status:</span>
+              <span class="text-[11px] text-white/75">Status Ceklis:</span>
               <span id="guruFinalBadge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-400 text-navy-900">BELUM LENGKAP</span>
             </div>
           </div>
@@ -381,6 +390,52 @@
               <i class="fa-solid fa-print"></i> Cetak Rekapan Ceklis Dokumen
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- KARTU PELACAKAN TAHAPAN PROSES PENCAIRAN BERKAS TPG (MENU GURU)     -->
+    <!-- =================================================================== -->
+    <div id="guruPaymentTrackerCard" class="bg-white rounded-3xl shadow-xs border-2 border-emerald-500/30 p-5 md:p-6 space-y-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div class="flex items-start sm:items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-navy-900 text-amber-300 flex items-center justify-center text-lg shadow-xs shrink-0">
+            <i class="fa-solid fa-route"></i>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                Informasi Pencairan Admin
+              </span>
+              <span id="guruTrackPeriodBadge" class="text-[10px] font-bold text-slate-400">-</span>
+            </div>
+            <h3 class="text-base md:text-lg font-extrabold text-navy-900 mt-0.5">Status Tahapan Proses Pencairan Berkas TPG</h3>
+            <p class="text-xs text-slate-500">Pantau posisi berkas pembayaran Anda mulai dari validasi hingga penerbitan SP2D</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-start md:items-end justify-center shrink-0 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200/80">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Tahapan Saat Ini:</span>
+          <div id="guruCurrentStageBadge" class="mt-0.5 font-extrabold text-xs md:text-sm text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-hourglass-start"></i> Menunggu Update Admin
+          </div>
+          <div id="guruStageUpdatedAt" class="text-[10px] text-slate-400 mt-0.5">-</div>
+        </div>
+      </div>
+
+      <!-- Visual 7 Tahapan Stepper -->
+      <div id="guruStageStepperGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5"></div>
+
+      <!-- Keterangan / Catatan Detail Tahapan untuk Guru -->
+      <div id="guruStageNoteBox" class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex items-start gap-3 text-xs text-emerald-950">
+        <i class="fa-solid fa-circle-info text-emerald-600 text-base mt-0.5 shrink-0"></i>
+        <div class="space-y-1 flex-1">
+          <div id="guruStageExplanationTitle" class="font-extrabold text-navy-900">Keterangan Tahapan Berkas:</div>
+          <div id="guruStageExplanationDesc" class="leading-relaxed text-slate-700">
+            Admin akan memperbarui status tahapan pencairan berkas TPG Anda secara berkala pada halaman ini.
+          </div>
+          <div id="guruStageAdminNote" class="hidden-force mt-2 pt-2 border-t border-emerald-200/80 font-semibold text-navy-900"></div>
         </div>
       </div>
     </div>
@@ -630,6 +685,7 @@
                 <th class="py-3 px-4 text-center">Disetujui</th>
                 <th class="py-3 px-4 text-center">Belum Upload</th>
                 <th class="py-3 px-4 text-center">Perbaikan</th>
+                <th class="py-3 px-4">Tahapan Pencairan</th>
                 <th class="py-3 px-4 text-right">Status & Cetak Kartu</th>
               </tr>
             </thead>
@@ -642,24 +698,27 @@
 
 
   <!-- ===================================================================== -->
-  <!-- 3. TAMPILAN KHUSUS ADMIN YANG DISEDERHANAKAN (#adminApp)              -->
+  <!-- 3. TAMPILAN KHUSUS ADMIN (#adminApp) DENGAN MENU UPDATE STATUS        -->
   <!-- ===================================================================== -->
   <div id="adminApp" class="max-w-[1400px] w-full mx-auto flex-1 p-4 md:p-6 lg:p-8 space-y-6 hidden-force">
     
-    <!-- Bar Navigasi Sederhana Admin -->
-    <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <!-- Bar Navigasi Admin (Ditambahkan Menu Update Status) -->
+    <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="showAdminTab('peserta')" id="aTab_peserta" class="nav-btn active px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold flex items-center gap-2 transition">
           <i class="fa-solid fa-users-gear"></i> 1. Kelola Peserta TPG & Selisih Tukin
         </button>
+        <button onclick="showAdminTab('updatestatus')" id="aTab_updatestatus" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
+          <i class="fa-solid fa-timeline"></i> 2. Update Status Berkas TPG
+        </button>
         <button onclick="showAdminTab('pengaturan')" id="aTab_pengaturan" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
-          <i class="fa-solid fa-sliders"></i> 2. Pengaturan Periode, Akun & Cloud
+          <i class="fa-solid fa-sliders"></i> 3. Pengaturan Periode, Akun & Cloud
         </button>
         <button onclick="showAdminTab('cetak')" id="aTab_cetak" class="nav-btn px-4 py-2.5 rounded-xl text-xs md:text-sm font-extrabold text-slate-600 hover:bg-slate-100 flex items-center gap-2 transition">
-          <i class="fa-solid fa-file-pdf"></i> 3. Cetak & Unduh PDF
+          <i class="fa-solid fa-file-pdf"></i> 4. Cetak & Unduh PDF
         </button>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 shrink-0">
         <button onclick="generateReadyToPrintPdf('ADMIN_PESERTA')" class="px-4 py-2.5 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-2">
           <i class="fa-solid fa-print text-amber-400"></i> Cetak & Unduh PDF Daftar Peserta
         </button>
@@ -806,7 +865,7 @@
                 <th class="py-3 px-4">Kategori</th>
                 <th class="py-3 px-4">Jenjang</th>
                 <th class="py-3 px-4">Nama Madrasah</th>
-                <th class="py-3 px-4">NIP / NPK</th>
+                <th class="py-3 px-4">Tahapan Pencairan</th>
                 <th class="py-3 px-4 text-right">Aksi (Edit / Hapus)</th>
               </tr>
             </thead>
@@ -816,7 +875,143 @@
       </div>
     </section>
 
-    <!-- TAB ADMIN 2: PENGATURAN PERIODE, KELOLA AKUN & KONEKSI GITHUB/GAS -->
+    <!-- =================================================================== -->
+    <!-- TAB ADMIN 2: UPDATE STATUS BERKAS TPG (FITUR BARU 7 TAHAPAN)        -->
+    <!-- =================================================================== -->
+    <section id="adminSec-updatestatus" class="page-sec hidden-force space-y-6">
+      
+      <!-- Statistik Ringkas 7 Tahapan Pencairan -->
+      <div id="adminStageStatsGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"></div>
+
+      <!-- Panel Update Status Massal / Sekaligus (Seluruh Periode, Per Jenjang, atau Peserta Terpilih) -->
+      <div class="bg-white p-5 md:p-6 rounded-3xl shadow-xs border-2 border-emerald-500/30 space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="flex items-start sm:items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-navy-900 text-amber-300 flex items-center justify-center text-xl font-bold shrink-0 shadow-xs">
+              <i class="fa-solid fa-arrows-spin"></i>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 mb-1">
+                Sinkronisasi Real-Time ke Menu Guru
+              </div>
+              <h3 class="font-extrabold text-navy-900 text-base md:text-lg">Update Status Tahapan Pencairan Berkas TPG</h3>
+              <p class="text-xs text-slate-500">Pilih tahapan proses berkas (1 s.d. 7). Setiap perubahan status akan otomatis tampil beserta keterangannya di halaman Portal Guru.</p>
+            </div>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200/80 px-4 py-2.5 rounded-2xl text-xs text-amber-950 font-semibold flex items-center gap-2 shrink-0">
+            <i class="fa-solid fa-calendar-check text-amber-600"></i>
+            <span>Periode Aktif: <b id="adminStatusActivePeriodLabel" class="font-extrabold text-navy-900">-</b></span>
+          </div>
+        </div>
+
+        <!-- Pilihan Cepat 7 Kartu Status Berkas TPG -->
+        <div>
+          <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider block mb-2.5">
+            1. Klik Tahapan Status Berkas TPG yang Ingin Diterapkan:
+          </label>
+          <div id="adminStageCardsSelector" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5"></div>
+        </div>
+
+        <!-- Form Kontrol Target Penerapan & Keterangan Tambahan -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2 items-end bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">2. Target Penerima Update</label>
+            <select id="bulkStageTargetMode" onchange="onChangeBulkStageTargetMode()" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-extrabold text-navy-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+              <option value="ALL">Semua Guru pada Periode Ini</option>
+              <option value="SELECTED">Guru yang Dicentang di Tabel (<span id="selectedTeachersCountOpt">0</span>)</option>
+              <option value="KATEGORI_TPG">Semua Guru Kategori TPG</option>
+              <option value="KATEGORI_TUKIN">Semua Guru Selisih Tukin</option>
+              <option value="JENJANG_RA">Khusus Guru Jenjang RA</option>
+              <option value="JENJANG_MI">Khusus Guru Jenjang MI</option>
+              <option value="JENJANG_MTs">Khusus Guru Jenjang MTs</option>
+              <option value="JENJANG_MA">Khusus Guru Jenjang MA</option>
+            </select>
+          </div>
+
+          <div class="lg:col-span-3">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">Tahapan Terpilih</label>
+            <select id="bulkStageSelectDropdown" onchange="selectAdminStageCard(Number(this.value))" class="w-full px-3.5 py-2.5 bg-white border border-emerald-500 rounded-xl text-xs font-extrabold text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+              <option value="1">1. Validasi Berkas Pembayaran</option>
+              <option value="2">2. Pembuatan Surat Permintaan Pembayaran (SPP)</option>
+              <option value="3">3. Pembuatan Surat Perintah Membayar (SPM)</option>
+              <option value="4">4. Validasi SPM</option>
+              <option value="5">5. Kirim ADK Ke KPPN</option>
+              <option value="6">6. Validasi KPPN</option>
+              <option value="7">7. SP2D (Pencairan Selesai)</option>
+            </select>
+          </div>
+
+          <div class="lg:col-span-4">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">3. Keterangan / Informasi Tambahan untuk Guru (Opsional)</label>
+            <input type="text" id="bulkStageCustomNote" placeholder="Contoh: Berkas gelombang I sedang diproses bendahara / No. SP2D..." class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+          </div>
+
+          <div class="lg:col-span-2">
+            <button type="button" onclick="applyBulkPaymentStage()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-paper-plane"></i> Terapkan Status
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Update Status Per Guru Secara Individual / Checklist -->
+      <div class="bg-white rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden">
+        <div class="p-4 md:px-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div>
+            <h4 class="font-extrabold text-navy-900 text-sm md:text-base">Daftar Status Tahapan Berkas Per Guru</h4>
+            <p class="text-xs text-slate-500">Anda juga dapat mengubah tahapan status pencairan secara langsung pada masing-masing baris guru di bawah ini</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="adminStatusFilterStage" onchange="renderAdminUpdateStatusTable()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Tahapan (1-7)</option>
+              <option value="1">1. Validasi Berkas Pembayaran</option>
+              <option value="2">2. Pembuatan SPP</option>
+              <option value="3">3. Pembuatan SPM</option>
+              <option value="4">4. Validasi SPM</option>
+              <option value="5">5. Kirim ADK Ke KPPN</option>
+              <option value="6">6. Validasi KPPN</option>
+              <option value="7">7. SP2D</option>
+            </select>
+            <select id="adminStatusFilterKat" onchange="renderAdminUpdateStatusTable()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Kategori</option>
+              <option value="TPG">Penerima TPG</option>
+              <option value="SELISIH_TUKIN">Selisih Tukin</option>
+            </select>
+            <select id="adminStatusFilterJenjang" onchange="renderAdminUpdateStatusTable()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <option value="">Semua Jenjang</option>
+              <option value="RA">RA</option><option value="MI">MI</option><option value="MTs">MTs</option><option value="MA">MA</option>
+            </select>
+            <div class="relative sm:w-56">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" id="adminStatusSearch" oninput="renderAdminUpdateStatusTable()" placeholder="Cari nama guru / madrasah..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-500">
+                <th class="py-3 px-4 w-10 text-center">
+                  <input type="checkbox" id="chkSelectAllTeachersStatus" onchange="toggleSelectAllTeachersStatus(this.checked)" class="w-4 h-4 rounded text-emerald-600 cursor-pointer">
+                </th>
+                <th class="py-3 px-3">Nama Guru & Madrasah</th>
+                <th class="py-3 px-3">Kelengkapan Ceklis</th>
+                <th class="py-3 px-3">Status Tahapan Saat Ini</th>
+                <th class="py-3 px-3">Pilih Update Status Tahapan</th>
+                <th class="py-3 px-3">Keterangan / Catatan Guru</th>
+                <th class="py-3 px-4 text-right">Simpan</th>
+              </tr>
+            </thead>
+            <tbody id="adminUpdateStatusRows" class="divide-y divide-slate-100 text-xs md:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB ADMIN 3: PENGATURAN PERIODE, KELOLA AKUN & KONEKSI GITHUB/GAS -->
     <section id="adminSec-pengaturan" class="page-sec hidden-force space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
@@ -910,7 +1105,7 @@
             <h3 class="font-extrabold text-navy-900 text-base md:text-lg flex items-center gap-2">
               <i class="fa-brands fa-github text-navy-900"></i> Pengaturan Hosting GitHub Pages & Integrasi Code.gs
             </h3>
-            <p class="text-xs text-slate-500">File <code>index.html</code> ini sudah utuh (standalone) dan di dalamnya tersimpan kode lengkap <code>Code.gs</code>.</p>
+            <p class="text-xs text-slate-500">URL Web App Google Apps Script Anda sudah tertanam otomatis di dalam kode sehingga tidak perlu ditempel ulang.</p>
           </div>
           <div class="flex flex-wrap gap-2">
             <button type="button" onclick="exportLocalDatabaseJson()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5">
@@ -924,8 +1119,8 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end bg-slate-50 p-4 rounded-2xl border border-slate-200">
           <div class="lg:col-span-9">
-            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">URL Web App Google Apps Script (Opsional - Untuk Sinkronisasi Online Antar HP/Laptop di GitHub Pages)</label>
-            <input type="url" id="gasEndpointInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec (Kosongkan jika menggunakan penyimpanan lokal)" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono">
+            <label class="text-[11px] font-bold text-slate-600 uppercase block mb-1">URL Web App Google Apps Script (Sudah Aktif & Dipertahankan Otomatis)</label>
+            <input type="url" id="gasEndpointInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono">
           </div>
           <div class="lg:col-span-3 flex gap-2">
             <button type="button" onclick="saveGasEndpointUrl()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition">
@@ -936,7 +1131,7 @@
       </div>
     </section>
 
-    <!-- TAB ADMIN 3: CETAK & UNDUH PDF -->
+    <!-- TAB ADMIN 4: CETAK & UNDUH PDF -->
     <section id="adminSec-cetak" class="page-sec hidden-force">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
@@ -945,7 +1140,7 @@
               <i class="fa-solid fa-users-viewfinder"></i>
             </div>
             <h4 class="font-extrabold text-navy-900 text-base mb-1">Cetak & Unduh PDF Daftar Peserta</h4>
-            <p class="text-xs text-slate-500 leading-relaxed mb-5">Laporan daftar seluruh nama guru penerima TPG dan penerima Selisih Tukin yang terdaftar pada sistem.</p>
+            <p class="text-xs text-slate-500 leading-relaxed mb-5">Laporan daftar seluruh nama guru penerima TPG dan penerima Selisih Tukin beserta tahapan status pencairannya.</p>
           </div>
           <button onclick="generateReadyToPrintPdf('ADMIN_PESERTA')" class="w-full py-2.5 px-4 bg-navy-900 hover:bg-navy-800 text-white font-extrabold text-xs rounded-xl transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-file-pdf text-amber-400"></i> Cetak / Unduh PDF Daftar Peserta
@@ -1080,7 +1275,7 @@
 var APP = {
   NAME: 'SIM-TPG & TUKIN Madrasah',
   ORG: 'Kementerian Agama Kabupaten Gorontalo Utara',
-  VERSION: '6.3.0',
+  VERSION: '6.5.0',
   PROP_DB: 'TPG_SPREADSHEET_ID',
   PROP_FOLDER: 'TPG_ROOT_FOLDER_ID',
   DEFAULT_ADMIN_USER: 'Admintpg@kemenag.go.id',
@@ -1100,10 +1295,81 @@ var APP = {
 
   <script>
     // =========================================================================
-    // KONFIGURASI URL CLOUD GOOGLE APPS SCRIPT (UNTUK HOSTING GITHUB PAGES)
+    // KONFIGURASI URL CLOUD GOOGLE APPS SCRIPT (TETAP DIPERTAHANKAN OTOMATIS)
     // =========================================================================
     const DEFAULT_GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbz8bnyhDiZZOLllVyoLXkHt-a35HZV2I7X1y0FFFJL_6kHuplGJaxHvpRcU7Ja4W-DjfQ/exec';
     const GAS_URL_STORAGE_KEY = 'SIM_TPG_GAS_ENDPOINT_URL';
+
+    // =========================================================================
+    // DEFINISI 7 TAHAPAN STATUS BERKAS PENCAIRAN TPG
+    // =========================================================================
+    const TPG_PAYMENT_STAGES = [
+      {
+        step: 1,
+        code: 'VALIDASI_BERKAS',
+        label: 'Validasi Berkas Pembayaran',
+        shortLabel: 'Validasi Berkas',
+        icon: 'fa-file-circle-check',
+        colorClass: 'bg-sky-100 text-sky-800 border-sky-300',
+        desc: 'Berkas persyaratan pencairan TPG Anda sedang diperiksa dan divalidasi kelengkapannya oleh operator/admin Seksi Pendidikan Madrasah.'
+      },
+      {
+        step: 2,
+        code: 'PEMBUATAN_SPP',
+        label: 'Pembuatan Surat Permintaan Pembayaran',
+        shortLabel: 'Pembuatan SPP',
+        icon: 'fa-file-invoice',
+        colorClass: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+        desc: 'Berkas pembayaran dinyatakan lengkap dan saat ini sedang dalam proses penerbitan Surat Permintaan Pembayaran (SPP) oleh Pejabat Pembuat Komitmen (PPK).'
+      },
+      {
+        step: 3,
+        code: 'PEMBUATAN_SPM',
+        label: 'Pembuatan Surat Perintah Membayar',
+        shortLabel: 'Pembuatan SPM',
+        icon: 'fa-file-signature',
+        colorClass: 'bg-purple-100 text-purple-800 border-purple-300',
+        desc: 'SPP telah diterbitkan dan sedang dilanjutkan ke tahap pembuatan Surat Perintah Membayar (SPM).'
+      },
+      {
+        step: 4,
+        code: 'VALIDASI_SPM',
+        label: 'Validasi SPM',
+        shortLabel: 'Validasi SPM',
+        icon: 'fa-stamp',
+        colorClass: 'bg-amber-100 text-amber-900 border-amber-300',
+        desc: 'Dokumen Surat Perintah Membayar (SPM) sedang dalam tahap pengujian dan validasi pengesahan oleh Pejabat Penandatangan SPM (PPSPM).'
+      },
+      {
+        step: 5,
+        code: 'KIRIM_ADK_KPPN',
+        label: 'Kirim ADK Ke KPPN',
+        shortLabel: 'Kirim ADK KPPN',
+        icon: 'fa-paper-plane',
+        colorClass: 'bg-cyan-100 text-cyan-900 border-cyan-300',
+        desc: 'Arsip Data Komputer (ADK) SPM telah berhasil diunggah dan dikirimkan secara elektronik ke Kantor Pelayanan Perbendaharaan Negara (KPPN).'
+      },
+      {
+        step: 6,
+        code: 'VALIDASI_KPPN',
+        label: 'Validasi KPPN',
+        shortLabel: 'Validasi KPPN',
+        icon: 'fa-building-columns',
+        colorClass: 'bg-teal-100 text-teal-900 border-teal-300',
+        desc: 'Berkas dan ADK SPM sedang dalam proses pemeriksaan serta persetujuan penyelesaian tagihan oleh pihak KPPN.'
+      },
+      {
+        step: 7,
+        code: 'SP2D',
+        label: 'SP2D',
+        shortLabel: 'Terbit SP2D',
+        icon: 'fa-circle-check',
+        colorClass: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+        desc: 'Surat Perintah Pencairan Dana (SP2D) telah diterbitkan oleh KPPN. Dana tunjangan disalurkan langsung ke rekening bank penerima masing-masing.'
+      }
+    ];
+
+    const STAGE_CHECKLIST_RESERVED_ID = '__SYS_TPG_STAGE_TRACKER__';
 
     let state = {
       auth: null,
@@ -1118,7 +1384,10 @@ var APP = {
       publicTeachers: [],
       guruSiklusFilter: 'SEMUA',
       guruDataCache: null,
-      currentLoginTab: 'GURU'
+      currentLoginTab: 'GURU',
+      selectedAdminBulkStage: 1,
+      selectedTeacherIdsForStatus: new Set(),
+      paymentStagesMap: {} // key: `${periodId}_${teacherId}` -> { step, note, updatedAt, updatedBy }
     };
     const $ = id => document.getElementById(id);
 
@@ -1149,7 +1418,7 @@ var APP = {
       }
       localStorage.setItem(GAS_URL_STORAGE_KEY, url);
       updateCloudBadgeUI();
-      alertMsg(url ? 'URL Cloud Google Apps Script berhasil disimpan!' : 'Kembali menggunakan penyimpanan mandiri.');
+      alertMsg(url ? 'URL Cloud Google Apps Script berhasil disimpan!' : 'Kembali menggunakan URL default.');
       loadPublicTeacherNames();
     }
 
@@ -1181,15 +1450,161 @@ var APP = {
     }
 
     // =========================================================================
-    // PEMBERSIH OTOMATIS FORMAT TANGGAL ISO ("2026-09-30T16:00:00.000Z" -> "Oktober 2026")
+    // HELPER PENYIMPANAN & SINKRONISASI STATUS 7 TAHAPAN (CLOUD & LOCAL)
+    // =========================================================================
+    // Agar status 7 tahapan tersimpan di Google Spreadsheet tanpa harus mengubah
+    // skema Code.gs yang sudah di-deploy di URL GAS, kita menyimpannya secara
+    // cerdas di localStorage DAN menyinkronkannya melalui field NSM/Kabupaten
+    // atau metadata pada data Teacher sehingga Guru di perangkat lain langsung
+    // membaca tahapan terbaru dari server GAS!
+    const LOCAL_STAGE_STORAGE_KEY = 'SIM_TPG_STAGE_TRACKER_V1';
+
+    function loadLocalStagesMap() {
+      try {
+        const raw = localStorage.getItem(LOCAL_STAGE_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state.paymentStagesMap = Object.assign({}, parsed, state.paymentStagesMap);
+        }
+      } catch (e) {}
+    }
+
+    function saveLocalStagesMap() {
+      try {
+        localStorage.setItem(LOCAL_STAGE_STORAGE_KEY, JSON.stringify(state.paymentStagesMap));
+      } catch (e) {}
+    }
+
+    function encodeStageToTeacherField(stageObj) {
+      if (!stageObj || !stageObj.step) return '';
+      // Format ringkas yang disimpan di kolom NSM/Kabupaten atau NIP_NPK metadata bila tersedia
+      const payload = {
+        s: Number(stageObj.step),
+        n: String(stageObj.note || '').substring(0, 160),
+        t: String(stageObj.updatedAt || ''),
+        p: String(stageObj.periodId || '')
+      };
+      return '__TPGSTAGE__:' + JSON.stringify(payload);
+    }
+
+    function decodeStageFromTeacher(teacher, currentPeriodId) {
+      if (!teacher) return null;
+      // 1. Cek jika objek teacher memiliki properti langsung StatusPencairan
+      if (teacher.StatusPencairanStep) {
+        return {
+          step: Number(teacher.StatusPencairanStep),
+          note: teacher.StatusPencairanNote || '',
+          updatedAt: teacher.StatusPencairanUpdatedAt || ''
+        };
+      }
+      // 2. Cek apakah ada metadata terenkode pada field NSM / Kabupaten / NIP_NPK
+      const fieldsToCheck = [teacher.NSM, teacher.Kabupaten, teacher.NIP_NPK];
+      for (const f of fieldsToCheck) {
+        const str = String(f || '');
+        const idx = str.indexOf('__TPGSTAGE__:');
+        if (idx !== -1) {
+          try {
+            const jsonStr = str.substring(idx + '__TPGSTAGE__:'.length);
+            const parsed = JSON.parse(jsonStr);
+            if (parsed && parsed.s) {
+              return {
+                step: Number(parsed.s),
+                note: parsed.n || '',
+                updatedAt: parsed.t || '',
+                periodId: parsed.p || currentPeriodId
+              };
+            }
+          } catch (e) {}
+        }
+      }
+      return null;
+    }
+
+    function cleanNipDisplay(rawNip) {
+      const s = String(rawNip || '').trim();
+      const idx = s.indexOf('__TPGSTAGE__:');
+      if (idx !== -1) {
+        return s.substring(0, idx).replace(/\s*\|\|\s*$/, '').trim();
+      }
+      return s;
+    }
+
+    function packNipWithStage(cleanNip, stageObj) {
+      const base = cleanNipDisplay(cleanNip);
+      if (!stageObj || !stageObj.step) return base;
+      const encoded = encodeStageToTeacherField(stageObj);
+      return base ? `${base} || ${encoded}` : encoded;
+    }
+
+    function getStageInfoByStep(stepNumber) {
+      const num = Number(stepNumber || 0);
+      return TPG_PAYMENT_STAGES.find(s => s.step === num) || null;
+    }
+
+    function getTeacherPaymentStage(teacherId, periodId = state.periodId) {
+      loadLocalStagesMap();
+      const key = `${periodId || 'ALL'}_${teacherId}`;
+      const fallbackKey = `ALL_${teacherId}`;
+
+      // Cek dari data Guru (hasil sinkronisasi Cloud GAS via NIP_NPK metadata)
+      const teacherObj = (state.teachers || []).find(t => t.TeacherID === teacherId)
+        || (state.guruDataCache?.teacher?.TeacherID === teacherId ? state.guruDataCache.teacher : null);
+
+      const cloudDecoded = decodeStageFromTeacher(teacherObj, periodId);
+      if (cloudDecoded && cloudDecoded.step) {
+        state.paymentStagesMap[key] = cloudDecoded;
+        return cloudDecoded;
+      }
+
+      if (state.paymentStagesMap[key]) return state.paymentStagesMap[key];
+      if (state.paymentStagesMap[fallbackKey]) return state.paymentStagesMap[fallbackKey];
+      return { step: 1, note: '', updatedAt: '' };
+    }
+
+    function setTeacherPaymentStageLocal(teacherId, periodId, step, note) {
+      const nowFormatted = new Date().toLocaleDateString('id-ID', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      const stageData = {
+        step: Number(step),
+        note: String(note || '').trim(),
+        updatedAt: nowFormatted,
+        periodId: periodId || state.periodId
+      };
+      const key = `${periodId || 'ALL'}_${teacherId}`;
+      const fallbackKey = `ALL_${teacherId}`;
+      state.paymentStagesMap[key] = stageData;
+      state.paymentStagesMap[fallbackKey] = stageData;
+      saveLocalStagesMap();
+
+      // Update di state.teachers agar langsung sinkron
+      const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
+      if (t) {
+        t.StatusPencairanStep = stageData.step;
+        t.StatusPencairanNote = stageData.note;
+        t.StatusPencairanUpdatedAt = stageData.updatedAt;
+      }
+      return stageData;
+    }
+
+    function renderStageBadgeHtml(stepNumber) {
+      const st = getStageInfoByStep(stepNumber) || TPG_PAYMENT_STAGES[0];
+      return `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold border ${st.colorClass}">
+          <span class="w-4 h-4 rounded-full bg-navy-900 text-white text-[10px] flex items-center justify-center shrink-0">${st.step}</span>
+          <span>${esc(st.label)}</span>
+        </span>
+      `;
+    }
+
+    // =========================================================================
+    // PEMBERSIH OTOMATIS FORMAT TANGGAL ISO
     // =========================================================================
     function formatPeriodNameClean(raw) {
       let s = String(raw ?? '').trim().replace(/^'+/, '');
-      // Deteksi apabila Google Sheets mengubah "Oktober 2026" menjadi ISO Date seperti "2026-09-30T16:00:00.000Z"
       if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
         const parsed = new Date(s);
         if (!isNaN(parsed.getTime())) {
-          // Tambah 12 jam agar tanggal akhir bulan UTC (misal 30 Sep 16:00 UTC) bergeser tepat ke 1 Oktober WITA
           const witaDate = new Date(parsed.getTime() + 12 * 3600 * 1000);
           const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
           return months[witaDate.getUTCMonth()] + ' ' + witaDate.getUTCFullYear();
@@ -1234,7 +1649,7 @@ var APP = {
           { Username: 'Pengawas@kemenag.go.id', Password: 'Pengawasgorut', Nama: 'Pengawas Madrasah Gorut', Role: 'PENGAWAS', TeacherID: '', Aktif: true }
         ],
         periods: [
-          { PeriodID: 'PER-2026-OKT', NamaPeriode: 'Oktober 2026', TanggalMulai: '2026-10-01', TanggalAkhir: '2026-10-31', Aktif: false },
+          { PeriodID: 'PER-2026-OKT', NamaPeriode: 'Oktober 2026', TanggalMulai: '2026-10-01', TanggalAkhir: '2026-10-31', Aktif: true },
           { PeriodID: 'PER-2026-2', NamaPeriode: 'Semester Genap 2026/2027', TanggalMulai: '2026-07-13', TanggalAkhir: '2026-12-31', Aktif: true },
           { PeriodID: 'PER-2026-1', NamaPeriode: 'Semester Ganjil TP 2026/2027', TanggalMulai: '2026-07-01', TanggalAkhir: '2026-12-31', Aktif: false }
         ],
@@ -1635,7 +2050,7 @@ var APP = {
       return { ok: true };
     }
 
-    // Antrean Eksekusi Request (Mencegah Tabrakan Pengiriman Data Bersamaan)
+    // Antrean Eksekusi Request
     let apiQueueChain = Promise.resolve();
     const WRITE_OPERATIONS = new Set([
       'apiSubmitDriveLink', 'apiVerify', 'apiSaveTeacher', 'apiBulkSaveTeachers',
@@ -1644,7 +2059,6 @@ var APP = {
     ]);
 
     async function executeRawCall(name, args) {
-      // 1. Jika dibuka langsung di dalam Google Apps Script Web App
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         return new Promise((resolve, reject) => {
           google.script.run
@@ -1653,7 +2067,6 @@ var APP = {
         });
       }
 
-      // 2. Jika di-hosting di GitHub Pages dan URL Cloud GAS sudah diatur
       const remoteGasUrl = getConfiguredGasUrl();
       if (remoteGasUrl) {
         const res = await fetch(remoteGasUrl, {
@@ -1666,7 +2079,6 @@ var APP = {
         return json.data;
       }
 
-      // 3. Mode Standalone Mandiri (LocalStorage)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           try { resolve(localApiHandler(name, args)); } catch (err) { reject(err); }
@@ -1718,6 +2130,8 @@ var APP = {
       }
       if ($('periodSelectTop')) $('periodSelectTop').value = state.periodId;
       if ($('periodSelectMobile')) $('periodSelectMobile').value = state.periodId;
+      const activePeriodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      if ($('adminStatusActivePeriodLabel')) $('adminStatusActivePeriodLabel').textContent = activePeriodName;
     }
 
     function recomputeFrontendCompleteness() {
@@ -1737,7 +2151,7 @@ var APP = {
         });
         const complete = required.length > 0 && approved === required.length;
         return {
-          TeacherID: t.TeacherID, Nama: t.Nama, NIP_NPK: t.NIP_NPK || '-', Kategori: t.Kategori || 'TPG',
+          TeacherID: t.TeacherID, Nama: t.Nama, NIP_NPK: cleanNipDisplay(t.NIP_NPK) || '-', Kategori: t.Kategori || 'TPG',
           Jenjang: t.Jenjang || 'MI', NamaMadrasah: t.NamaMadrasah || '-',
           totalWajib: required.length, disetujui: approved, belumUpload: missing, perluPerbaikan: revision, menunggu: pending,
           statusKelengkapan: complete ? 'LENGKAP' : (revision ? 'PERLU_PERBAIKAN' : 'BELUM_LENGKAP')
@@ -1834,14 +2248,14 @@ var APP = {
       $('tabBtnAdmin').className = tab === 'ADMIN' ? activeCls : idleCls;
 
       if (tab === 'GURU') {
-        $('loginInfoText').innerHTML = `Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive.`;
+        $('loginInfoText').innerHTML = `Masuk menggunakan <b>Nama Lengkap Guru</b> yang telah didaftarkan Admin untuk melampirkan berkas PDF Google Drive dan memantau tahapan pencairan.`;
       } else if (tab === 'PENGAWAS') {
         $('loginInfoText').innerHTML = `Masuk untuk melanjutkan ke <b>Workspace Pemeriksaan Pengawas</b> & pengaturan lembar ceklis dokumen.`;
         $('staffUserLabel').textContent = 'Username / Email Pengawas';
         $('staffUsername').value = '';
         $('staffPassword').value = '';
       } else if (tab === 'ADMIN') {
-        $('loginInfoText').innerHTML = `Masuk untuk melanjutkan ke <b>Dashboard Pengelolaan Admin</b> (Peserta TPG/Tukin, Periode, & Akun).`;
+        $('loginInfoText').innerHTML = `Masuk untuk melanjutkan ke <b>Dashboard Pengelolaan Admin</b> (Peserta TPG/Tukin, Update Status 7 Tahapan, Periode, & Akun).`;
         $('staffUserLabel').textContent = 'Username / Email Admin';
         $('staffUsername').value = '';
         $('staffPassword').value = '';
@@ -1955,6 +2369,9 @@ var APP = {
       state.periodId = val;
       $('periodSelectTop').value = val;
       $('periodSelectMobile').value = val;
+      const activePeriodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      if ($('adminStatusActivePeriodLabel')) $('adminStatusActivePeriodLabel').textContent = activePeriodName;
+
       if (state.user?.role === 'GURU') {
         await loadMyDocs();
       } else if (state.user?.role === 'PENGAWAS' || state.user?.role === 'KASI') {
@@ -1965,8 +2382,75 @@ var APP = {
     }
 
     // =========================================================================
-    // 1. LOGIKA PORTAL GURU
+    // 1. LOGIKA PORTAL GURU & PELACAKAN 7 TAHAPAN PENCAIRAN BERKAS TPG
     // =========================================================================
+    function renderGuruPaymentTracker(teacher) {
+      if (!teacher) return;
+      const periodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      $('guruTrackPeriodBadge').textContent = `Periode: ${periodName}`;
+
+      const stageData = getTeacherPaymentStage(teacher.TeacherID, state.periodId);
+      const currentStep = Number(stageData.step || 1);
+      const currentStageInfo = getStageInfoByStep(currentStep) || TPG_PAYMENT_STAGES[0];
+
+      // Badge Tahapan Saat Ini di Kanan Atas
+      $('guruCurrentStageBadge').innerHTML = `
+        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] flex items-center justify-center font-extrabold">${currentStageInfo.step}</span>
+        <span>${esc(currentStageInfo.label)}</span>
+      `;
+      $('guruStageUpdatedAt').textContent = stageData.updatedAt
+        ? `Diperbarui Admin: ${stageData.updatedAt}`
+        : 'Tahap aktif saat ini';
+
+      // Render 7 Kartu Stepper
+      $('guruStageStepperGrid').innerHTML = TPG_PAYMENT_STAGES.map(st => {
+        const isCompleted = st.step < currentStep;
+        const isCurrent = st.step === currentStep;
+
+        let cardCls = 'bg-slate-50 border-slate-200 text-slate-400';
+        let circleCls = 'bg-slate-200 text-slate-500';
+        let statusTag = '<span class="text-[10px] font-bold text-slate-400">Menunggu</span>';
+
+        if (isCompleted) {
+          cardCls = 'bg-emerald-50/70 border-emerald-300 text-emerald-950';
+          circleCls = 'bg-emerald-600 text-white';
+          statusTag = '<span class="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700"><i class="fa-solid fa-circle-check"></i> Selesai</span>';
+        } else if (isCurrent) {
+          cardCls = 'bg-gradient-to-br from-navy-900 to-emerald-900 border-amber-400 text-white shadow-md ring-2 ring-emerald-500/30';
+          circleCls = 'bg-amber-400 text-navy-950 step-active-pulse';
+          statusTag = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-400 text-navy-950 text-[9px] font-extrabold uppercase">${st.step === 7 ? 'Selesai / Cair' : 'Tahap Saat Ini'}</span>`;
+        }
+
+        return `
+          <div class="p-3.5 rounded-2xl border ${cardCls} flex flex-col justify-between gap-2.5 transition-all">
+            <div class="flex items-center justify-between gap-1.5">
+              <div class="w-7 h-7 rounded-xl ${circleCls} font-extrabold text-xs flex items-center justify-center shrink-0">
+                ${isCompleted ? '<i class="fa-solid fa-check"></i>' : st.step}
+              </div>
+              ${statusTag}
+            </div>
+            <div>
+              <div class="text-xs font-extrabold leading-snug ${isCurrent ? 'text-white' : (isCompleted ? 'text-navy-900' : 'text-slate-500')}">
+                ${esc(st.label)}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Keterangan Detail Tahapan untuk Guru
+      $('guruStageExplanationTitle').innerHTML = `Tahap ${currentStageInfo.step} dari 7: <span class="text-emerald-800">${esc(currentStageInfo.label)}</span>`;
+      $('guruStageExplanationDesc').textContent = currentStageInfo.desc;
+
+      const noteEl = $('guruStageAdminNote');
+      if (stageData.note) {
+        noteEl.innerHTML = `<i class="fa-solid fa-bullhorn text-amber-600 mr-1.5"></i>Catatan Admin: "${esc(stageData.note)}"`;
+        noteEl.classList.remove('hidden-force');
+      } else {
+        noteEl.classList.add('hidden-force');
+      }
+    }
+
     function setGuruSiklusFilter(siklus) {
       state.guruSiklusFilter = siklus;
       ['SEMUA', 'BULANAN', 'SEMESTERAN'].forEach(s => {
@@ -1984,7 +2468,7 @@ var APP = {
         const d = await call('apiGetMyChecklist', state.auth, state.periodId);
         state.guruDataCache = d;
         $('guruPortalName').textContent = d.teacher.Nama;
-        $('guruPortalMeta').textContent = `Jenjang ${d.teacher.Jenjang || '-'} · ${d.teacher.NamaMadrasah || '-'} · NIP/NPK: ${d.teacher.NIP_NPK || '-'}`;
+        $('guruPortalMeta').textContent = `Jenjang ${d.teacher.Jenjang || '-'} · ${d.teacher.NamaMadrasah || '-'} · NIP/NPK: ${cleanNipDisplay(d.teacher.NIP_NPK) || '-'}`;
         $('guruKategoriBadge').textContent = d.teacher.Kategori === 'SELISIH_TUKIN' ? 'PESERTA SELISIH TUKIN' : 'PESERTA TPG';
 
         if (d.completeness) {
@@ -1999,6 +2483,7 @@ var APP = {
              c.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-500 text-white' : 'bg-amber-400 text-navy-950');
         }
 
+        renderGuruPaymentTracker(d.teacher);
         renderGuruChecklistCards();
       } catch (e) {
         alertMsg(e.message, 'danger');
@@ -2009,6 +2494,7 @@ var APP = {
       const d = state.guruDataCache;
       if (!d) return;
       const items = (d.items || []).filter(c => {
+        if (c.ChecklistID === STAGE_CHECKLIST_RESERVED_ID) return false;
         if (state.guruSiklusFilter === 'SEMUA') return true;
         return (c.Siklus || 'BULANAN') === state.guruSiklusFilter;
       });
@@ -2210,7 +2696,7 @@ var APP = {
         $('checkPeriod').value = state.periodId;
       }
 
-      const activeList = state.checklist.filter(c => !state.periodId || c.PeriodID === state.periodId);
+      const activeList = state.checklist.filter(c => (!state.periodId || c.PeriodID === state.periodId) && c.ChecklistID !== STAGE_CHECKLIST_RESERVED_ID);
       const tpgItems = activeList.filter(c => c.Kategori === 'TPG' || c.Kategori === 'SEMUA').sort((a, b) => Number(a.Urutan || 1) - Number(b.Urutan || 1));
       const tukinItems = activeList.filter(c => c.Kategori === 'SELISIH_TUKIN' || c.Kategori === 'SEMUA').sort((a, b) => Number(a.Urutan || 1) - Number(b.Urutan || 1));
 
@@ -2317,6 +2803,7 @@ var APP = {
         const badgeCls = x.statusKelengkapan === 'LENGKAP'
           ? 'bg-emerald-100 text-emerald-800'
           : x.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800';
+        const stData = getTeacherPaymentStage(x.TeacherID, state.periodId);
         return `
           <tr class="hover:bg-slate-50/80">
             <td class="py-3 px-4 font-bold text-slate-800">${esc(x.Nama)}</td>
@@ -2326,6 +2813,7 @@ var APP = {
             <td class="py-3 px-4 text-center font-bold text-emerald-600">${x.disetujui}</td>
             <td class="py-3 px-4 text-center text-slate-500">${x.belumUpload}</td>
             <td class="py-3 px-4 text-center font-bold text-rose-600">${x.perluPerbaikan}</td>
+            <td class="py-3 px-4">${renderStageBadgeHtml(stData.step)}</td>
             <td class="py-3 px-4 text-right flex items-center justify-end gap-2">
               <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${badgeCls}">${esc(x.statusKelengkapan)}</span>
               <button onclick="generateTeacherChecklistPdfById('${x.TeacherID}')" class="px-2.5 py-1 bg-navy-800 hover:bg-navy-900 text-white rounded-lg text-[11px] font-bold">
@@ -2334,18 +2822,21 @@ var APP = {
             </td>
           </tr>
         `;
-      }).join('') || '<tr><td colspan="8" class="py-8 text-center text-slate-400">Belum ada data kelengkapan peserta.</td></tr>';
+      }).join('') || '<tr><td colspan="9" class="py-8 text-center text-slate-400">Belum ada data kelengkapan peserta.</td></tr>';
     }
 
     // =========================================================================
-    // 3. LOGIKA PORTAL ADMIN
+    // 3. LOGIKA PORTAL ADMIN + MENU UPDATE STATUS BERKAS TPG (7 TAHAPAN)
     // =========================================================================
     function showAdminTab(tab) {
-      ['peserta', 'pengaturan', 'cetak'].forEach(t => {
+      ['peserta', 'updatestatus', 'pengaturan', 'cetak'].forEach(t => {
         $('adminSec-' + t)?.classList.toggle('hidden-force', t !== tab);
         const btn = $('aTab_' + t);
         if (btn) btn.classList.toggle('active', t === tab);
       });
+      if (tab === 'updatestatus') {
+        renderAdminUpdateStatusWorkspace();
+      }
     }
 
     async function loadAdminWorkspace() {
@@ -2363,10 +2854,290 @@ var APP = {
 
         refreshPeriodDropdowns();
         renderAdminTeachersTable();
+        renderAdminUpdateStatusWorkspace();
         renderAdminSettingsAndUsers();
         updateCloudBadgeUI();
       } catch (e) {
         alertMsg(e.message, 'danger');
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // FITUR BARU: WORKSPACE MENU UPDATE STATUS BERKAS TPG (ADMIN)
+    // -------------------------------------------------------------------------
+    function renderAdminUpdateStatusWorkspace() {
+      renderAdminStageStatsAndSelector();
+      renderAdminUpdateStatusTable();
+      const activePeriodName = $('periodSelectTop')?.selectedOptions?.[0]?.text || 'Periode Aktif';
+      if ($('adminStatusActivePeriodLabel')) $('adminStatusActivePeriodLabel').textContent = activePeriodName;
+    }
+
+    function renderAdminStageStatsAndSelector() {
+      const activeTeachers = (state.teachers || []).filter(t => t.Aktif !== false);
+      const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+      activeTeachers.forEach(t => {
+        const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const stepNum = Number(st.step || 1);
+        counts[stepNum] = (counts[stepNum] || 0) + 1;
+      });
+
+      // Statistik 7 Tahapan di Atas
+      if ($('adminStageStatsGrid')) {
+        $('adminStageStatsGrid').innerHTML = TPG_PAYMENT_STAGES.map(st => `
+          <div onclick="filterAdminTableByStage(${st.step})" class="bg-white p-3.5 rounded-2xl shadow-xs border border-slate-200/80 hover:border-emerald-500 cursor-pointer transition flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-2">
+              <span class="w-6 h-6 rounded-lg bg-navy-900 text-amber-300 font-extrabold text-xs flex items-center justify-center">${st.step}</span>
+              <span class="text-xl font-extrabold text-emerald-700">${counts[st.step] || 0} <span class="text-[10px] font-bold text-slate-400">Guru</span></span>
+            </div>
+            <div class="mt-2 text-[11px] font-extrabold text-slate-700 leading-snug">${esc(st.label)}</div>
+          </div>
+        `).join('');
+      }
+
+      // Pilihan Kartu 7 Tahapan
+      if ($('adminStageCardsSelector')) {
+        $('adminStageCardsSelector').innerHTML = TPG_PAYMENT_STAGES.map(st => {
+          const isSelected = state.selectedAdminBulkStage === st.step;
+          return `
+            <button type="button" onclick="selectAdminStageCard(${st.step})" class="text-left p-3.5 rounded-2xl border-2 transition-all flex flex-col justify-between gap-2 cursor-pointer ${
+              isSelected
+                ? 'bg-gradient-to-br from-navy-900 to-emerald-900 text-white border-amber-400 shadow-md scale-[1.01]'
+                : 'bg-slate-50/80 hover:bg-white text-slate-800 border-slate-200'
+            }">
+              <div class="flex items-center justify-between w-full">
+                <span class="w-7 h-7 rounded-xl ${isSelected ? 'bg-amber-400 text-navy-950' : 'bg-navy-900 text-white'} font-extrabold text-xs flex items-center justify-center">
+                  ${st.step}
+                </span>
+                <i class="fa-solid ${st.icon} ${isSelected ? 'text-amber-300' : 'text-emerald-600'} text-sm"></i>
+              </div>
+              <div>
+                <div class="text-xs font-extrabold leading-snug">${esc(st.label)}</div>
+                <div class="text-[10px] mt-1 ${isSelected ? 'text-emerald-200' : 'text-slate-400'}">Klik untuk memilih</div>
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      if ($('bulkStageSelectDropdown')) {
+        $('bulkStageSelectDropdown').value = String(state.selectedAdminBulkStage);
+      }
+    }
+
+    function selectAdminStageCard(stepNumber) {
+      state.selectedAdminBulkStage = Number(stepNumber || 1);
+      renderAdminStageStatsAndSelector();
+    }
+
+    function filterAdminTableByStage(stepNumber) {
+      const sel = $('adminStatusFilterStage');
+      if (!sel) return;
+      sel.value = sel.value === String(stepNumber) ? '' : String(stepNumber);
+      renderAdminUpdateStatusTable();
+    }
+
+    function updateSelectedTeachersCounterUI() {
+      const count = state.selectedTeacherIdsForStatus.size;
+      const opt = $('selectedTeachersCountOpt');
+      if (opt) opt.textContent = count;
+      const selMode = $('bulkStageTargetMode');
+      if (selMode) {
+        const optionEl = selMode.querySelector('option[value="SELECTED"]');
+        if (optionEl) optionEl.textContent = `Guru yang Dicentang di Tabel (${count} Guru)`;
+      }
+    }
+
+    function onChangeBulkStageTargetMode() {
+      updateSelectedTeachersCounterUI();
+    }
+
+    function toggleSelectTeacherStatusRow(teacherId, checked) {
+      if (checked) state.selectedTeacherIdsForStatus.add(teacherId);
+      else state.selectedTeacherIdsForStatus.delete(teacherId);
+      updateSelectedTeachersCounterUI();
+      if (state.selectedTeacherIdsForStatus.size > 0 && $('bulkStageTargetMode')) {
+        $('bulkStageTargetMode').value = 'SELECTED';
+      }
+    }
+
+    function toggleSelectAllTeachersStatus(checked) {
+      const filtered = getFilteredTeachersForStatusTable();
+      filtered.forEach(t => {
+        if (checked) state.selectedTeacherIdsForStatus.add(t.TeacherID);
+        else state.selectedTeacherIdsForStatus.delete(t.TeacherID);
+      });
+      updateSelectedTeachersCounterUI();
+      if (checked && filtered.length > 0 && $('bulkStageTargetMode')) {
+        $('bulkStageTargetMode').value = 'SELECTED';
+      }
+      renderAdminUpdateStatusTable();
+    }
+
+    function getFilteredTeachersForStatusTable() {
+      const fStage = $('adminStatusFilterStage')?.value || '';
+      const fKat = $('adminStatusFilterKat')?.value || '';
+      const fJen = $('adminStatusFilterJenjang')?.value || '';
+      const q = ($('adminStatusSearch')?.value || '').toLowerCase().trim();
+
+      return (state.teachers || []).filter(t => {
+        if (t.Aktif === false) return false;
+        const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const mStage = !fStage || String(st.step) === String(fStage);
+        const mKat = !fKat || (t.Kategori || 'TPG') === fKat;
+        const mJen = !fJen || t.Jenjang === fJen;
+        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${cleanNipDisplay(t.NIP_NPK)}`.toLowerCase().includes(q);
+        return mStage && mKat && mJen && mQ;
+      });
+    }
+
+    function renderAdminUpdateStatusTable() {
+      const filtered = getFilteredTeachersForStatusTable();
+      updateSelectedTeachersCounterUI();
+
+      $('adminUpdateStatusRows').innerHTML = filtered.map(t => {
+        const comp = (state.completenessCache || []).find(c => c.TeacherID === t.TeacherID);
+        const compBadge = comp
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              comp.statusKelengkapan === 'LENGKAP' ? 'bg-emerald-100 text-emerald-800' :
+              comp.statusKelengkapan === 'PERLU_PERBAIKAN' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
+            }">${esc(comp.statusKelengkapan)} (${comp.disetujui}/${comp.totalWajib})</span>`
+          : '<span class="text-xs text-slate-400">-</span>';
+
+        const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const isChecked = state.selectedTeacherIdsForStatus.has(t.TeacherID);
+
+        const optionsHtml = TPG_PAYMENT_STAGES.map(item =>
+          `<option value="${item.step}" ${Number(st.step) === item.step ? 'selected' : ''}>${item.step}. ${esc(item.label)}</option>`
+        ).join('');
+
+        return `
+          <tr class="hover:bg-slate-50/90 transition">
+            <td class="py-3 px-4 text-center">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelectTeacherStatusRow('${t.TeacherID}', this.checked)" class="w-4 h-4 rounded text-emerald-600 cursor-pointer">
+            </td>
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-800">${esc(t.Nama)}</span>
+                ${kategoriBadge(t.Kategori)}
+              </div>
+              <div class="text-[11px] text-slate-500 mt-0.5">
+                <span class="font-bold text-navy-800">${esc(t.Jenjang)}</span> · ${esc(t.NamaMadrasah)}
+              </div>
+            </td>
+            <td class="py-3 px-3">${compBadge}</td>
+            <td class="py-3 px-3">
+              ${renderStageBadgeHtml(st.step)}
+              ${st.updatedAt ? `<div class="text-[10px] text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i>${esc(st.updatedAt)}</div>` : ''}
+            </td>
+            <td class="py-3 px-3">
+              <select id="rowStageSelect-${t.TeacherID}" onchange="saveSingleTeacherPaymentStage('${t.TeacherID}')" class="w-full min-w-[230px] px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-navy-900 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                ${optionsHtml}
+              </select>
+            </td>
+            <td class="py-3 px-3">
+              <input type="text" id="rowStageNote-${t.TeacherID}" value="${esc(st.note || '')}" placeholder="Keterangan tambahan untuk guru..." class="w-full min-w-[190px] px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <button type="button" onclick="saveSingleTeacherPaymentStage('${t.TeacherID}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-2xs transition inline-flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-check"></i> Update
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('') || '<tr><td colspan="7" class="py-8 text-center text-slate-400">Tidak ada data guru yang sesuai filter.</td></tr>';
+    }
+
+    // Simpan Perubahan Status Tahapan 1 Guru & Sinkronkan ke Cloud GAS
+    async function saveSingleTeacherPaymentStage(teacherId) {
+      const selectEl = $('rowStageSelect-' + teacherId);
+      const noteEl = $('rowStageNote-' + teacherId);
+      if (!selectEl) return;
+
+      const step = Number(selectEl.value || 1);
+      const note = noteEl ? noteEl.value.trim() : '';
+      const stageInfo = getStageInfoByStep(step);
+      const stageData = setTeacherPaymentStageLocal(teacherId, state.periodId, step, note);
+
+      renderAdminStageStatsAndSelector();
+      renderAdminUpdateStatusTable();
+      renderAdminTeachersTable();
+
+      const t = (state.teachers || []).find(x => x.TeacherID === teacherId);
+      alertMsg(`Status "${t ? t.Nama : 'Guru'}" diperbarui ke: ${step}. ${stageInfo.label}`);
+
+      // Sinkronkan juga ke Cloud GAS melalui apiSaveTeacher (menyisipkan metadata tahapan di NIP_NPK)
+      if (t) {
+        try {
+          const packedNip = packNipWithStage(t.NIP_NPK, stageData);
+          t.NIP_NPK = packedNip;
+          await call('apiSaveTeacher', state.auth, {
+            TeacherID: t.TeacherID,
+            Nama: t.Nama,
+            Kategori: t.Kategori || 'TPG',
+            Jenjang: t.Jenjang || 'MI',
+            NamaMadrasah: t.NamaMadrasah || '-',
+            NIP_NPK: packedNip
+          });
+        } catch (e) {
+          // Tetap tersimpan di localStorage jika sedang offline
+        }
+      }
+    }
+
+    // Terapkan Update Status Massal (Semua Guru / Guru Terpilih / Per Kategori / Per Jenjang)
+    async function applyBulkPaymentStage() {
+      const targetMode = $('bulkStageTargetMode')?.value || 'ALL';
+      const step = Number($('bulkStageSelectDropdown')?.value || state.selectedAdminBulkStage || 1);
+      const customNote = ($('bulkStageCustomNote')?.value || '').trim();
+      const stageInfo = getStageInfoByStep(step);
+
+      const activeTeachers = (state.teachers || []).filter(t => t.Aktif !== false);
+      let targets = [];
+
+      if (targetMode === 'ALL') {
+        targets = activeTeachers;
+      } else if (targetMode === 'SELECTED') {
+        targets = activeTeachers.filter(t => state.selectedTeacherIdsForStatus.has(t.TeacherID));
+        if (!targets.length) {
+          alertMsg('Silakan centang minimal 1 nama guru pada tabel di bawah terlebih dahulu.', 'warning');
+          return;
+        }
+      } else if (targetMode === 'KATEGORI_TPG') {
+        targets = activeTeachers.filter(t => (t.Kategori || 'TPG') === 'TPG');
+      } else if (targetMode === 'KATEGORI_TUKIN') {
+        targets = activeTeachers.filter(t => t.Kategori === 'SELISIH_TUKIN');
+      } else if (targetMode.startsWith('JENJANG_')) {
+        const jen = targetMode.replace('JENJANG_', '');
+        targets = activeTeachers.filter(t => t.Jenjang === jen);
+      }
+
+      if (!targets.length) {
+        alertMsg('Tidak ada peserta yang cocok dengan target pilihan Anda.', 'warning');
+        return;
+      }
+
+      targets.forEach(t => {
+        const existingStage = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const finalNote = customNote !== '' ? customNote : (existingStage.note || '');
+        const stageData = setTeacherPaymentStageLocal(t.TeacherID, state.periodId, step, finalNote);
+        t.NIP_NPK = packNipWithStage(t.NIP_NPK, stageData);
+      });
+
+      renderAdminStageStatsAndSelector();
+      renderAdminUpdateStatusTable();
+      renderAdminTeachersTable();
+      alertMsg(`Berhasil memperbarui status ${targets.length} guru ke Tahap ${step}: ${stageInfo.label}!`);
+
+      // Sinkronkan ke Cloud GAS di latar belakang
+      for (const t of targets) {
+        call('apiSaveTeacher', state.auth, {
+          TeacherID: t.TeacherID,
+          Nama: t.Nama,
+          Kategori: t.Kategori || 'TPG',
+          Jenjang: t.Jenjang || 'MI',
+          NamaMadrasah: t.NamaMadrasah || '-',
+          NIP_NPK: t.NIP_NPK
+        }).catch(() => {});
       }
     }
 
@@ -2375,28 +3146,38 @@ var APP = {
       const q = ($('adminSearchTeacher')?.value || '').toLowerCase().trim();
       const filtered = (state.teachers || []).filter(t => {
         const mKat = !kat || (t.Kategori || 'TPG') === kat;
-        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${t.NIP_NPK}`.toLowerCase().includes(q);
+        const mQ = !q || `${t.Nama} ${t.NamaMadrasah} ${cleanNipDisplay(t.NIP_NPK)}`.toLowerCase().includes(q);
         return mKat && mQ;
       });
 
-      $('teacherRows').innerHTML = filtered.map((t, idx) => `
-        <tr class="hover:bg-slate-50">
-          <td class="py-3 px-4 text-slate-400 font-semibold">${idx + 1}</td>
-          <td class="py-3 px-4 font-bold text-slate-800">${esc(t.Nama)}</td>
-          <td class="py-3 px-4">${kategoriBadge(t.Kategori)}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-xs">${esc(t.Jenjang)}</span></td>
-          <td class="py-3 px-4 text-slate-700">${esc(t.NamaMadrasah)}</td>
-          <td class="py-3 px-4 text-slate-500 font-mono text-xs">${esc(t.NIP_NPK || '-')}</td>
-          <td class="py-3 px-4 text-right whitespace-nowrap">
-            <button onclick="startEditTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition mr-1">
-              <i class="fa-solid fa-pen-to-square"></i> Edit
-            </button>
-            <button onclick="removeTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition">
-              <i class="fa-solid fa-trash-can"></i> Hapus
-            </button>
-          </td>
-        </tr>
-      `).join('') || '<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada peserta terdaftar.</td></tr>';
+      $('teacherRows').innerHTML = filtered.map((t, idx) => {
+        const st = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        return `
+          <tr class="hover:bg-slate-50">
+            <td class="py-3 px-4 text-slate-400 font-semibold">${idx + 1}</td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-800">${esc(t.Nama)}</div>
+              <div class="text-[11px] text-slate-400 font-mono">NIP/NPK: ${esc(cleanNipDisplay(t.NIP_NPK) || '-')}</div>
+            </td>
+            <td class="py-3 px-4">${kategoriBadge(t.Kategori)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-xs">${esc(t.Jenjang)}</span></td>
+            <td class="py-3 px-4 text-slate-700">${esc(t.NamaMadrasah)}</td>
+            <td class="py-3 px-4">
+              <button type="button" onclick="showAdminTab('updatestatus')" title="Klik untuk mengubah tahapan status berkas" class="text-left cursor-pointer hover:opacity-85 transition">
+                ${renderStageBadgeHtml(st.step)}
+              </button>
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <button onclick="startEditTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition mr-1">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button onclick="removeTeacher('${t.TeacherID}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition">
+                <i class="fa-solid fa-trash-can"></i> Hapus
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('') || '<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada peserta terdaftar.</td></tr>';
     }
 
     function startEditTeacher(teacherId) {
@@ -2407,7 +3188,7 @@ var APP = {
       $('tFormKategori').value = t.Kategori || 'TPG';
       $('tFormJenjang').value = t.Jenjang || 'MI';
       $('tFormMadrasah').value = t.NamaMadrasah || '';
-      $('tFormNip').value = t.NIP_NPK || '';
+      $('tFormNip').value = cleanNipDisplay(t.NIP_NPK) || '';
 
       $('teacherFormTitle').innerHTML = `<i class="fa-solid fa-user-pen text-amber-500"></i> Edit Data Peserta: ${esc(t.Nama)}`;
       $('btnSubmitTeacher').textContent = 'Update';
@@ -2430,6 +3211,8 @@ var APP = {
       const tempId = data.TeacherID || ('GR-' + Date.now());
 
       if (isEdit) {
+        const existingStage = getTeacherPaymentStage(data.TeacherID, state.periodId);
+        data.NIP_NPK = packNipWithStage(data.NIP_NPK, existingStage);
         const t = state.teachers.find(x => x.TeacherID === data.TeacherID);
         if (t) Object.assign(t, data, { Aktif: true });
       } else {
@@ -2437,6 +3220,7 @@ var APP = {
       }
       resetTeacherForm();
       renderAdminTeachersTable();
+      renderAdminUpdateStatusWorkspace();
       alertMsg('Data peserta berhasil disimpan.');
 
       try {
@@ -2445,6 +3229,7 @@ var APP = {
           const added = state.teachers.find(x => x.TeacherID === tempId);
           if (added) added.TeacherID = res.teacherId;
           renderAdminTeachersTable();
+          renderAdminUpdateStatusWorkspace();
         }
         loadPublicTeacherNames();
       } catch (e) {
@@ -2456,6 +3241,7 @@ var APP = {
     async function removeTeacher(teacherId) {
       state.teachers = state.teachers.filter(x => x.TeacherID !== teacherId);
       renderAdminTeachersTable();
+      renderAdminUpdateStatusWorkspace();
       alertMsg('Peserta berhasil dihapus.');
 
       try {
@@ -2684,7 +3470,7 @@ var APP = {
     }
 
     // =========================================================================
-    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS (100% INSTAN TANPA RELOAD)
+    // MODAL TAMPILKAN FILE PDF & VERIFIKASI PENGAWAS
     // =========================================================================
     async function openVerifyAndPreview(docId, readOnly = false) {
       try {
@@ -2779,6 +3565,8 @@ var APP = {
         if (!d || !d.teacher) { alertMsg('Data ceklis guru belum termuat.', 'warning'); return; }
         const t = d.teacher;
         const c = d.completeness || {};
+        const stData = getTeacherPaymentStage(t.TeacherID, state.periodId);
+        const stInfo = getStageInfoByStep(stData.step) || TPG_PAYMENT_STAGES[0];
         title = `LEMBAR CEKLIS KELENGKAPAN DOKUMEN ${t.Kategori === 'SELISIH_TUKIN' ? 'SELISIH TUKIN' : 'TPG'} MADRASAH`;
         const items = d.items || [];
 
@@ -2789,12 +3577,12 @@ var APP = {
               <td style="border:0; width:18%"><b>Kategori</b></td><td style="border:0; width:32%">: ${esc(t.Kategori === 'SELISIH_TUKIN' ? 'Penerima Selisih Tukin' : 'Penerima TPG')}</td>
             </tr>
             <tr>
-              <td style="border:0"><b>NIP / NPK</b></td><td style="border:0">: ${esc(t.NIP_NPK || '-')}</td>
+              <td style="border:0"><b>NIP / NPK</b></td><td style="border:0">: ${esc(cleanNipDisplay(t.NIP_NPK) || '-')}</td>
               <td style="border:0"><b>Periode</b></td><td style="border:0">: ${esc(periodName)}</td>
             </tr>
             <tr>
               <td style="border:0"><b>Jenjang / Satker</b></td><td style="border:0">: ${esc(t.Jenjang)} - ${esc(t.NamaMadrasah)}</td>
-              <td style="border:0"><b>Status Akhir</b></td><td style="border:0">: <b>${esc(c.statusKelengkapan || 'BELUM LENGKAP')}</b></td>
+              <td style="border:0"><b>Tahapan Pencairan</b></td><td style="border:0">: <b>Tahap ${stInfo.step} - ${esc(stInfo.label)}</b></td>
             </tr>
           </table>
 
@@ -2827,32 +3615,38 @@ var APP = {
           </table>
         `;
       } else if (mode === 'ADMIN_PESERTA') {
-        title = 'DAFTAR NAMA PESERTA PENERIMA TPG & SELISIH TUKIN MADRASAH';
+        title = 'DAFTAR NAMA PESERTA & STATUS TAHAPAN PENCAIRAN BERKAS TPG / SELISIH TUKIN';
         const list = state.teachers || [];
         bodyHtml = `
           <p><b>Periode:</b> ${esc(periodName)} &nbsp;|&nbsp; <b>Total Peserta Terdaftar:</b> ${list.length} Guru</p>
           <table>
             <thead>
               <tr>
-                <th style="width:6%">No</th>
-                <th style="width:30%">Nama Lengkap Guru</th>
-                <th style="width:16%">Kategori</th>
-                <th style="width:10%">Jenjang</th>
-                <th style="width:23%">Nama Madrasah</th>
-                <th style="width:15%">NIP / NPK</th>
+                <th style="width:5%">No</th>
+                <th style="width:25%">Nama Lengkap Guru</th>
+                <th style="width:12%">Kategori</th>
+                <th style="width:8%">Jenjang</th>
+                <th style="width:20%">Nama Madrasah</th>
+                <th style="width:13%">NIP / NPK</th>
+                <th style="width:17%">Tahapan Pencairan</th>
               </tr>
             </thead>
             <tbody>
-              ${list.map((t, i) => `
-                <tr>
-                  <td style="text-align:center">${i + 1}</td>
-                  <td><b>${esc(t.Nama)}</b></td>
-                  <td>${esc(t.Kategori === 'SELISIH_TUKIN' ? 'SELISIH TUKIN' : 'TPG')}</td>
-                  <td style="text-align:center">${esc(t.Jenjang)}</td>
-                  <td>${esc(t.NamaMadrasah)}</td>
-                  <td>${esc(t.NIP_NPK || '-')}</td>
-                </tr>
-              `).join('')}
+              ${list.map((t, i) => {
+                const stData = getTeacherPaymentStage(t.TeacherID, state.periodId);
+                const stInfo = getStageInfoByStep(stData.step) || TPG_PAYMENT_STAGES[0];
+                return `
+                  <tr>
+                    <td style="text-align:center">${i + 1}</td>
+                    <td><b>${esc(t.Nama)}</b></td>
+                    <td>${esc(t.Kategori === 'SELISIH_TUKIN' ? 'SELISIH TUKIN' : 'TPG')}</td>
+                    <td style="text-align:center">${esc(t.Jenjang)}</td>
+                    <td>${esc(t.NamaMadrasah)}</td>
+                    <td>${esc(cleanNipDisplay(t.NIP_NPK) || '-')}</td>
+                    <td><b>${stInfo.step}. ${esc(stInfo.label)}</b></td>
+                  </tr>
+                `;
+              }).join('')}
             </tbody>
           </table>
         `;
@@ -2872,28 +3666,34 @@ var APP = {
             <thead>
               <tr>
                 <th style="width:5%">No</th>
-                <th style="width:25%">Nama Lengkap Guru</th>
-                <th style="width:13%">Kategori</th>
-                <th style="width:8%">Jenjang</th>
-                <th style="width:20%">Madrasah</th>
-                <th style="width:7%">Wajib</th>
-                <th style="width:8%">Disetujui</th>
-                <th style="width:14%">Status Akhir</th>
+                <th style="width:22%">Nama Lengkap Guru</th>
+                <th style="width:11%">Kategori</th>
+                <th style="width:7%">Jenjang</th>
+                <th style="width:18%">Madrasah</th>
+                <th style="width:6%">Wajib</th>
+                <th style="width:7%">Disetujui</th>
+                <th style="width:11%">Status Ceklis</th>
+                <th style="width:13%">Tahapan Pencairan</th>
               </tr>
             </thead>
             <tbody>
-              ${list.map((x, i) => `
-                <tr>
-                  <td style="text-align:center">${i + 1}</td>
-                  <td><b>${esc(x.Nama)}</b></td>
-                  <td>${esc(x.Kategori)}</td>
-                  <td style="text-align:center">${esc(x.Jenjang)}</td>
-                  <td>${esc(x.NamaMadrasah)}</td>
-                  <td style="text-align:center">${x.totalWajib}</td>
-                  <td style="text-align:center">${x.disetujui}</td>
-                  <td><b>${esc(x.statusKelengkapan)}</b></td>
-                </tr>
-              `).join('')}
+              ${list.map((x, i) => {
+                const stData = getTeacherPaymentStage(x.TeacherID, state.periodId);
+                const stInfo = getStageInfoByStep(stData.step) || TPG_PAYMENT_STAGES[0];
+                return `
+                  <tr>
+                    <td style="text-align:center">${i + 1}</td>
+                    <td><b>${esc(x.Nama)}</b></td>
+                    <td>${esc(x.Kategori)}</td>
+                    <td style="text-align:center">${esc(x.Jenjang)}</td>
+                    <td>${esc(x.NamaMadrasah)}</td>
+                    <td style="text-align:center">${x.totalWajib}</td>
+                    <td style="text-align:center">${x.disetujui}</td>
+                    <td><b>${esc(x.statusKelengkapan)}</b></td>
+                    <td>${stInfo.step}. ${esc(stInfo.label)}</td>
+                  </tr>
+                `;
+              }).join('')}
             </tbody>
           </table>
         `;
@@ -3005,6 +3805,7 @@ var APP = {
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      loadLocalStagesMap();
       $('teacherForm')?.addEventListener('submit', saveTeacher);
       $('periodForm')?.addEventListener('submit', savePeriod);
       $('checkForm')?.addEventListener('submit', saveChecklist);
